@@ -1,0 +1,67 @@
+// app global css in SCSS form
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-feature-settings: "ss01",
+    "ss02",
+    "cv01",
+    "cv03";
+  font-variant: no-common-ligatures no-discretionary-ligatures no-historical-ligatures no-contextual;
+}
+
+html {
+  background-color: rgb(247, 248, 250);
+}
+
+* {
+  font-family: Kanit, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.radius-30 {
+  border-radius: 30px !important;
+}
+
+.wallet-container {
+  img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .q-item__label {
+    text-align: center;
+    padding: 8px;
+  }
+
+  .huobi img {
+    padding: 15px;
+  }
+
+  .token-pocket img,
+  .bitkeep img,
+  .bitpie img {
+    padding: 12px;
+  }
+}
+
+.q-card {
+  border-radius: 30px;
+}
+
+.q-card.swap {
+  max-width: 436px;
+}
+
+.q-item__section--avatar {
+  min-width: 40px;
+}
+
+.q-item__section--side {
+  padding-right: 8px;
+}
+
+.q-item--active {
+  border-left: 5px solid $secondary;
+}
