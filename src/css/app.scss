@@ -20,6 +20,10 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+.center {
+  margin: 0 auto;
+}
+
 .radius-30 {
   border-radius: 30px !important;
 }
@@ -47,7 +51,7 @@ html {
 }
 
 .q-card {
-  border-radius: 30px;
+  border-radius: 30px !important;
 }
 
 .q-card.swap {
@@ -64,4 +68,59 @@ html {
 
 .q-item--active {
   border-left: 5px solid $secondary;
+}
+
+.q-layout.ido {
+  .bg {
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transform: translate3d(0px, 0px, 0px);
+    height: -webkit-fill-available;
+    // background-image: radial-gradient(50% 50% at 50% 50%, #ffb850 0%, rgb(247, 248, 250) 100%);
+    background: rgba(44, 44, 44, .2);
+    background: -webkit-gradient(linear, left bottom, left top, from(rgba(44, 44, 44, .2)), to(rgba(224, 23, 3, .6)));
+    background: linear-gradient(0deg, rgba(44, 44, 44, .2), rgba(255, 184, 80, .6));
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    opacity: 0.15;
+    -webkit-user-select: none;
+    pointer-events: none;
+  }
+
+  .ido-card {
+    border-radius: 30px;
+    background-color: #767676;
+    color: white;
+    font-weight: bold;
+
+    .finish {
+      background-color: rgba(86, 86, 86, 0.5);
+      width: 80%;
+      margin: 0 auto;
+      font-size: 20pt;
+      font-weight: bold;
+      padding: 8px;
+      border-radius: 8px;
+    }
+  }
+
+  .content-container {
+    >div {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 0
+    }
+  }
 }

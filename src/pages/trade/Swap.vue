@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-card-section>
+    <q-card-section class="text-center">
       <q-btn-toggle
         no-caps
         rounded
@@ -13,10 +13,11 @@
           {label: 'Exchange', value: 'swap'},
           {label: 'Liquidity', value: 'pool'}
         ]"
+        class="center"
       />
     </q-card-section>
-    <q-card-section class="row">
-    <q-card flat class="swap">
+    <q-card-section class="q-pa-none">
+    <q-card flat class="swap center">
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col">
@@ -29,7 +30,7 @@
                 Settings
               </q-tooltip>
             </q-btn>
-            <q-btn flat round color="grey-7" icon="fas fa-history">
+            <q-btn flat round color="grey-7" icon="fas fa-history" @click="openTokenSelect()">
               <q-tooltip>
               Recent Transactions
               </q-tooltip>
@@ -38,88 +39,36 @@
         </div>
        
       </q-card-section>
-      <q-separator spaced inset />
+      <q-separator spaced />
         <q-card-section>
-            <q-form>
-                <q-input
-                    rounded standout
-                    stack-label
-                    label="From"
-                    placeholder="0.0"
-                    input-class="text-h6"
-                    v-model="from"
-                >
-                    <template v-slot:append>
-                        <q-chip>
-                            <q-avatar>
-                                <img src="/tokens/eth.png">
-                            </q-avatar>
-                            ETH
-                        </q-chip>
-                    </template>
-                </q-input>
-                <q-card-section class="text-center">
+            <q-form class="q-gutter-md">
+                <token-input v-bind="from" v-on:change="fromTokenChange" />
+                <div class="text-center">
                     <q-icon name="fas fa-arrow-circle-down" size="sm" color="secondary" />
-                </q-card-section>
-                <q-input
-                    filled
-                    stack-label
-                    label="To"
-                    placeholder="0.0"
-                    input-class="text-h6"
-                    v-model="to"
-                >
-                    <template v-slot:append>
-                        <q-chip>
-                            <q-avatar>
-                                <img src="/tokens/usdt.png">
-                            </q-avatar>
-                            USDT
-                        </q-chip>
-                    </template>
-                </q-input>
-                <q-item class="q-pt-md q-pb-md q-pl-sm q-pr-sm">
+                </div>
+                <token-input v-bind="to" />
+                <q-item class="q-pa-md">
                     <q-item-section>
-                        <q-item-label>Price</q-item-label>
+                        <q-item-label>Slippage tolerance</q-item-label>
                     </q-item-section>
                     <q-item-section side class="q-pa-none" >
-                        <div>
-                            <span class="q-mr-sm" v-if="!swapPrice">0.00217863 ETH per USDT</span>
-                            <span class="q-mr-sm" v-else>459.004 USDT per ETH</span>
-                            <q-btn round dense flat icon="swap_horiz" @click="swapPrice = !swapPrice" />
-                        </div>
+                        <q-item-label class="text-weight-bold">0.5%</q-item-label>
                     </q-item-section>
                 </q-item>
-                <q-btn disable no-caps color="primary" size="lg" class="full-width" label="Insufficient ETH balance" type="submit"/>
+                <div>
+                  <q-btn 
+                    unelevated
+                    rounded
+                    no-caps
+                    color="secondary"
+                    padding="md"
+                    label="Unlock Wallet" 
+                    type="submit"
+                    icon="lock"
+                    class="full-width"
+                  />
+                </div>
             </q-form>
-        </q-card-section>
-        <q-card-section>
-            <q-list dense class="rounded-borders bg-grey-3 text-grey-8">
-                <q-item>
-                    <q-item-section>
-                        <q-item-label>Minimum Received</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                        <q-item-label>456.7 USDT</q-item-label>
-                    </q-item-section>
-                </q-item>
-                <q-item>
-                    <q-item-section>
-                        <q-item-label>Price Impact</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                        <q-item-label class="text-green">0.01%</q-item-label>
-                    </q-item-section>
-                </q-item>
-                <q-item>
-                    <q-item-section>
-                        <q-item-label>Liquidity Provider Fee</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                        <q-item-label>0.003 ETH</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </q-list>
         </q-card-section>
     </q-card>
     </q-card-section>
@@ -127,14 +76,33 @@
 </template>
 
 <script>
+import TokenInput from './components/TokenInput'
+
 export default {
   name: 'Swap',
+  components: { TokenInput },
+
   data () {
     return {
       value: 'swap',
       swapPrice: false,
-      from: 1.0,
-      to: 459.004
+      from: {
+        sybmol: 'WETH',
+        logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        amount: 1.00
+      },
+      to: {
+        sybmol: 'USDT',
+        logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
+        amount: 459.004
+      }
+    }
+  },
+
+  methods: {
+    fromTokenChange (token) {
+      console.log(token)
+      this.from = Object.assign(this.from, token)
     }
   }
 }
