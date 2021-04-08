@@ -53,6 +53,14 @@ export default class WalletConnectConnector {
       })
     }
 
+    async sendTransaction(tx) {
+      if (this.provider === undefined) {
+        this.provider = this._newProvider()
+      }
+
+      return await this.provider.sendTransaction(tx);
+    }
+
     _newProvider(success, err) {
       const provider = new WalletConnect({
           bridge: "https://bridge.walletconnect.org", // Required

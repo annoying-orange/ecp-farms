@@ -89,4 +89,12 @@ export default class MetaMaskConnector {
 
     return { accounts, chainId }
   }
+
+  async sendTransaction(tx) {
+    if (typeof window.ethereum === "undefined") {
+      throw "Please install MetaMask!"
+    }
+      
+    return await ethereum.request({ method: "eth_sendTransaction", params: [tx] })
+  }
 }

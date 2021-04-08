@@ -1,9 +1,19 @@
-export function update (state, { accounts, chainId }) {
+export function update (state, { name, description, accounts, chainId }) {
     if (accounts.length === 0) {
-        state.connected = false
+        state = Object.assign(state, {
+            connected: false,
+            name: '',
+            description: '',
+            address: '',
+            chainId: 0
+        })
     } else {
-        state.connected = true
-        state.address = accounts[0]
-        state.chainId = chainId
+        state = Object.assign(state, {
+            connected: true,
+            name,
+            description,
+            address: accounts[0],
+            chainId
+        })
     }
 }

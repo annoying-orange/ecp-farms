@@ -54,12 +54,17 @@ export default {
   },
 
   mounted() {
-    connectors.every(({ name, connector }) => {
+    connectors.every(({ name, description, connector }) => {
       console.log(`Detecting ${name}`);
       if (connector.isConnected()) {
         connector.getAccounts().then(({ accounts, chainId }) => {
           console.log({ accounts, chainId });
-          this.$store.commit("connector/update", { accounts, chainId });
+          this.$store.commit("connector/update", {
+            name,
+            description,
+            accounts,
+            chainId
+          });
         });
 
         return false;
