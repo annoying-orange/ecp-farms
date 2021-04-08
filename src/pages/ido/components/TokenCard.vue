@@ -4,12 +4,12 @@
       <q-avatar>
         <q-icon name="fab fa-galactic-republic" size="xl" />
       </q-avatar>
-      <q-item-label class="text-h5 q-pt-md text-secondary"
-        >EtherSwap Token</q-item-label
-      >
-      <q-item-label class="text-h6 q-pt-sm" lines="1"
-        >0x1d32916cfa6534d261ad53e2498ab95505bd2510</q-item-label
-      >
+      <q-item-label class="text-h5 q-pt-md text-secondary">
+        {{ name }}
+      </q-item-label>
+      <q-item-label class="text-h6 q-pt-sm" lines="1">
+        {{ address }}
+      </q-item-label>
     </q-card-section>
     <q-card-section class="q-mt-sm">
       <div class="q-gutter-md">
@@ -18,21 +18,65 @@
           size="lg"
           label="Connect Wallet"
         />
-        <q-btn rounded outline no-caps label="View Etherscan" size="lg" />
+        <q-btn
+          v-if="connected"
+          unelevated
+          rounded
+          no-caps
+          color="secondary"
+          padding="sm xl"
+          label="Buy"
+          size="lg"
+          @click="onBuy"
+        />
+        <q-btn
+          rounded
+          outline
+          no-caps
+          label="View HecoInfo"
+          size="lg"
+          type="a"
+          target="_blank"
+          href="https://testnet.hecoinfo.com/address/0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd"
+        />
       </div>
     </q-card-section>
     <q-card-section class="tips q-mt-sm">
-      The public round allows over-raising. After reaching the end block height,
-      token collection and fund return will be carried out in proportion to the
-      actual raised funds.
+      {{ description }}
     </q-card-section>
   </q-card>
 </template>
 <script>
 import WalletConnectButton from "../../../components/WalletConnectButton";
+import BuyDialog from "./BuyDialog";
+
 export default {
   components: { WalletConnectButton },
-  name: "TokenCard"
+  name: "TokenCard",
+
+  data() {
+    return {
+      name: "Caviar Token",
+      address: "0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd",
+      description:
+        "The public round allows over-raising. After reaching the end block height, token collection and fund return will be carried out in proportion to the actual raised funds."
+    };
+  },
+
+  computed: {
+    connected: function() {
+      return this.$store.state.connector.connected;
+    }
+  },
+
+  methods: {
+    onBuy: function() {
+      console.log(this);
+      this.$q.dialog({ component: BuyDialog, parent: this }).onOk(() => {
+        console.log("Buy Done.");
+      });
+    }
+  }
 };
 </script>
 <style lang="sass" scoped>

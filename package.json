@@ -10,6 +10,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@metamask/detect-provider": "^1.2.0",
     "@quasar/extras": "^1.0.0",
     "@walletconnect/client": "^1.4.0",
     "@walletconnect/qrcode-modal": "^1.4.0",

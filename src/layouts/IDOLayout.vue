@@ -12,6 +12,7 @@
           <q-btn flat no-caps label="IDO" to="/ido/detail" />
           <language-button icon="fas fa-globe" />
           <wallet-connect-button />
+          <account-card />
         </div>
         <div class="mobile-only">
           <language-button icon="fas fa-globe" />
@@ -39,15 +40,33 @@
 </template>
 
 <script>
+import connectors from "../plugins/WalletDialog/connectors";
 import LanguageButton from "src/components/LanguageButton";
 import WalletConnectButton from "src/components/WalletConnectButton.vue";
+import AccountCard from "src/components/AccountCard.vue";
 
 export default {
   name: "IDOLayout",
-  components: { LanguageButton, WalletConnectButton },
+  components: { LanguageButton, WalletConnectButton, AccountCard },
 
   data() {
     return {};
+  },
+
+  mounted() {
+    connectors.every(({ name, connector }) => {
+      console.log(`Detecting ${name}`);
+      if (connector.isConnected()) {
+        connector.getAccounts().then(({ accounts, chainId }) => {
+          console.log({ accounts, chainId });
+          this.$store.commit("connector/update", { accounts, chainId });
+        });
+
+        return false;
+      }
+
+      return true;
+    });
   }
 };
 </script>

@@ -34,9 +34,18 @@ html {
     height: 100px;
   }
 
+  .q-item {
+    padding: 16px;
+    background-color: #f7f8fa;
+    border-radius: 30px;
+  }
+
   .q-item__label {
-    text-align: center;
+    text-align: left;
     padding: 8px;
+    padding-left: 0;
+    font-size: 16px;
+    font-weight: 400;
   }
 
   .huobi img {
@@ -129,5 +138,17 @@ html {
   >div:first-child {
     background-color: #f7f8fa;
     text-align: center;
+  }
+}
+
+.count {
+  >div:first-child {
+    background-color: rgba(86, 86, 86, 0.5);
+    margin: 0 auto;
+    font-size: 20pt;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 8px;
+    min-width: 48px
   }
 }
