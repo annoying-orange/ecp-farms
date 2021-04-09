@@ -7,9 +7,9 @@
           EtherSwap
         </q-toolbar-title>
         <div class="q-gutter-md desktop-only">
-          <q-btn flat no-caps label="Home" to="/ido" />
-          <q-btn flat no-caps label="Invite" to="/ido/invite" />
-          <q-btn flat no-caps label="IDO" to="/ido/detail" />
+          <q-btn flat no-caps :label="$t('menu.home')" to="/ido" />
+          <q-btn flat no-caps :label="$t('menu.invite')" to="/ido/invite" />
+          <q-btn flat no-caps :label="$t('menu.ido')" to="/ido/detail" />
           <language-button icon="fas fa-globe" />
           <wallet-connect-button />
           <account-card />
@@ -19,11 +19,14 @@
           <q-btn flat round icon="fas fa-bars">
             <q-menu>
               <q-list style="min-width: 100px">
-                <q-item clickable v-close-popup to="invite">
-                  <q-item-section>Invite</q-item-section>
+                <q-item clickable v-close-popup to="/ido">
+                  <q-item-section>{{ $t("menu.home") }}</q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup to="detail">
-                  <q-item-section>IDO</q-item-section>
+                <q-item clickable v-close-popup to="/ido/invite">
+                  <q-item-section>{{ $t("menu.invite") }}</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup to="/ido/detail">
+                  <q-item-section>{{ $t("menu.ido") }}</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>

@@ -5,12 +5,12 @@
       Finish
     </div>
     <q-item class="q-gutter-md">
-      <count label="Day" v-model="day" />
-      <count label="Hour" v-model="hour" />
+      <count :label="$t('date.day')" v-model="day" />
+      <count :label="$t('date.hour')" v-model="hour" />
       <div class="q-pt-md">:</div>
-      <count label="Minute" v-model="minute" />
+      <count :label="$t('date.minute')" v-model="minute" />
       <div class="q-pt-md">:</div>
-      <count label="Second" v-model="second" />
+      <count :label="$t('date.second')" v-model="second" />
     </q-item>
     <div></div>
   </div>

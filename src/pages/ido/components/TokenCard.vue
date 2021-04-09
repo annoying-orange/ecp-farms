@@ -25,7 +25,7 @@
           no-caps
           color="secondary"
           padding="sm xl"
-          label="Buy"
+          :label="$t('token.buy')"
           size="lg"
           @click="onBuy"
         />
@@ -33,7 +33,7 @@
           rounded
           outline
           no-caps
-          label="View HecoInfo"
+          :label="$t('token.viewHecoInfo')"
           size="lg"
           type="a"
           target="_blank"
@@ -42,7 +42,7 @@
       </div>
     </q-card-section>
     <q-card-section class="tips q-mt-sm">
-      {{ description }}
+      {{ $t("token.description") }}
     </q-card-section>
   </q-card>
 </template>
@@ -57,9 +57,7 @@ export default {
   data() {
     return {
       name: "Caviar Token",
-      address: "0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd",
-      description:
-        "The public round allows over-raising. After reaching the end block height, token collection and fund return will be carried out in proportion to the actual raised funds."
+      address: "0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd"
     };
   },
 

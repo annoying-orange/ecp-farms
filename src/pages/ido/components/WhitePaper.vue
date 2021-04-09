@@ -4,9 +4,12 @@
       <q-item-label class="brand-name text-h4 text-secondary"
         >EtherSwap Token</q-item-label
       >
-      <q-item-label class="text-h6 q-pt-md" lines="1"
-        >The decentralized exchange that truly belongs to you</q-item-label
-      >
+      <q-item-label class="text-h5 q-pt-md">
+        {{ $t("ido.whitePaperTitle") }}
+      </q-item-label>
+      <q-item-label class="q-pt-md text-grey">
+        {{ $t("ido.whitePaperDescription") }}
+      </q-item-label>
     </q-card-section>
     <q-card-section class="q-mt-sm">
       <q-btn
@@ -14,7 +17,7 @@
         unelevated
         no-caps
         color="secondary"
-        label="White Paper"
+        :label="$t('ido.whitePaper')"
         class="text-weight-bold"
         size="lg"
         @click="onWhitePaper"

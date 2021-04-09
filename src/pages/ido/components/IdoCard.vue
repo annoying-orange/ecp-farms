@@ -12,7 +12,7 @@
         </q-item-section>
         <q-item-section side>
           <div>
-            <q-chip square>Public</q-chip>
+            <q-chip square>{{ $t("ido.public") }}</q-chip>
           </div>
         </q-item-section>
       </q-item>
@@ -20,13 +20,17 @@
     <q-card-section class="q-pt-none">
       <q-item>
         <q-item-section>
-          <q-item-label class="text-weight-bold">Total Raise</q-item-label>
+          <q-item-label class="text-weight-bold">{{
+            $t("ido.totalRaise")
+          }}</q-item-label>
           <q-item-label class="text-h5 text-weight-bold q-pt-sm">
             {{ issuances | fromWei }} CAV
           </q-item-label>
         </q-item-section>
         <q-item-section side class="text-white">
-          <q-item-label class="text-weight-bold">Min Allocation</q-item-label>
+          <q-item-label class="text-weight-bold">{{
+            $t("ido.minAllocation")
+          }}</q-item-label>
           <q-item-label class="text-weight-bold q-pt-sm">
             {{ min | fromWei }} USDT
           </q-item-label>
@@ -35,12 +39,12 @@
     </q-card-section>
     <q-card-section>
       <q-item class="q-pb-none">
-        <q-item-section class="text-white text-weight-bold"
-          >Swap Progress</q-item-section
-        >
-        <q-item-section side class="text-white"
-          >1 CAV = {{ exchange }} USDT</q-item-section
-        >
+        <q-item-section class="text-white text-weight-bold">
+          {{ $t("ido.swapProgress") }}
+        </q-item-section>
+        <q-item-section side class="text-white">
+          1 CAV = {{ exchange }} USDT
+        </q-item-section>
       </q-item>
       <q-item class="q-pt-none q-pb-none">
         <q-item-section>
@@ -60,7 +64,7 @@
       </q-item>
       <q-item>
         <q-item-section class="text-weight-bold q-mb-md">
-          End Time: {{ expires | datetime }}
+          {{ $t("ido.endTime") }}: {{ expires | datetime }}
         </q-item-section>
       </q-item>
     </q-card-section>
@@ -73,7 +77,7 @@
           color="secondary"
           size="lg"
           class="full-width"
-          label="Check IDO Details"
+          :label="$t('ido.checkIDODetails')"
           to="/ido/detail"
         />
       </div>

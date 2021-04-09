@@ -3,7 +3,9 @@
     <q-card-section>
       <q-item>
         <q-item-section>
-          <q-item-label class="text-weight-bold">Swap Amount</q-item-label>
+          <q-item-label class="text-weight-bold">{{
+            $t("ido.swapAmount")
+          }}</q-item-label>
           <q-item-label class="text-h5 text-weight-bold q-pt-sm">
             {{ issuances | fromWei }} CAV
           </q-item-label>
@@ -19,15 +21,15 @@
       </q-item>
     </q-card-section>
     <q-card-section>
-      <q-item-label header class="text-white text-weight-bold"
-        >Estimated countdown</q-item-label
-      >
+      <q-item-label header class="text-white text-weight-bold">
+        {{ $t("ido.estimatedCountdown") }}
+      </q-item-label>
       <countdown :end="expires" />
     </q-card-section>
     <q-card-section>
-      <q-item-label header class="text-white text-weight-bold"
-        >Swap Progress</q-item-label
-      >
+      <q-item-label header class="text-white text-weight-bold">
+        {{ $t("ido.swapProgress") }}
+      </q-item-label>
       <q-card-section>
         <q-linear-progress
           rounded

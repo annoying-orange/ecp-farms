@@ -31,8 +31,8 @@
           <q-item-label header>
             {{
               transactions.length > 0
-                ? "Transactions"
-                : "Your transactions will appear here..."
+                ? $t("account.transactions")
+                : $t("account.transactionsHint")
             }}
           </q-item-label>
           <q-item v-for="t in transactions" :key="t.blockHash">
@@ -57,7 +57,9 @@
                 {{ isIn(t.to) ? "" : "-" }}{{ t.value | fromWei }}
                 <small>HT</small>
               </q-item-label>
-              <q-item-label caption> Block: {{ t.blockNumber }} </q-item-label>
+              <q-item-label caption>
+                {{ $t("account.block") }}: {{ t.blockNumber }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
