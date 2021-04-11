@@ -39,6 +39,7 @@ export function sendTransaction({ state }, tx) {
   const { connector } = connectors.find(c => c.name === state.name)
 
   return new Promise((resolve, reject) => {
+    console.log("Sending transaction ...")
     connector.sendTransaction(tx)
       .then(data => {
         console.log({ sendTransaction: data })

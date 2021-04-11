@@ -24,7 +24,24 @@
       <q-item-label header class="text-white text-weight-bold">
         {{ $t("ido.estimatedCountdown") }}
       </q-item-label>
-      <countdown :end="expires" />
+      <q-item>
+        <q-item-section>
+          <countdown :end="expires" />
+        </q-item-section>
+        <q-item-section side top>
+          <q-btn
+            unelevated
+            rounded
+            no-caps
+            color="secondary"
+            padding="sm xl"
+            :label="$t('token.buy')"
+            class="btn-buy"
+            size="lg"
+            @click="onBuy"
+          />
+        </q-item-section>
+      </q-item>
     </q-card-section>
     <q-card-section>
       <q-item-label header class="text-white text-weight-bold">
@@ -49,6 +66,7 @@
 </template>
 <script>
 import Countdown from "./Countdown";
+import BuyDialog from "./BuyDialog";
 
 export default {
   components: { Countdown },
@@ -72,6 +90,15 @@ export default {
 
     exchangeAmount() {
       return this.$web3.utils.fromWei(this.issuances) * this.exchange;
+    }
+  },
+
+  methods: {
+    onBuy: function() {
+      console.log(this);
+      this.$q.dialog({ component: BuyDialog, parent: this }).onOk(() => {
+        console.log("Buy Done.");
+      });
     }
   }
 };

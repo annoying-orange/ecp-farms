@@ -14,13 +14,12 @@
     <q-card-section class="q-mt-sm">
       <q-btn
         rounded
-        unelevated
+        outline
         no-caps
-        color="secondary"
         :label="$t('ido.whitePaper')"
-        class="text-weight-bold"
         size="lg"
-        @click="onWhitePaper"
+        type="a"
+        href="#/ido"
       />
     </q-card-section>
   </q-card>

@@ -57,7 +57,7 @@ export default class WalletConnectConnector {
       if (this.provider === undefined) {
         this.provider = this._newProvider()
       }
-
+      console.log({ tx })
       return await this.provider.sendTransaction(tx);
     }
 

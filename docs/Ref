@@ -1,0 +1,35 @@
+// EtherSwap
+0xc87a9034167bd84a18bd1b19b7b6f2b2115f8ea7
+0xA1Ee9F0a5af385e9efAd52aB8ec240C5e1dAF031
+
+http://etherswap.io
+http://etherswap.org
+
+https://docs.openzeppelin.com/contracts/4.x/api/finance
+
+https://m.hecochain.com/zh-cn
+
+https://ht.mdex.com/
+https://www.goosedefi.com
+https://www.youswap.info/
+https://mining.youswap.info/
+https://www.youswap.info/detail
+https://bxh.com/#/
+joyswap.org
+
+主网
+网络名称：heco-mainnet
+新增RPC URL:
+中国大陆：https://http-mainnet-node.huobichain.com
+其他地区：https://http-mainnet.hecochain.com
+链ID:128
+符号:HT
+管理器URL：https://scan.hecochain.com
+
+测试网
+chainid: 256
+rpc: https://http-testnet.hecochain.com
+scan: https://testnet.hecoinfo.com
+
+// Test Token
+0x001b8992c4ea8a60eccab866b556b9bb446070bf

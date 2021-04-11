@@ -38,6 +38,29 @@
       </q-item>
     </q-card-section>
     <q-card-section>
+      <q-item-label header class="text-white text-weight-bold">
+        {{ $t("ido.estimatedCountdown") }}
+      </q-item-label>
+      <q-item>
+        <q-item-section>
+          <countdown :end="expires" />
+        </q-item-section>
+        <q-item-section side top>
+          <q-btn
+            unelevated
+            rounded
+            no-caps
+            color="secondary"
+            padding="sm xl"
+            :label="$t('token.buy')"
+            class="btn-buy"
+            size="lg"
+            @click="onBuy"
+          />
+        </q-item-section>
+      </q-item>
+    </q-card-section>
+    <q-card-section>
       <q-item class="q-pb-none">
         <q-item-section class="text-white text-weight-bold">
           {{ $t("ido.swapProgress") }}
@@ -85,7 +108,11 @@
   </q-card>
 </template>
 <script>
+import Countdown from "./Countdown";
+import BuyDialog from "./BuyDialog";
+
 export default {
+  components: { Countdown },
   name: "IdoCard",
 
   data() {
@@ -106,23 +133,10 @@ export default {
   },
 
   methods: {
-    onBuy() {
-      const idoContract = new this.$web3.eth.Contract(
-        [],
-        "0x8FE395A1836Dfe5622e8436d735130989247b348",
-        {
-          from: "0x878E5f1D36E83C12542590FEB99257f822D23411",
-          gasPrice: "20000000000"
-        }
-      );
-
-      console.log(idoContract.methods);
-      //   idoContract.methods
-      //     .balanceOf("0x878E5f1D36E83C12542590FEB99257f822D23411")
-      //     .call()
-      //     .then(balance => {
-      //       console.log({ balance });
-      //     });
+    onBuy: function() {
+      this.$q.dialog({ component: BuyDialog, parent: this }).onOk(() => {
+        console.log("Buy Done.");
+      });
     }
   }
 };

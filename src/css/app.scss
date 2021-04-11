@@ -123,13 +123,20 @@ html {
       padding: 8px;
       border-radius: 8px;
     }
+
+    .btn-buy {
+      height: 60px;
+      border-radius: 8px;
+      margin-top: 8px;
+      margin-right: 16px;
+    }
   }
 
   .content-container {
     >div {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 48px 0
+      padding: 48px 16px
     }
   }
 }
@@ -149,7 +156,8 @@ html {
     font-weight: bold;
     padding: 8px;
     border-radius: 8px;
-    min-width: 48px
+    min-width: 60px;
+    min-height: 60px
   }
 }
 

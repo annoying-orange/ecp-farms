@@ -13,22 +13,6 @@
     </q-card-section>
     <q-card-section class="q-mt-sm">
       <div class="q-gutter-md">
-        <wallet-connect-button
-          :no-details="true"
-          size="lg"
-          label="Connect Wallet"
-        />
-        <q-btn
-          v-if="connected"
-          unelevated
-          rounded
-          no-caps
-          color="secondary"
-          padding="sm xl"
-          :label="$t('token.buy')"
-          size="lg"
-          @click="onBuy"
-        />
         <q-btn
           rounded
           outline
@@ -47,11 +31,7 @@
   </q-card>
 </template>
 <script>
-import WalletConnectButton from "../../../components/WalletConnectButton";
-import BuyDialog from "./BuyDialog";
-
 export default {
-  components: { WalletConnectButton },
   name: "TokenCard",
 
   data() {
@@ -59,21 +39,6 @@ export default {
       name: "Caviar Token",
       address: "0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd"
     };
-  },
-
-  computed: {
-    connected: function() {
-      return this.$store.state.connector.connected;
-    }
-  },
-
-  methods: {
-    onBuy: function() {
-      console.log(this);
-      this.$q.dialog({ component: BuyDialog, parent: this }).onOk(() => {
-        console.log("Buy Done.");
-      });
-    }
   }
 };
 </script>

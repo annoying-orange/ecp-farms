@@ -69,10 +69,8 @@ export default {
             chainId
           });
         });
-
         return false;
       }
-
       return true;
     });
   }
