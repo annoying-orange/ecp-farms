@@ -4,7 +4,6 @@
     unelevated
     rounded
     no-caps
-    class="q-mr-md"
     color="secondary"
     :label="address | address"
   >
@@ -26,6 +25,7 @@
             </q-item-label>
             <q-chip>{{ address | address }}</q-chip>
           </div>
+          <q-item-label caption class="q-pt-sm">{{ description }}</q-item-label>
         </q-card-section>
         <q-list>
           <q-item-label header>
@@ -87,6 +87,10 @@ export default {
 
     address: function() {
       return this.$store.state.connector.address;
+    },
+
+    description: function() {
+      return this.$store.state.connector.description;
     },
 
     totalBalance: function() {

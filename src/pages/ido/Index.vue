@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-primary">
-    <div class="q-pt-xl q-pb-xl">
+    <div class="q-pt-xl q-pb-md">
       <div class="row" style="max-width: 1200px; margin: 0 auto">
         <div class="col-xs-12 col-sm-6">
           <white-paper />

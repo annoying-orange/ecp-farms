@@ -27,7 +27,7 @@ export default class WalletConnectConnector {
         console.log(this.provider);
 
         const { accounts, chainId } = this.provider;
-        success()
+        success({ accounts, chainId })
       }
     }
 

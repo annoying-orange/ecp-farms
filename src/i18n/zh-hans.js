@@ -50,5 +50,12 @@ export default {
         scalabilityDescription: '高性能的可扩展性正在开发中，可以实现即时交换和低气费。',
         crossChain: '跨链聚合交易',
         crossChainDescription: '多个公共链上的每个DEX服务提供商都集成了各种DEX流动性和定价，从而为用户提供最佳的交易价格和最小的费用。'
+    },
+    transaction: {
+        buy: '认购',
+        confirm: '确定',
+        successfully: '交易成功',
+        failed: '交易失败',
+        insufficientBalance: '您的账户余额不足'
     }
 }

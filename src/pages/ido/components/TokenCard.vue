@@ -1,18 +1,26 @@
 <template>
-  <q-card flat class="transparent text-white">
+  <q-card flat class="transparent text-white q-pa-md">
     <q-card-section>
-      <q-avatar>
-        <q-icon name="fab fa-galactic-republic" size="xl" />
-      </q-avatar>
-      <q-item-label class="text-h5 q-pt-md text-secondary">
-        {{ name }}
-      </q-item-label>
+      <q-item class="q-pl-none">
+        <q-item-section avatar>
+          <q-avatar>
+            <q-icon name="fab fa-galactic-republic" size="lg" />
+          </q-avatar>
+        </q-item-section>
+        <q-item-section top>
+          <q-item-label class="text-h4 text-secondary">
+            {{ name }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
       <q-item-label class="text-h6 q-pt-sm" lines="1">
         {{ address }}
       </q-item-label>
     </q-card-section>
     <q-card-section class="q-mt-sm">
       <div class="q-gutter-md">
+        <buy-button />
         <q-btn
           rounded
           outline
@@ -21,7 +29,7 @@
           size="lg"
           type="a"
           target="_blank"
-          href="https://testnet.hecoinfo.com/address/0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd"
+          href="https://testnet.hecoinfo.com/token/0x1812d24b12a5d8117eab07958bb768fe76b29ff8"
         />
       </div>
     </q-card-section>
@@ -31,13 +39,16 @@
   </q-card>
 </template>
 <script>
+import BuyButton from "./BuyButton";
+
 export default {
+  components: { BuyButton },
   name: "TokenCard",
 
   data() {
     return {
-      name: "Caviar Token",
-      address: "0xfe77358a99ea08dc2c2b1598bfafd42c796a59bd"
+      name: "Angus Token",
+      address: "0x1812d24b12a5d8117eab07958bb768fe76b29ff8"
     };
   }
 };

@@ -1,67 +1,127 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide" persistent>
-    <q-card class="radius-30">
-      <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Buy</div>
-        <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
-      </q-card-section>
-      <q-card-section />
+  <q-dialog
+    ref="dialog"
+    @hide="onDialogHide"
+    persistent
+    :position="$q.platform.is.mobile ? 'bottom' : 'standard'"
+  >
+    <q-card
+      :class="{ 'radius-30': !$q.platform.is.mobile }"
+      class="buy-dialog-content"
+    >
+      <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
+        <q-tab-panel name="buy">
+          <q-card flat>
+            <q-card-section class="row items-center q-pb-none">
+              <div class="text-h6">
+                {{ $t("transaction.buy") }}
+              </div>
+              <q-space />
+              <q-btn icon="close" flat round dense v-close-popup />
+            </q-card-section>
+            <q-card-section class="text-center q-pt-xl">
+              <q-chip>
+                <q-avatar>
+                  <img src="img/icon-usdt.png" />
+                </q-avatar>
+                UAGS
+              </q-chip>
+              >
+              <q-chip>
+                <q-avatar>
+                  <q-icon name="fab fa-galactic-republic" size="28px" />
+                </q-avatar>
+                AGS
+              </q-chip>
+            </q-card-section>
+            <q-card-section>
+              <q-input
+                stack-label
+                type="number"
+                placeholder="0.0"
+                input-class="text-h4 text-center"
+                reverse-fill-mask
+                v-model="amount"
+              >
+              </q-input>
+            </q-card-section>
+            <q-card-section>
+              <q-item-label
+                header
+                class="q-pt-none text-h6 text-secondary text-center"
+              >
+                ~{{ expectedAmount }} AGS
+              </q-item-label>
+              <div class="text-center">
+                <q-chip clickable @click="amount = 100">100</q-chip>
+                <q-chip clickable @click="amount = 500">500</q-chip>
+                <q-chip clickable @click="amount = 2500">2500</q-chip>
+                <q-chip clickable @click="amount = 10000">10000</q-chip>
+              </div>
+            </q-card-section>
 
-      <div class="text-center">
-        <q-chip>
-          <q-avatar>
-            <img src="img/icon-usdt.png" />
-          </q-avatar>
-          UAGS
-        </q-chip>
-        >
-        <q-chip>
-          <q-avatar>
-            <q-icon name="fab fa-galactic-republic" size="28px" />
-          </q-avatar>
-          AGS
-        </q-chip>
-      </div>
-      <q-card-section class="q-pa-xl">
-        <q-input
-          stack-label
-          type="number"
-          placeholder="0.0"
-          input-class="text-h4 text-center"
-          reverse-fill-mask
-          v-model="amount"
-        >
-        </q-input>
-      </q-card-section>
-      <q-card-section class="q-pt-none q-pb-xl">
-        <q-item-label
-          header
-          class="q-pt-none text-h6 text-secondary text-center"
-        >
-          ~{{ expectedAmount }} AGS
-        </q-item-label>
-        <div class="text-center">
-          <q-chip clickable @click="amount = 100">100</q-chip>
-          <q-chip clickable @click="amount = 500">500</q-chip>
-          <q-chip clickable @click="amount = 2500">2500</q-chip>
-          <q-chip clickable @click="amount = 10000">10000</q-chip>
-        </div>
-      </q-card-section>
+            <q-card-actions align="center" class="q-mt-md">
+              <q-btn
+                unelevated
+                rounded
+                no-caps
+                color="secondary"
+                :label="$t('transaction.confirm')"
+                size="lg"
+                padding="sm 60px"
+                @click="onConfrim"
+              />
+            </q-card-actions>
+          </q-card>
+        </q-tab-panel>
 
-      <q-card-actions align="center" class="text-primary q-pa-md">
-        <q-btn
-          unelevated
-          rounded
-          no-caps
-          color="secondary"
-          label="Confrim"
-          type="submit"
-          size="lg"
-          padding="sm 60px"
-          @click="onOK"
-        />
-      </q-card-actions>
+        <q-tab-panel name="send">
+          <q-card flat>
+            <q-card-section class="text-center">
+              <q-spinner color="secondary" size="10em" :thickness="2" />
+            </q-card-section>
+          </q-card>
+        </q-tab-panel>
+
+        <q-tab-panel name="success">
+          <q-card flat>
+            <q-card-section class="row items-center q-pb-none">
+              <q-space />
+              <q-btn icon="close" flat round dense v-close-popup />
+            </q-card-section>
+            <q-card-section class="text-center">
+              <q-avatar
+                icon="far fa-check-circle"
+                class="text-green"
+                font-size="1em"
+                size="8em"
+              />
+              <q-item-label class="text-h6 q-pt-md">
+                {{ $t("transaction.successfully") }}
+              </q-item-label>
+            </q-card-section>
+          </q-card>
+        </q-tab-panel>
+        <q-tab-panel name="fail">
+          <q-card flat>
+            <q-card-section class="row items-center q-pb-none">
+              <q-space />
+              <q-btn icon="close" flat round dense v-close-popup />
+            </q-card-section>
+            <q-card-section class="text-center">
+              <q-avatar
+                icon="far fa-times-circle"
+                class="text-negative"
+                font-size="1em"
+                size="8em"
+              />
+              <q-item-label class="text-h6 q-pt-md">
+                {{ err.message }}
+              </q-item-label>
+            </q-card-section>
+          </q-card>
+        </q-tab-panel>
+      </q-tab-panels>
     </q-card>
   </q-dialog>
 </template>
@@ -71,12 +131,21 @@ export default {
 
   data() {
     return {
+      panel: "buy",
+      err: {
+        message: ""
+      },
       amount: 0,
       min: 100,
       max: 10000,
       contract: {
         address: "0x1b248fa4374a36ed5474f8154ac4e7eeae3692b1",
         abi: []
+      },
+      ido: {
+        address:
+          this.$route.params.contract ||
+          "0x49fa04CFc1fbc13d5c29358ab96D852203aD5765"
       }
     };
   },
@@ -109,8 +178,16 @@ export default {
     },
 
     onOK() {
-      this.$emit("ok");
-      //   this.hide();
+      this.$emit("ok", this.tx);
+      this.hide();
+    },
+
+    onCancel() {
+      this.hide();
+    },
+
+    onConfrim() {
+      this.panel = "send";
 
       this.$store
         .dispatch("connector/abi", this.contract.address)
@@ -131,37 +208,20 @@ export default {
 
             this.genertaeTransaction({ from, to, amount }, (tx, err) => {
               if (err) {
-                this.$q.notify({
-                  type: "negative",
-                  message: err.message
-                });
+                this.fail(err);
                 return;
               }
               console.log(tx);
 
               this.$store
                 .dispatch("connector/sendTransaction", tx)
-                .then(data => {
-                  // blockHash: "0x4b78e5fadf4a32e4270bcbd96421fb2fde65d896287668692cb9ef9cca4394bb"
-                  console.log({ tx, data });
-                })
-                .catch(err => {
-                  this.$q.notify({
-                    type: "negative",
-                    position: "top",
-                    message: err.message
-                  });
-                  this.hide();
-                });
+                .then(data => this.success({ tx, data }))
+                .catch(err => this.fail(err));
             });
           } else {
             console.error(message);
           }
         });
-    },
-
-    onCancel() {
-      this.hide();
     },
 
     async balanceOf(abi, address, from) {
@@ -182,14 +242,14 @@ export default {
 
       const tokenBalance = await token.methods.balanceOf(from).call();
       if (tokenBalance < balance) {
-        callback(null, { message: "余额不足" });
+        callback(null, { message: this.$t("transaction.insufficientBalance") });
         return;
       }
 
       console.log({ tokenBalance, balance, decimals });
 
       const data = await token.methods
-        .transfer("0x49fa04CFc1fbc13d5c29358ab96D852203aD5765", balance)
+        .transfer(this.ido.address, balance)
         .encodeABI();
 
       try {
@@ -208,6 +268,17 @@ export default {
         console.error(err);
         callback(null, err);
       }
+    },
+
+    fail(err) {
+      console.log({ message: "Transaction Failed", err });
+      this.err = Object.assign(this.err, err);
+      this.panel = "fail";
+    },
+
+    success(payload) {
+      console.log({ message: "Transaction Success", payload });
+      this.panel = "success";
     }
   }
 };

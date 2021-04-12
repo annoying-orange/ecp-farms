@@ -24,7 +24,7 @@
             $t("ido.totalRaise")
           }}</q-item-label>
           <q-item-label class="text-h5 text-weight-bold q-pt-sm">
-            {{ issuances | fromWei }} CAV
+            {{ issuances | fromWei }} AGS
           </q-item-label>
         </q-item-section>
         <q-item-section side class="text-white">
@@ -37,30 +37,13 @@
         </q-item-section>
       </q-item>
     </q-card-section>
-    <q-card-section>
+    <q-card-section class="q-pt-none">
       <q-item-label header class="text-white text-weight-bold">
         {{ $t("ido.estimatedCountdown") }}
       </q-item-label>
-      <q-item>
-        <q-item-section>
-          <countdown :end="expires" />
-        </q-item-section>
-        <q-item-section side top>
-          <q-btn
-            unelevated
-            rounded
-            no-caps
-            color="secondary"
-            padding="sm xl"
-            :label="$t('token.buy')"
-            class="btn-buy"
-            size="lg"
-            @click="onBuy"
-          />
-        </q-item-section>
-      </q-item>
+      <countdown :end="expires" />
     </q-card-section>
-    <q-card-section>
+    <q-card-section class="q-pt-none">
       <q-item class="q-pb-none">
         <q-item-section class="text-white text-weight-bold">
           {{ $t("ido.swapProgress") }}
@@ -69,7 +52,7 @@
           1 CAV = {{ exchange }} USDT
         </q-item-section>
       </q-item>
-      <q-item class="q-pt-none q-pb-none">
+      <q-item class="q-pt-none q-pb-none swap-progress">
         <q-item-section>
           <q-linear-progress
             rounded
@@ -129,14 +112,6 @@ export default {
   computed: {
     progress() {
       return this.purchased / this.issuances;
-    }
-  },
-
-  methods: {
-    onBuy: function() {
-      this.$q.dialog({ component: BuyDialog, parent: this }).onOk(() => {
-        console.log("Buy Done.");
-      });
     }
   }
 };

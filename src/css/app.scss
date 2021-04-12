@@ -76,7 +76,14 @@ html {
 }
 
 .q-item--active {
-  border-left: 5px solid $secondary;
+  color: $secondary;
+  font-weight: 600;
+}
+
+.menu {
+  .q-item--active {
+    border-left: 5px solid $secondary;
+  }
 }
 
 .q-layout.ido {
@@ -156,9 +163,13 @@ html {
     font-weight: bold;
     padding: 8px;
     border-radius: 8px;
-    min-width: 60px;
-    min-height: 60px
+    min-width: 48px;
+    min-height: 48px
   }
+}
+
+.swap-progress {
+  min-height: auto;
 }
 
 .product-highlights {
@@ -169,4 +180,8 @@ html {
     font-weight: bold;
     min-height: 280px;
   }
+}
+
+.buy-dialog-content {
+  min-height: 465px;
 }

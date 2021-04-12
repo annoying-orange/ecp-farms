@@ -13,7 +13,7 @@
           :key="c.name"
           :name="c.name"
           :icon="c.icon"
-          @connect="onOK(c.connector)"
+          @connect="onOK(c)"
         />
       </q-card-section>
 
@@ -60,8 +60,8 @@ export default {
       this.$emit("hide");
     },
 
-    onOK(connector) {
-      this.$emit("ok", connector);
+    onOK(target) {
+      this.$emit("ok", target);
       this.hide();
     },
 

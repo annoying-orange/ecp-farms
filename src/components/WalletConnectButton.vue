@@ -4,7 +4,6 @@
     unelevated
     rounded
     no-caps
-    class="q-mr-md"
     color="secondary"
     :label="label"
     :size="size"
@@ -51,7 +50,7 @@ export default {
     onConnect() {
       this.$q
         .dialog({ component: ConnectDialog, parent: this })
-        .onOk(connector => {
+        .onOk(({ name, description, connector }) => {
           if (connector) {
             connector.connect(
               ({ accounts, chainId }) => {
@@ -60,12 +59,16 @@ export default {
                 this.address = accounts[0];
                 this.chainId = chainId;
 
-                this.$store.commit("connector/update", { accounts, chainId });
+                this.$store.commit("connector/update", {
+                  name,
+                  description,
+                  accounts,
+                  chainId
+                });
               },
               err => {
                 this.$q.notify({
                   type: "negative",
-                  position: "top",
                   message: err
                 });
               }

@@ -50,5 +50,12 @@ export default {
         scalabilityDescription: 'Scalability with high performance is under development, which may realize instant exchange and low Gas fee.',
         crossChain: 'Cross-chain Aggregation Trade',
         crossChainDescription: 'Each DEX service provider on multiple public chains integrate all kinds of DEX liquidity and pricing to provide users with optimal trading price and minimum slippage.'
+    },
+    transaction: {
+        buy: 'Buy',
+        confirm: 'Confrim',
+        successfully: 'Transaction Successfully',
+        failed: 'Transaction Failed',
+        insufficientBalance: 'Insufficient balance'
     }
 }

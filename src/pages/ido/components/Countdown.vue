@@ -12,7 +12,6 @@
       <div class="q-pt-md">:</div>
       <count :label="$t('date.second')" v-model="second" />
     </q-item>
-    <div></div>
   </div>
 </template>
 <script>
