@@ -21,7 +21,7 @@
         </q-toolbar-title>
         <div class="q-gutter-md desktop-only">
           <q-btn flat no-caps :label="$t('menu.home')" to="/ido" />
-          <q-btn flat no-caps :label="$t('menu.invite')" to="/ido/invite" />
+          <q-btn flat no-caps :label="$t('menu.invite')" @click="onInvite" />
           <q-btn flat no-caps :label="$t('menu.ido')" to="/ido/detail" />
           <language-button icon="fas fa-globe" />
           <wallet-connect-button />
@@ -37,7 +37,6 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
       content-class="bg-grey-1"
       class="menu"
@@ -107,6 +106,7 @@ import connectors from "../plugins/WalletDialog/connectors";
 import LanguageButton from "src/components/LanguageButton";
 import WalletConnectButton from "src/components/WalletConnectButton";
 import AccountCard from "src/components/AccountCard";
+import InviteDialog from "../pages/ido/components/InviteDialog";
 
 const viewMode = {
   light: "light_mode",
@@ -182,6 +182,11 @@ export default {
   },
 
   methods: {
+    onInvite() {
+      const value = "https://etherswap.1ecp.com/#Y9mT1c8K";
+      this.$q.dialog({ component: InviteDialog, parent: this, value });
+    },
+
     changeLanguage(lang) {
       this.locale = lang.value;
       this.localeDialog = !this.localeDialog;

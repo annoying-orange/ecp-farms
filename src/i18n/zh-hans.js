@@ -57,5 +57,9 @@ export default {
         successfully: '交易成功',
         failed: '交易失败',
         insufficientBalance: '您的账户余额不足'
+    },
+    invite: {
+        text: '使用以下链接邀请您的朋友',
+        copyLink: '邀请链接已复制到剪贴板'
     }
 }

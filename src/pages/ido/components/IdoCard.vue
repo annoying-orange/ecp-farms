@@ -84,7 +84,7 @@
           size="lg"
           class="full-width"
           :label="$t('ido.checkIDODetails')"
-          to="/ido/detail"
+          to="/ido/details"
         />
       </div>
     </q-card-section>
@@ -105,8 +105,35 @@ export default {
       purchased: "2500000000000000000000", // 已购额度 Wei
       issuances: "50000000000000000000000", // 发行额度 Wei
       min: "100000000000000000000", // 最小购买额度 Wei
-      max: "100000000000000000000" // 最大购买额度 Wei
+      max: "100000000000000000000", // 最大购买额度 Wei
+      ido: {
+        address: "0x49fa04CFc1fbc13d5c29358ab96D852203aD5765"
+      }
     };
+  },
+
+  mounted() {
+    this.$store
+      .dispatch("connector/abi", this.ido.address)
+      .then(({ status, message, result }) => {
+        console.log({ status, message, result });
+        if (status === "1") {
+          const abi = JSON.parse(result);
+          const contract = new this.$web3.eth.Contract(abi, this.ido.address);
+
+          contract.methods
+            .getInfo()
+            .call()
+            .then(d => {
+              console.log(d);
+              // this.expires = d[1]
+              // this.exchange = d[2]
+              // this.min = d[3]
+            });
+        } else {
+          console.error(message);
+        }
+      });
   },
 
   computed: {

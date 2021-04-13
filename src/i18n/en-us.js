@@ -57,5 +57,9 @@ export default {
         successfully: 'Transaction Successfully',
         failed: 'Transaction Failed',
         insufficientBalance: 'Insufficient balance'
+    },
+    invite: {
+        text: 'Use the bellow link to invite your friends',
+        copyLink: 'The invite link copied to the clipboard'
     }
 }

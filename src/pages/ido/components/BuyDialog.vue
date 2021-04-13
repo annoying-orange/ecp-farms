@@ -138,7 +138,7 @@ export default {
       amount: 0,
       min: 100,
       max: 10000,
-      contract: {
+      token: {
         address: "0x1b248fa4374a36ed5474f8154ac4e7eeae3692b1",
         abi: []
       },
@@ -190,23 +190,24 @@ export default {
       this.panel = "send";
 
       this.$store
-        .dispatch("connector/abi", this.contract.address)
+        .dispatch("connector/abi", this.token.address)
         .then(({ status, message, result }) => {
           console.log({ status, message, result });
           if (status === "1") {
-            this.contract.abi = JSON.parse(result);
+            this.token.abi = JSON.parse(result);
 
             const from = this.$store.state.connector.address;
-            const to = this.contract;
+            const to = this.ido.address;
+            const token = this.token;
             const amount = this.amount;
 
-            this.balanceOf(
-              this.contract.abi,
-              this.contract.address,
-              from
-            ).then(balance => console.log({ balance }));
+            // this.balanceOf(
+            //   this.contract.abi,
+            //   this.contract.address,
+            //   from
+            // ).then(balance => console.log({ balance }));
 
-            this.genertaeTransaction({ from, to, amount }, (tx, err) => {
+            this.genertaeTransaction({ from, to, token, amount }, (tx, err) => {
               if (err) {
                 this.fail(err);
                 return;
@@ -220,6 +221,7 @@ export default {
             });
           } else {
             console.error(message);
+            this.fail({ message });
           }
         });
     },
@@ -232,40 +234,36 @@ export default {
       return balance / Math.pow(10, decimals);
     },
 
-    async genertaeTransaction({ from, to, amount }, callback) {
+    async genertaeTransaction({ from, to, token, amount }, callback) {
       const nonce = await this.$web3.eth.getTransactionCount(from);
       const gasPrice = await this.$web3.eth.getGasPrice();
 
-      const token = new this.$web3.eth.Contract(to.abi, to.address);
-      const decimals = await token.methods.decimals().call();
-      const balance = this.$web3.utils.toWei(amount + ""); // amount * Math.pow(10, decimals);
+      const contract = new this.$web3.eth.Contract(token.abi, token.address);
+      // const decimals = await contract.methods.decimals().call();
+      // console.log(Math.pow(10, decimals) + "");
+      const value = this.$web3.utils.toWei(amount + "");
+      const balance = await contract.methods.balanceOf(from).call();
+      console.log({ balance, value });
 
-      const tokenBalance = await token.methods.balanceOf(from).call();
-      if (tokenBalance < balance) {
+      if (balance < value) {
         callback(null, { message: this.$t("transaction.insufficientBalance") });
         return;
       }
 
-      console.log({ tokenBalance, balance, decimals });
-
-      const data = await token.methods
-        .transfer(this.ido.address, balance)
-        .encodeABI();
+      const data = await contract.methods.transfer(to, value).encodeABI();
 
       try {
         var tx = {
           from,
-          to: to.address,
+          to: token.address,
           nonce,
           gasPrice,
           data
         };
         const gas = await this.$web3.eth.estimateGas(tx);
         tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
-        console.log({ tx });
         callback(tx, null);
       } catch (err) {
-        console.error(err);
         callback(null, err);
       }
     },

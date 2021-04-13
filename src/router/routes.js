@@ -18,9 +18,13 @@ const routes = [
     children: [
       { path: '/', component: () => import('pages/ido/Index.vue') },
       { path: '/:contract', component: () => import('pages/ido/Index.vue') },
-      { path: '/ido/invite', component: () => import('pages/ido/Invite.vue') },
       { path: '/ido/detail', component: () => import('pages/ido/Detail.vue') }
     ]
+  },
+
+  { 
+    path: '/ido/invite', 
+    component: () => import('pages/ido/Invite.vue') 
   },
 
   // Always leave this as last one,
