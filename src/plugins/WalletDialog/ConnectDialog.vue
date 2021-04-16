@@ -1,10 +1,12 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="radius-30">
+  <q-dialog ref="dialog" @hide="onDialogHide" class="connect-dialog">
+    <q-card>
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6">Connect to a wallet</div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <a href="#" class="nk-quick-nav-icon" @click="onCancel">
+          <em class="icon ni ni-cross"></em>
+        </a>
       </q-card-section>
 
       <q-card-section class="q-pt-md q-gutter-md wallet-container">
@@ -18,7 +20,7 @@
       </q-card-section>
 
       <q-card-actions align="center" class="text-primary">
-        <div class="q-pa-md">
+        <div class="q-pa-md full-width">
           <q-btn
             flat
             no-caps
@@ -27,6 +29,7 @@
             type="a"
             target="_blank"
             href="https://ethereum.org/zh/wallets"
+            class="full-width text-center"
           />
         </div>
       </q-card-actions>
@@ -71,3 +74,25 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.connect-dialog {
+  .q-card {
+    min-width: 300px;
+  }
+
+  .row {
+    margin-left: inherit;
+    margin-right: inherit;
+  }
+
+  .q-gutter-x-md > *,
+  .q-gutter-md > * {
+    margin-left: 16px;
+  }
+}
+
+.justify-center,
+.flex-center {
+  justify-content: center !important;
+}
+</style>

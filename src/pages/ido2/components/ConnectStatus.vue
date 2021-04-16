@@ -1,72 +1,98 @@
 <template>
-  <div class="nk-sidebar-widget d-none d-xl-block">
-    <div class="user-account-info between-center">
-      <div class="user-account-main">
-        <h6 class="overline-title-alt">Available Balance</h6>
-        <div class="user-balance">
-          {{ ht.balance | fixed }}
-          <small class="currency currency-btc">{{ ht.symbol }}</small>
+  <ul class="nk-quick-nav">
+    <li v-if="!connected">
+      <a href="#">
+        <div class="user-avatar sm">
+          <em class="icon ni ni-user-alt"></em>
         </div>
-        <div class="user-balance-alt">
-          {{ usdt.balance | fixed }}
-          <span class="currency currency-btc">{{ usdt.symbol }}</span>
+      </a>
+      <a
+        class="btn btn-primary dropdown-indicator d-none d-md-block"
+        href="#"
+        type="button"
+        data-toggle="dropdown"
+        @click="onConnect"
+        >Connect Wallet
+      </a>
+    </li>
+    <li class="dropdown user-dropdown" v-else>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <div class="user-toggle">
+          <div class="user-avatar sm">
+            <em class="icon ni ni-user-alt"></em>
+          </div>
+          <div class="user-info d-none d-md-block">
+            <div class="user-status user-status-unverified">
+              {{ eth.balance | fixed }}
+              <small class="currency currency-btc">{{ eth.symbol }}</small>
+            </div>
+            <div class="user-name dropdown-indicator">
+              {{ address | address }}
+            </div>
+          </div>
+        </div>
+      </a>
+      <div
+        class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-menu-s1"
+      >
+        <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+          <div class="user-card">
+            <div class="user-avatar">
+              <em class="icon ni ni-user-alt"></em>
+            </div>
+            <div class="user-info">
+              <span class="lead-text">{{ address | address }}</span>
+              <span class="sub-text"> </span>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown-inner user-account-info">
+          <h6 class="overline-title-alt">WALLET ACCOUNT</h6>
+          <div class="user-balance">
+            {{ eth.balance | fixed }}
+            <small class="currency currency-btc">{{ eth.symbol }}</small>
+          </div>
+          <div class="user-balance-sub">
+            Locked
+            <span
+              >0.00
+              <span class="currency currency-btc">{{ eth.symbol }}</span></span
+            >
+          </div>
+        </div>
+        <div class="dropdown-inner">
+          <ul class="link-list">
+            <li>
+              <a class="dark-switch" href="#">
+                <em class="icon ni ni-moon"></em><span>Dark Mode</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="dropdown-inner">
+          <ul class="link-list">
+            <li>
+              <a href="#">
+                <em class="icon ni ni-signout"></em><span>Disconnect</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-      <a
-        href="https://hecoinfo.com/chart/htprice"
-        target="_blank"
-        class="btn btn-white btn-icon btn-light"
-        ><em class="icon ni ni-line-chart"></em
-      ></a>
-    </div>
-    <ul class="user-account-data gy-1">
-      <li>
-        <div class="user-account-label">
-          <span class="sub-text">Profits (7d)</span>
-        </div>
-        <div class="user-account-value">
-          <span class="lead-text">
-            + 0.0526
-            <span class="currency currency-btc">BTC</span>
-          </span>
-          <span class="text-success ml-2">
-            3.1% <em class="icon ni ni-arrow-long-up"></em>
-          </span>
-        </div>
-      </li>
-      <li>
-        <div class="user-account-label">
-          <span class="sub-text">Deposit in orders</span>
-        </div>
-        <div class="user-account-value">
-          <span class="sub-text">
-            {{ eth.balance | fixed }}
-            <span class="currency currency-btc">{{ eth.symbol }}</span>
-          </span>
-        </div>
-      </li>
-    </ul>
-    <div class="user-account-actions">
-      <ul class="g-3">
-        <li v-if="!connected">
-          <a href="#" class="btn btn-lg btn-primary" @click="onConnect">
-            <span>Connect Wallet</span>
-          </a>
-        </li>
-        <li v-else>
-          <a href="#" class="btn btn-lg btn-warning">
-            <span>Change Wallet</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 <script>
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 
 export default {
-  name: "Account",
+  name: "ConnectStatus",
+
+  data() {
+    return {
+      connectors
+    };
+  },
 
   computed: {
     connected: function() {
@@ -88,10 +114,6 @@ export default {
     eth: function() {
       return this.$store.state.account.eth;
     }
-  },
-
-  mounted() {
-    console.log(this.usdt);
   },
 
   methods: {
@@ -167,8 +189,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-.user-account-actions ul li {
-  width: 100% !important;
-}
-</style>
