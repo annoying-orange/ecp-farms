@@ -59,6 +59,10 @@ html {
   }
 }
 
+.q-drawer {
+  background: transparent !important;
+}
+
 .q-card {
   border-radius: 30px;
 }
@@ -184,4 +188,22 @@ html {
 
 .buy-dialog-content {
   min-height: 465px;
+}
+
+// dashlite
+
+.language-list {
+  .row {
+    margin: 0 !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .nk-header-fluid {
+    margin-left: 300px;
+  }
+}
+
+.nk-sidebar-footer {
+  background: transparent !important;
 }

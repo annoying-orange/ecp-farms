@@ -4,8 +4,17 @@ import Web3 from 'web3'
 const web3 = new Web3('https://http-testnet.hecochain.com')
 Vue.prototype.$web3 = web3
 
+Vue.filter('address', function(val) {
+  return val
+    ? val.substring(0, 6) + "***" + val.substring(val.length - 4) : val;
+}),
+
 Vue.filter('balance', function (val) {
-  return val ? parseFloat(web3.utils.fromWei(val)).toFixed(4) : val
+  return val ? parseFloat(web3.utils.fromWei(val)).toFixed(6) : val
+})
+
+Vue.filter('fixed', function (val) {
+  return val ? parseFloat(val).toFixed(6) : val
 })
 
 Vue.filter('fromWei', function (val) {

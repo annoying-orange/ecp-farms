@@ -2,9 +2,11 @@ export default {
     isoName: 'en-us',
     nativeName: 'English(US)',
     menu: {
+        title: 'Menu',
         home: 'Home',
         invite: 'Invite',
-        ido: 'IDO'
+        ido: 'IDO',
+        buy: 'Buy'
     },
     date: {
         day: 'Day',
@@ -23,6 +25,7 @@ export default {
     },
     token: {
         buy: 'Buy',
+        whitePaper: 'White Paper',
         viewHecoInfo: 'View HecoInfo',
         description: 'The public round allows over-raising. After reaching the end block height, token collection and fund return will be carried out in proportion to the actual raised funds.'
     },

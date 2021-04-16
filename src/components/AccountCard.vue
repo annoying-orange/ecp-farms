@@ -140,12 +140,6 @@ export default {
   },
 
   filters: {
-    address: function(val) {
-      return val
-        ? val.substring(0, 6) + "***" + val.substring(val.length - 4)
-        : val;
-    },
-
     ago: function(val) {
       var diff = Math.round(new Date().getTime() / 1000 - val);
       if (diff < 60) {

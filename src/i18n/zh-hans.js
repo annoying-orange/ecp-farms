@@ -2,9 +2,11 @@ export default {
     isoName: 'zh-hans',
     nativeName: '中文(简体)',
     menu: {
+        title: '菜单',
         home: '主页',
         invite: '邀请',
-        ido: 'IDO'
+        ido: 'IDO',
+        buy: '认购'
     },
     date: {
         day: '天',
@@ -23,6 +25,7 @@ export default {
     },
     token: {
         buy: '认购',
+        whitePaper: '白皮书',
         viewHecoInfo: '查看浏览器',
         description: '公有轮可以提高筹资水平。 达到结束区块高度后，将根据实际筹集的资金按比例进行代币收集和资金返还。'
     },

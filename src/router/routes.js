@@ -13,18 +13,28 @@ const routes = [
   },
 
   {
-    path: '/',
+    path: '/ido1',
     component: () => import('layouts/IDOLayout.vue'),
     children: [
-      { path: '/', component: () => import('pages/ido/Index.vue') },
-      { path: '/:contract', component: () => import('pages/ido/Index.vue') },
-      { path: '/ido/detail', component: () => import('pages/ido/Detail.vue') }
+      { path: '/ido1', component: () => import('pages/ido/Index.vue') },
+      { path: '/ido1:contract', component: () => import('pages/ido/Index.vue') },
+      { path: '/ido1/detail', component: () => import('pages/ido/Detail.vue') }
     ]
   },
 
   { 
-    path: '/ido/invite', 
-    component: () => import('pages/ido/Invite.vue') 
+    path: '/invite', 
+    component: () => import('pages/ido2/Invite.vue') 
+  },
+  
+  {
+    path: '/',
+    component: () => import('pages/ido2/Layout.vue'),
+    children: [
+      { path: '/', component: () => import('pages/ido2/Index.vue') },
+      { path: '/buy', component: () => import('pages/ido2/Buy.vue') },
+      { path: '/:contract', component: () => import('pages/ido2/Index.vue') }
+    ]
   },
 
   // Always leave this as last one,
