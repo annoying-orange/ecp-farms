@@ -2,7 +2,7 @@
   <div>
     <div class="card-head">
       <div class="card-title mb-0">
-        <h5 class="title">Token Information</h5>
+        <h5 class="title">{{ $t("token.title") }}</h5>
       </div>
     </div>
     <!-- .card-head -->
@@ -12,7 +12,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Name
+                {{ $t("token.name") }}
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              Angus Token
+              {{ value.name }}
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Contract Address
+                {{ $t("token.contractAddress") }}
               </div>
             </div>
           </div>
@@ -39,7 +39,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              0x1812d2....6b29ff8
+              {{ value.address | address }}
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Total Supply
+                {{ $t("token.totalSupply") }}
               </div>
             </div>
           </div>
@@ -58,7 +58,8 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              500000
+              {{ value.totalSupply | number }}
+              <span class="currency currency-btc">{{ value.symbol }}</span>
             </div>
           </div>
         </div>
@@ -69,7 +70,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Holder
+                {{ $t("token.holders") }}
               </div>
             </div>
           </div>
@@ -77,8 +78,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              196
-              <span class="currency currency-btc">AGS</span>
+              {{ value.holders }}
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Trades
+                {{ $t("token.transfers") }}
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              Trades
+              {{ value.transfers }}
             </div>
           </div>
         </div>
@@ -109,6 +109,10 @@
 </template>
 <script>
 export default {
-  name: "TokenCard"
+  name: "TokenCard",
+
+  props: {
+    value: Object
+  }
 };
 </script>

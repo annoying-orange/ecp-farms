@@ -2,7 +2,7 @@
   <div>
     <div class="card-head">
       <div class="card-title mb-0">
-        <h5 class="title">Pool Information</h5>
+        <h5 class="title">{{ $t("pool.title") }}</h5>
       </div>
     </div>
     <!-- .card-head -->
@@ -12,7 +12,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                StartBlock
+                {{ $t("pool.startBlock") }}
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              12066995
+              {{ value.startBlock }}
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                EndBlock
+                {{ $t("pool.endBlock") }}
               </div>
             </div>
           </div>
@@ -39,7 +39,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              12069155
+              {{ value.endBlock }}
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Token Allocated Time
+                {{ $t("pool.allocatedTime") }}
               </div>
             </div>
           </div>
@@ -58,7 +58,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              2021-03-19 20:26:47
+              {{ value.allocatedTime | datetime }}
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Min Allocation
+                {{ $t("pool.minAllocation") }}
               </div>
             </div>
           </div>
@@ -77,8 +77,8 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              100
-              <span class="currency currency-btc">USDT</span>
+              {{ value.minAllocation }}
+              <span class="currency">{{ value.symbol }}</span>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
           <div class="tranx-info">
             <div class="tranx-data">
               <div class="tranx-label">
-                Qualification
+                {{ $t("pool.qualification") }}
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
         <div class="tranx-col">
           <div class="tranx-amount">
             <div class="number">
-              No
+              {{ $t(`pool.${value.qualification}`) }}
             </div>
           </div>
         </div>
@@ -109,6 +109,16 @@
 </template>
 <script>
 export default {
-  name: "PoolCard"
+  name: "PoolCard",
+
+  props: {
+    value: {
+      startBlock: Number,
+      endBlock: Number,
+      allocatedTime: Number,
+      minAllocation: Number,
+      qualification: String
+    }
+  }
 };
 </script>

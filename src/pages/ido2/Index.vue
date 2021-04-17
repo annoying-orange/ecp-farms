@@ -1,12 +1,14 @@
 <template>
   <q-page class="nk-content-body">
     <div class="nk-block-head">
-      <div class="nk-block-head-sub"><span>Welcome!</span></div>
+      <div class="nk-block-head-sub">
+        <span>{{ $t("crowdsale.welcome") }}</span>
+      </div>
       <div class="nk-block-between-md g-4">
         <div class="nk-block-head-content">
-          <h2 class="nk-block-title fw-normal">EtherSwap</h2>
+          <h2 class="nk-block-title fw-normal">{{ $t("crowdsale.title") }}</h2>
           <div class="nk-block-des">
-            <p>{{ $t("ido.whitePaperDescription") }}</p>
+            <p>{{ $t("crowdsale.description") }}</p>
           </div>
         </div>
         <!-- .nk-block-head-content -->
@@ -34,16 +36,12 @@
     <div class="nk-block">
       <div class="row gy-gs">
         <div class="col-lg-5 col-xl-4">
-          <overview-card />
+          <overview-card v-model="raise" />
           <!-- .nk-block -->
         </div>
         <!-- .col -->
         <div class="col-lg-7 col-xl-8">
-          <swap-progress
-            :exchange="exchange"
-            :purchased="purchased"
-            :issuances="issuances"
-          />
+          <swap-progress v-model="raise" />
         </div>
         <!-- .col -->
       </div>
@@ -52,211 +50,15 @@
     <!-- .nk-block -->
     <div class="nk-block nk-block-lg">
       <div class="row gy-gs">
-        <pool-card class="col-md-6" />
-        <token-card class="col-md-6" />
+        <pool-card class="col-md-6" v-model="pool" />
+        <token-card class="col-md-6" v-model="token" />
       </div>
       <!-- .row -->
     </div>
     <!-- .nk-block -->
-    <refer-us />
+    <refer-us v-model="invite" />
     <partnership />
-    <!-- .nk-block -->
-    <div class="nk-block">
-      <div class="card card-bordered">
-        <div class="card-inner card-inner-lg">
-          <div class="align-center flex-wrap flex-md-nowrap g-4">
-            <div class="nk-block-image w-120px flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 118">
-                <path
-                  d="M8.916,94.745C-.318,79.153-2.164,58.569,2.382,40.578,7.155,21.69,19.045,9.451,35.162,4.32,46.609.676,58.716.331,70.456,1.845,84.683,3.68,99.57,8.694,108.892,21.408c10.03,13.679,12.071,34.71,10.747,52.054-1.173,15.359-7.441,27.489-19.231,34.494-10.689,6.351-22.92,8.733-34.715,10.331-16.181,2.192-34.195-.336-47.6-12.281A47.243,47.243,0,0,1,8.916,94.745Z"
-                  transform="translate(0 -1)"
-                  fill="#f6faff"
-                />
-                <rect
-                  x="18"
-                  y="32"
-                  width="84"
-                  height="50"
-                  rx="4"
-                  ry="4"
-                  fill="#fff"
-                />
-                <rect
-                  x="26"
-                  y="44"
-                  width="20"
-                  height="12"
-                  rx="1"
-                  ry="1"
-                  fill="#e5effe"
-                />
-                <rect
-                  x="50"
-                  y="44"
-                  width="20"
-                  height="12"
-                  rx="1"
-                  ry="1"
-                  fill="#e5effe"
-                />
-                <rect
-                  x="74"
-                  y="44"
-                  width="20"
-                  height="12"
-                  rx="1"
-                  ry="1"
-                  fill="#e5effe"
-                />
-                <rect
-                  x="38"
-                  y="60"
-                  width="20"
-                  height="12"
-                  rx="1"
-                  ry="1"
-                  fill="#e5effe"
-                />
-                <rect
-                  x="62"
-                  y="60"
-                  width="20"
-                  height="12"
-                  rx="1"
-                  ry="1"
-                  fill="#e5effe"
-                />
-                <path
-                  d="M98,32H22a5.006,5.006,0,0,0-5,5V79a5.006,5.006,0,0,0,5,5H52v8H45a2,2,0,0,0-2,2v4a2,2,0,0,0,2,2H73a2,2,0,0,0,2-2V94a2,2,0,0,0-2-2H66V84H98a5.006,5.006,0,0,0,5-5V37A5.006,5.006,0,0,0,98,32ZM73,94v4H45V94Zm-9-2H54V84H64Zm37-13a3,3,0,0,1-3,3H22a3,3,0,0,1-3-3V37a3,3,0,0,1,3-3H98a3,3,0,0,1,3,3Z"
-                  transform="translate(0 -1)"
-                  fill="#798bff"
-                />
-                <path
-                  d="M61.444,41H40.111L33,48.143V19.7A3.632,3.632,0,0,1,36.556,16H61.444A3.632,3.632,0,0,1,65,19.7V37.3A3.632,3.632,0,0,1,61.444,41Z"
-                  transform="translate(0 -1)"
-                  fill="#6576ff"
-                />
-                <path
-                  d="M61.444,41H40.111L33,48.143V19.7A3.632,3.632,0,0,1,36.556,16H61.444A3.632,3.632,0,0,1,65,19.7V37.3A3.632,3.632,0,0,1,61.444,41Z"
-                  transform="translate(0 -1)"
-                  fill="none"
-                  stroke="#6576ff"
-                  stroke-miterlimit="10"
-                  stroke-width="2"
-                />
-                <line
-                  x1="40"
-                  y1="22"
-                  x2="57"
-                  y2="22"
-                  fill="none"
-                  stroke="#fffffe"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                />
-                <line
-                  x1="40"
-                  y1="27"
-                  x2="57"
-                  y2="27"
-                  fill="none"
-                  stroke="#fffffe"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                />
-                <line
-                  x1="40"
-                  y1="32"
-                  x2="50"
-                  y2="32"
-                  fill="none"
-                  stroke="#fffffe"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                />
-                <line
-                  x1="30.5"
-                  y1="87.5"
-                  x2="30.5"
-                  y2="91.5"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <line
-                  x1="28.5"
-                  y1="89.5"
-                  x2="32.5"
-                  y2="89.5"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <line
-                  x1="79.5"
-                  y1="22.5"
-                  x2="79.5"
-                  y2="26.5"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <line
-                  x1="77.5"
-                  y1="24.5"
-                  x2="81.5"
-                  y2="24.5"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle
-                  cx="90.5"
-                  cy="97.5"
-                  r="3"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-miterlimit="10"
-                />
-                <circle
-                  cx="24"
-                  cy="23"
-                  r="2.5"
-                  fill="none"
-                  stroke="#9cabff"
-                  stroke-miterlimit="10"
-                />
-              </svg>
-            </div>
-            <div class="nk-block-content">
-              <div class="nk-block-content-head px-lg-4">
-                <h5>We’re here to help you!</h5>
-                <p class="text-soft">
-                  Ask a question or file a support ticket, manage request,
-                  report an issues. Our team support team will get back to you
-                  by email.
-                </p>
-              </div>
-            </div>
-            <div class="nk-block-content flex-shrink-0">
-              <a href="#" class="btn btn-lg btn-outline-primary"
-                >Get Support Now</a
-              >
-            </div>
-          </div>
-        </div>
-        <!-- .card-inner -->
-      </div>
-      <!-- .card -->
-    </div>
-    <!-- .nk-block -->
+    <help />
   </q-page>
 </template>
 <script>
@@ -267,6 +69,13 @@ import TokenCard from "./components/TokenCard";
 import ReferUs from "./components/ReferUs";
 import Partnership from "./components/Partnership";
 
+import { CrowdsaleContract } from "../../utils/contracts";
+import {
+  getTransactionStartBlock,
+  getTransactionEndBlock
+} from "../../utils/apis";
+import Help from "./components/Help";
+
 export default {
   components: {
     OverviewCard,
@@ -274,21 +83,118 @@ export default {
     PoolCard,
     TokenCard,
     ReferUs,
-    Partnership
+    Partnership,
+    Help
   },
 
   data() {
     return {
-      expires: 1619827199, // IDO 到期UTC Timetamp
-      exchange: 0.1, // 汇率
-      purchased: "2500000000000000000000", // 已购额度 Wei
-      issuances: "50000000000000000000000", // 发行额度 Wei
-      min: "100000000000000000000", // 最小购买额度 Wei
-      max: "100000000000000000000", // 最大购买额度 Wei
-      ido: {
-        address: "0x49fa04CFc1fbc13d5c29358ab96D852203aD5765"
+      raise: {
+        expires: 1619827199,
+        rate: 0.1,
+        total: 0,
+        amount: 0,
+        min: 100,
+        max: 10000,
+        transactionCount: 0
+      },
+      pool: {
+        startBlock: 0,
+        endBlock: 0,
+        allocatedTime: 0,
+        minAllocation: 100,
+        symbol: "USDT",
+        qualification: "no"
+      },
+      token: {
+        name: CrowdsaleContract.token.name,
+        address: CrowdsaleContract.token.address,
+        symbol: CrowdsaleContract.token.symbol,
+        totalSupply: 0,
+        holders: 0,
+        transfers: 0
+      },
+      invite: {
+        link: "https://etherswap.1ecp.com/?#/4945KD48"
       }
     };
+  },
+
+  mounted() {
+    const contract = new this.$web3.eth.Contract(
+      CrowdsaleContract.abi,
+      CrowdsaleContract.address
+    );
+
+    console.log({ contract });
+    contract.methods
+      .getInfo()
+      .call()
+      .then(result => {
+        this.raise = Object.assign(this.raise, {
+          // expires: parseInt(result[1]),
+          rate: parseFloat(result[2]),
+          min: parseFloat(result[3]),
+          max: parseFloat(result[4]),
+          total: parseFloat(result[5]),
+          amount: parseFloat(this.$web3.utils.fromWei(result[6]))
+        });
+
+        this.pool = Object.assign(this.pool, {
+          allocatedTime: parseInt(result[0]),
+          minAllocation: parseFloat(result[3])
+        });
+      });
+
+    this.$web3.eth
+      .getTransactionCount(CrowdsaleContract.token.address)
+      .then(transactionCount => {
+        console.log({
+          address: CrowdsaleContract.token.address,
+          transactionCount
+        });
+        this.raise = Object.assign(this.raise, { transactionCount });
+      });
+
+    this.poolInformation(CrowdsaleContract).then(pool => {
+      console.log({ poolInformation: pool });
+      this.pool = Object.assign(this.pool, pool);
+    });
+
+    this.tokenInformation(CrowdsaleContract.token).then(token => {
+      console.log({ tokenInformation: token });
+      this.token = Object.assign(this.token, token);
+    });
+  },
+
+  methods: {
+    async poolInformation({ address, abi }) {
+      const startBlock = await getTransactionStartBlock(address);
+      const endBlock = await getTransactionEndBlock(address);
+
+      return {
+        startBlock,
+        endBlock
+      };
+    },
+
+    async tokenInformation({ address, abi }) {
+      const contract = new this.$web3.eth.Contract(abi, address);
+      const name = await contract.methods.name().call();
+      const symbol = await contract.methods.symbol().call();
+      const totalSupply = await contract.methods.totalSupply().call();
+      const holders = 12;
+      const transfers = 12;
+
+      return {
+        name,
+        address,
+        symbol,
+        totalSupply: this.$web3.utils.fromWei(totalSupply),
+        holders,
+        transfers
+      };
+    }
   }
 };
 </script>

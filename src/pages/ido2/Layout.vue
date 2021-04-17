@@ -314,13 +314,15 @@
                 <div class="nk-footer-links">
                   <ul class="nav nav-sm">
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Terms</a>
+                      <a class="nav-link" href="#">{{ $t("footer.terms") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Privacy</a>
+                      <a class="nav-link" href="#">{{
+                        $t("footer.privacy")
+                      }}</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Help</a>
+                      <a class="nav-link" href="#">{{ $t("footer.help") }}</a>
                     </li>
                   </ul>
                 </div>

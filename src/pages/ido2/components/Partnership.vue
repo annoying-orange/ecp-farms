@@ -2,7 +2,7 @@
   <div class="nk-block partnership">
     <div class="card-head">
       <div class="card-title mb-0">
-        <h5 class="title">Partnership</h5>
+        <h5 class="title">{{ $t("partnership.title") }}</h5>
       </div>
     </div>
     <div class="content q-gutter-md">

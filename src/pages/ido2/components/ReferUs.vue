@@ -5,13 +5,15 @@
         <div class="nk-refwg-invite card-inner">
           <div class="nk-refwg-head g-3">
             <div class="nk-refwg-title">
-              <h5 class="title">Refer Us & Earn</h5>
+              <h5 class="title">{{ $t("referUs.title") }}</h5>
               <div class="title-sub">
-                Use the bellow link to invite your friends.
+                {{ $t("referUs.description") }}
               </div>
             </div>
             <div class="nk-refwg-action">
-              <a href="#" class="btn btn-primary">Invite</a>
+              <a href="#" class="btn btn-primary" @click="onInvite">{{
+                $t("referUs.invite")
+              }}</a>
             </div>
           </div>
           <div class="nk-refwg-url">
@@ -20,10 +22,10 @@
                 class="form-clip clipboard-init"
                 data-clipboard-target="#refUrl"
                 data-success="Copied"
-                data-text="Copy Link"
+                :data-text="$t('referUs.copyLink')"
               >
                 <em class="clipboard-icon icon ni ni-copy"></em>
-                <span class="clipboard-text">Copy Link</span>
+                <span class="clipboard-text">{{ $t("referUs.copyLink") }}</span>
               </div>
               <div class="form-icon">
                 <em class="icon ni ni-link-alt"></em>
@@ -32,7 +34,7 @@
                 type="text"
                 class="form-control copy-text"
                 id="refUrl"
-                value="https://etherswap.1ecp.com/?#/4945KD48"
+                :value="value.link"
               />
             </div>
           </div>
@@ -42,7 +44,7 @@
           <div class="nk-refwg-group g-3">
             <div class="nk-refwg-name">
               <h6 class="title">
-                My Referral
+                {{ $t("referUs.myReferral") }}
                 <em
                   class="icon ni ni-info"
                   data-toggle="tooltip"
@@ -54,11 +56,11 @@
             <div class="nk-refwg-info g-3">
               <div class="nk-refwg-sub">
                 <div class="title">394</div>
-                <div class="sub-text">Total Joined</div>
+                <div class="sub-text">{{ $t("referUs.totalJoined") }}</div>
               </div>
               <div class="nk-refwg-sub">
                 <div class="title">548.49</div>
-                <div class="sub-text">Referral Earn</div>
+                <div class="sub-text">{{ $t("referUs.referralEarn") }}</div>
               </div>
             </div>
             <div class="nk-refwg-more dropdown mt-n1 mr-n1">
@@ -70,9 +72,15 @@
               ></a>
               <div class="dropdown-menu dropdown-menu-xs dropdown-menu-right">
                 <ul class="link-list-plain sm">
-                  <li><a href="#">7 days</a></li>
-                  <li><a href="#">15 Days</a></li>
-                  <li><a href="#">30 Days</a></li>
+                  <li>
+                    <a href="#">7 {{ $t("referUs.days") }}</a>
+                  </li>
+                  <li>
+                    <a href="#">15 {{ $t("referUs.days") }}</a>
+                  </li>
+                  <li>
+                    <a href="#">30 {{ $t("referUs.days") }}</a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -96,10 +104,9 @@
   </div>
 </template>
 <script>
-import QChart from "quasar-components-chart";
+import InviteQrcode from "./InviteQrcode";
 
 export default {
-  components: { QChart },
   name: "ReferUs",
 
   data() {
@@ -237,6 +244,22 @@ export default {
         }
       }
     };
+  },
+
+  props: {
+    value: {
+      link: String
+    }
+  },
+
+  methods: {
+    onInvite() {
+      this.$q.dialog({
+        component: InviteQrcode,
+        parent: this,
+        value: this.value.link
+      });
+    }
   }
 };
 </script>

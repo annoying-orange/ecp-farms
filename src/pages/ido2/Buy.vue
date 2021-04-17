@@ -162,7 +162,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-content" v-else-if="error">
+        <div class="modal-content" v-else-if="err">
           <a href="#" class="close" data-dismiss="modal"
             ><em class="icon ni ni-cross-sm"></em
           ></a>
@@ -171,11 +171,10 @@
               <em
                 class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"
               ></em>
-              <h4 class="nk-modal-title">Insufficient balance</h4>
+              <h4 class="nk-modal-title">{{ err.error }}</h4>
               <div class="nk-modal-text">
                 <p class="caption-text">
-                  You’ve 30 {{ paymentToken.symbol }} in wallet, but need
-                  payment <strong>100</strong> {{ paymentToken.symbol }}.
+                  {{ err.message }}
                 </p>
               </div>
               <div class="nk-modal-action-lg">
@@ -259,7 +258,7 @@ export default {
       sending: true,
       amount: null,
       paymentToken: {
-        address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        address: "0x1b248fa4374a36ed5474f8154ac4e7eeae3692b1",
         name: "Tether USD",
         symbol: "USDT",
         decimals: 6,
@@ -278,13 +277,63 @@ export default {
         min: 100.0,
         exchange: 1.0
       },
-      error: null
+      contract: {
+        address: "0x49fa04CFc1fbc13d5c29358ab96D852203aD5765"
+      },
+      err: null
     };
+  },
+
+  mounted() {
+    const ido = "0x8139B06A8bbE42E648Dd4b112148304F0DBfA549";
+    this.$store
+      .dispatch("connector/abi", ido)
+      .then(({ status, message, result }) => {
+        const abi = JSON.parse(result);
+        console.log(abi);
+        const contract = new this.$web3.eth.Contract(abi, ido);
+        const from = "0x59f5BDCCEE34E74cD15828bC43F1F96EB5e276B7";
+
+        contract.methods
+          .balanceOf(from)
+          .call()
+          .then(data => console.log({ balanceOf: data }));
+
+        const value = this.$web3.utils.toWei("100");
+
+        const data = contract.methods.subscribeToken(from).encodeABI();
+        console.log(data);
+
+        this.$web3.eth
+          .sendTransaction({
+            from,
+            data
+          })
+          .then(receipt => {
+            console.log(receipt);
+          });
+      });
   },
 
   computed: {
     connected: function() {
       return this.$store.state.connector.connected;
+    },
+
+    address: function() {
+      return this.$store.state.connector.address;
+    },
+
+    ht: function() {
+      return this.$store.state.account.ht;
+    },
+
+    usdt: function() {
+      return this.$store.state.account.usdt;
+    },
+
+    eth: function() {
+      return this.$store.state.account.eth;
     },
 
     expectPaymentAmount: function() {
@@ -293,6 +342,12 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.sending = false;
+      this.amount = null;
+      this.err = null;
+    },
+
     onConnect() {
       this.$q
         .dialog({ component: ConnectDialog, parent: this })
@@ -346,12 +401,32 @@ export default {
     },
 
     onBuy() {
-      console.log("Continue to Buy");
+      this.err = null;
       this.sending = true;
-      setTimeout(() => {
-        this.sending = false;
-        this.error = { message: "Insufficient balance" };
-      }, 2000);
+
+      const from = this.address;
+      const to = this.contract.address;
+      const token = this.paymentToken.address;
+      const amount = this.expectPaymentAmount;
+
+      this.genertaeTransaction({ from, to, token, amount })
+        .then(tx => {
+          console.log(tx);
+
+          this.$store
+            .dispatch("connector/sendTransaction", tx)
+            .then(data => {
+              console.log({ tx, data });
+            })
+            .catch(err => {
+              this.sending = false;
+              this.err = err;
+            });
+        })
+        .catch(err => {
+          this.sending = false;
+          this.err = err;
+        });
     },
 
     async balanceOf(address, token) {
@@ -369,6 +444,51 @@ export default {
         return balance / Math.pow(10, decimals);
       } else {
         console.error(message);
+      }
+    },
+
+    async genertaeTransaction({ from, to, token, amount }) {
+      const { status, message, result } = await this.$store.dispatch(
+        "connector/abi",
+        token
+      );
+
+      if (status !== "1") {
+        throw { error: message, message: result };
+      }
+
+      const abi = JSON.parse(result);
+      const contract = new this.$web3.eth.Contract(abi, token);
+      const decimals = await contract.methods.decimals().call();
+      const balance = await contract.methods.balanceOf(from).call();
+      const balanceNumber = parseFloat(balance / Math.pow(10, decimals));
+      console.log({ balance, amount, balanceNumber });
+      if (balanceNumber < amount) {
+        throw {
+          error: this.$t("transaction.insufficientBalance"),
+          message: `You''ve ${balanceNumber} ${this.paymentToken.symbol} in wallet, but need payment <strong>${amount}</strong> ${paymentToken.symbol}.`
+        };
+      }
+
+      const nonce = await this.$web3.eth.getTransactionCount(from);
+      const gasPrice = await this.$web3.eth.getGasPrice();
+      const value = this.$web3.utils.toWei(amount + "");
+      const data = await contract.methods.transfer(to, value).encodeABI();
+
+      try {
+        var tx = {
+          from,
+          to: token,
+          nonce,
+          gasPrice,
+          data
+        };
+
+        const gas = await this.$web3.eth.estimateGas(tx);
+
+        return Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+      } catch (err) {
+        throw { error: "", message: err };
       }
     }
   }

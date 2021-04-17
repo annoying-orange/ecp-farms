@@ -2,7 +2,7 @@
   <div class="nk-sidebar-widget d-none d-xl-block">
     <div class="user-account-info between-center">
       <div class="user-account-main">
-        <h6 class="overline-title-alt">Available Balance</h6>
+        <h6 class="overline-title-alt">{{ $t("account.availableBalance") }}</h6>
         <div class="user-balance">
           {{ ht.balance | fixed }}
           <small class="currency currency-btc">{{ ht.symbol }}</small>
@@ -22,7 +22,7 @@
     <ul class="user-account-data gy-1">
       <li>
         <div class="user-account-label">
-          <span class="sub-text">Profits (7d)</span>
+          <span class="sub-text">{{ $t("account.profits7d") }}</span>
         </div>
         <div class="user-account-value">
           <span class="lead-text">
@@ -36,7 +36,7 @@
       </li>
       <li>
         <div class="user-account-label">
-          <span class="sub-text">Deposit in orders</span>
+          <span class="sub-text">{{ $t("account.depositInOrders") }}</span>
         </div>
         <div class="user-account-value">
           <span class="sub-text">
@@ -50,12 +50,12 @@
       <ul class="g-3">
         <li v-if="!connected">
           <a href="#" class="btn btn-lg btn-primary" @click="onConnect">
-            <span>Connect Wallet</span>
+            <span>{{ $t("account.connectWallet") }}</span>
           </a>
         </li>
         <li v-else>
           <a href="#" class="btn btn-lg btn-warning">
-            <span>Change Wallet</span>
+            <span>{{ $t("account.changeWallet") }}</span>
           </a>
         </li>
       </ul>

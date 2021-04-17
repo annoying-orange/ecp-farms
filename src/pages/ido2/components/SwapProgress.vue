@@ -4,7 +4,9 @@
       <div class="nk-block-head-xs">
         <div class="nk-block-between-md g-2">
           <div class="nk-block-head-content">
-            <h5 class="nk-block-title title">{{ $t("ido.swapProgress") }}</h5>
+            <h5 class="nk-block-title title">
+              {{ $t("crowdsale.swapProgress") }}
+            </h5>
           </div>
           <div class="nk-block-head-content"></div>
         </div>
@@ -15,7 +17,7 @@
           <q-item class="nk-wgw nk-wgw-name">
             <q-item-section></q-item-section>
             <q-item-section side class="nk-wgw-title title">
-              1 AGS = {{ exchange }} USDT
+              1 AGS = {{ value.rate }} USDT
             </q-item-section>
           </q-item>
           <q-item class="q-pt-none q-pb-none swap-progress">
@@ -23,17 +25,16 @@
               <q-linear-progress
                 rounded
                 size="md"
-                :value="progress"
+                :value="progress || 0"
                 color="secondary"
               />
             </q-item-section>
           </q-item>
           <q-item class="nk-wgw-balance">
-            <q-item-section class="amount">{{ progress }}%</q-item-section>
-            <q-item-section side class="amount"
-              >{{ purchased | fromWei }} /
-              {{ issuances | fromWei }}</q-item-section
-            >
+            <q-item-section class="amount">{{ progress || 0 }}%</q-item-section>
+            <q-item-section side class="amount">
+              {{ value.amount }} / {{ value.total }}
+            </q-item-section>
           </q-item>
         </div>
       </div>
@@ -44,7 +45,9 @@
       <div class="nk-block-head-xs">
         <div class="nk-block-between-md g-2">
           <div class="nk-block-head-content">
-            <h5 class="nk-block-title title">Recent Transactions</h5>
+            <h5 class="nk-block-title title">
+              {{ $t("crowdsale.recentTransactions") }}
+            </h5>
           </div>
           <div class="nk-block-head-content"></div>
         </div>
@@ -54,11 +57,13 @@
           <div class="card bg-light">
             <div class="nk-wgw nk-wgw-inner">
               <div class="nk-wgw-name">
-                <h5 class="nk-wgw-title title">Total Transactions</h5>
+                <h5 class="nk-wgw-title title">
+                  {{ $t("crowdsale.totalTransactions") }}
+                </h5>
               </div>
               <div class="nk-wgw-balance">
                 <div class="amount">
-                  1,024
+                  {{ value.transactionCount | number }}
                 </div>
               </div>
             </div>
@@ -69,7 +74,9 @@
           <div class="card bg-light">
             <div class="nk-wgw nk-wgw-inner">
               <div class="nk-wgw-name">
-                <h5 class="nk-wgw-title title">Recent 24H</h5>
+                <h5 class="nk-wgw-title title">
+                  {{ $t("crowdsale.recent24H") }}
+                </h5>
               </div>
               <div>
                 <q-chart
@@ -181,9 +188,7 @@ export default {
                 return (
                   data.datasets[tooltipItem.datasetIndex]["data"][
                     tooltipItem["index"]
-                  ] +
-                  " " +
-                  _get_data.dataUnit
+                  ] + " "
                 );
               }
             },
@@ -223,14 +228,12 @@ export default {
   },
 
   props: {
-    exchange: Number,
-    purchased: String,
-    issuances: String
+    value: Object
   },
 
   computed: {
     progress() {
-      return this.purchased / this.issuances;
+      return parseFloat((this.value.amount / this.value.total).toFixed(2));
     }
   }
 };

@@ -88,12 +88,6 @@ import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 export default {
   name: "ConnectStatus",
 
-  data() {
-    return {
-      connectors
-    };
-  },
-
   computed: {
     connected: function() {
       return this.$store.state.connector.connected;

@@ -14,7 +14,12 @@ export default {
         minute: 'Minute',
         second: 'Second'
     },
-    account: {
+    account: { 
+        availableBalance: "Available Balance",
+        profits7d: "Profits (7d)",
+        depositInOrders: "Deposit in orders",
+        connectWallet: "Connect Wallet",
+        changeWallet: "Change Wallet",
         transactions: 'Transactions',
         transactionsHint: 'Your transactions will appear here...',
         block: 'Block',
@@ -23,16 +28,12 @@ export default {
         hoursAgo: 'hours ago',
         daysAgo: 'days ago'
     },
-    token: {
-        buy: 'Buy',
+    crowdsale: {
+        title: 'EtherSwap',
+        description: 'HECO and Ethereum\'s double chains, Dex innovative trading platform, a decentralized trading platform, take double-chain mining mechanism.',
         whitePaper: 'White Paper',
-        viewHecoInfo: 'View HecoInfo',
-        description: 'The public round allows over-raising. After reaching the end block height, token collection and fund return will be carried out in proportion to the actual raised funds.'
-    },
-    ido: {
-        whitePaper: 'White Paper',
-        whitePaperTitle: 'HECO and Ethereum\'s double chains, Dex innovative trading platform',
-        whitePaperDescription: 'A decentralized trading platform, take double - chain mining mechanism。Everyone can participate!',
+        welcome: 'Welcome!',
+        overview: 'Overview',
         finish: 'Finish',
         public: 'Public',
         totalRaise: 'Total Raise',
@@ -42,6 +43,31 @@ export default {
         checkIDODetails: 'Check IDO Details',
         swapAmount: 'Swap Amount',
         estimatedCountdown: 'Estimated countdown',
+        recentTransactions: 'Recent Transactions',
+        totalTransactions: 'Total Transactions',
+        recent24H: 'Recent 24H'
+    },
+    pool: {
+        title: 'Pool Information',
+        startBlock: 'StartBlock',
+        endBlock: 'EndBlock',
+        allocatedTime: 'Token Allocated Time',
+        minAllocation: 'Min Allocation',
+        qualification: 'Qualification',
+        yes: 'Yes',
+        no: 'No'
+    },
+    token: {
+        title: 'Token Information',
+        name: 'Name',
+        contractAddress: 'Contract Address',
+        totalSupply: 'Total Supply',
+        holders: 'Holders',
+        transfers: 'Transfers',
+        buy: 'Buy',
+        whitePaper: 'White Paper',
+        viewHecoInfo: 'View HecoInfo',
+        description: 'The public round allows over-raising. After reaching the end block height, token collection and fund return will be carried out in proportion to the actual raised funds.'
     },
     product: {
         highlights: 'Product Highlights',
@@ -61,8 +87,29 @@ export default {
         failed: 'Transaction Failed',
         insufficientBalance: 'Insufficient balance'
     },
-    invite: {
-        text: 'Use the bellow link to invite your friends',
-        copyLink: 'The invite link copied to the clipboard'
+    referUs: {
+        title: 'Refer Us & Earn',
+        description: 'Use the bellow link to invite your friends',
+        copyLink: 'CopyLink',
+        copied: 'Copied',
+        myReferral: 'My Referral',
+        totalJoined: 'Total Joined',
+        referralEarn: 'Referral Earn',
+        days: "days",
+        invite: 'Invite',
+        copiedMessage: 'The invite link copied to the clipboard'
+    },
+    partnership: {
+        title: 'Partnership'
+    },
+    help: {
+        title: 'We’re here to help you!',
+        description: 'Ask a question or file a support ticket, manage request, report an issues. Our team support team will get back to you by email.',
+        support: 'Get Support Now'
+    },
+    footer: {
+        terms: 'Terms',
+        privacy: 'Privacy',
+        help: 'Help'
     }
 }

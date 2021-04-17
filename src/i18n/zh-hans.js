@@ -15,6 +15,11 @@ export default {
         second: '秒'
     },
     account: {
+        availableBalance: "可用额度",
+        profits7d: "收益（7天）",
+        depositInOrders: "存入额度",
+        connectWallet: "连接钱包",
+        changeWallet: "更换钱包",
         transactions: '最近交易',
         transactionsHint: '您的交易将显示在这里...',
         block: '区块',
@@ -23,16 +28,12 @@ export default {
         hoursAgo: '小时前',
         daysAgo: '天前'
     },
-    token: {
-        buy: '认购',
+    crowdsale: {
+        title: 'EtherSwap',
+        description: '火币生态链Heco和以太坊的双链，DEX创新交易平台；一个去中心化的交易平台，采取双链挖矿机制。',
         whitePaper: '白皮书',
-        viewHecoInfo: '查看浏览器',
-        description: '公有轮可以提高筹资水平。 达到结束区块高度后，将根据实际筹集的资金按比例进行代币收集和资金返还。'
-    },
-    ido: {
-        whitePaper: '白皮书',
-        whitePaperTitle: '火币生态链Heco和以太坊的双链，DEX创新交易平台',
-        whitePaperDescription: '一个去中心化的交易平台，采取双链挖矿机制。每个人都可以参与!',
+        welcome: '欢迎光临!',
+        overview: '总募概要',
         finish: '完成',
         public: '公有轮',
         totalRaise: '总募集资金',
@@ -42,6 +43,31 @@ export default {
         checkIDODetails: '查看IDO详情',
         swapAmount: '兑换额度',
         estimatedCountdown: '预计倒数',
+        recentTransactions: '最近交易',
+        totalTransactions: '交易总数',
+        recent24H: '最近24小时'
+    },
+    pool: {
+        title: '交易池',
+        startBlock: '起始块',
+        endBlock: '结束块',
+        allocatedTime: '参与时间',
+        minAllocation: '最低参与资金',
+        qualification: '资质',
+        yes: '有',
+        no: '无'
+    },
+    token: {
+        title: '代币',
+        name: '名称',
+        contractAddress: '合约地址',
+        totalSupply: '总额度',
+        holders: '持有人',
+        transfers: '转账',
+        buy: '认购',
+        whitePaper: '白皮书',
+        viewHecoInfo: '查看浏览器',
+        description: '公有轮可以提高筹资水平。 达到结束区块高度后，将根据实际筹集的资金按比例进行代币收集和资金返还。'
     },
     product: {
         highlights: '产品亮点',
@@ -61,8 +87,29 @@ export default {
         failed: '交易失败',
         insufficientBalance: '您的账户余额不足'
     },
-    invite: {
-        text: '使用以下链接邀请您的朋友',
-        copyLink: '邀请链接已复制到剪贴板'
+    referUs: {
+        title: '推荐与收入',
+        description: '使用以下链接邀请您的朋友',
+        copyLink: '复制链接',
+        copied: '已复制',
+        myReferral: '我的推荐人',
+        totalJoined: '推荐总数',
+        referralEarn: '推荐收入',
+        days: "天",
+        invite: '邀请',
+        copiedMessage: '邀请链接已复制到剪贴板'
+    },
+    partnership: {
+        title: '合作伙伴'
+    },
+    help: {
+        title: '我们在这里为您提供帮助！',
+        description: '提出问题或提交支持通知单，管理请求，报告问题。 我们的团队支持团队将通过电子邮件与您联系。',
+        support: '提交帮助'
+    },
+    footer: {
+        terms: '条款',
+        privacy: '隐私',
+        help: '帮助'
     }
 }

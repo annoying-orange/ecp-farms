@@ -1,5 +1,9 @@
 import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
 import Web3 from 'web3'
+
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
 
 const web3 = new Web3('https://http-testnet.hecochain.com')
 Vue.prototype.$web3 = web3
@@ -11,6 +15,29 @@ Vue.filter('address', function(val) {
 
 Vue.filter('balance', function (val) {
   return val ? parseFloat(web3.utils.fromWei(val)).toFixed(6) : val
+})
+
+Vue.filter('number', function (s) {
+  var value = new String(s)
+  if (!value) return '0'
+  var intPart = Number(value) | 0
+  var intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+  var floatPart = ".00";
+  var value2Array = value.split(".");
+
+  if (value2Array.length == 2) {
+    floatPart = value2Array[1].toString();
+
+    if (floatPart.length == 1) {
+      return intPartFormat + "." + floatPart + '0';
+    }
+    else {
+      return intPartFormat + "." + Math.round(parseFloat('0.' + floatPart).toFixed(2) * 100);
+    }
+  }
+  else {
+    return intPartFormat;
+  }
 })
 
 Vue.filter('fixed', function (val) {
@@ -35,6 +62,30 @@ Vue.filter('datetime', function (timestamp) {
   const seconds = (dt.getSeconds() + '').padStart(2, '0')
 
   return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
+})
+
+Vue.directive('numberOnly', {
+  bind: function (el) {
+    el.handler = function () {
+      el.value = el.value.replace(/\D+/, '')
+    }
+    el.addEventListener('input', el.handler)
+  },
+  unbind: function (el) {
+    el.removeEventListener('input', el.handler)
+  }
+})
+
+Vue.directive('focus', {
+  inserted: function (el, { value }) {
+    if (value) {
+      el.focus()
+
+      if (el.select) {
+        el.select()
+      }
+    }
+  }
 })
 
 // "async" is optional;
