@@ -1,3 +1,7 @@
+export function update(state, acount) {
+    state = Object.assign(state, acount)
+}
+
 export function ht (state, ht) {
     console.log({ HT: ht })
     state.ht = Object.assign(state.ht, ht)

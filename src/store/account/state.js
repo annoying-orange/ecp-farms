@@ -1,5 +1,11 @@
 export default function () {
   return {
+    id: 0,
+    name: "",
+    address: "",
+    code: "",
+    referrals: [],
+    inviteCode: "",
     ht: {
       symbol: 'HT',
       balance: 0

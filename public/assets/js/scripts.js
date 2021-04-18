@@ -256,6 +256,7 @@
 
 
   NioApp.TGL.showmenu = function (elm, opt) {
+    console.log({showmenu: elm, opt})
     var toggle = elm ? elm : '.nk-nav-toggle',
         $toggle = $(toggle),
         $contentD = $('[data-content]'),
@@ -274,7 +275,10 @@
       close: toggleClose
     },
         attr = opt ? extend(def, opt) : def;
+
+    console.log({ toggle: $toggle, class: toggle })
     $toggle.on('click', function (e) {
+      console.log(e)
       NioApp.Toggle.trigger($(this).data('target'), attr);
       e.preventDefault();
     });

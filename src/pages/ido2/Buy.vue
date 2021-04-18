@@ -3,14 +3,14 @@
     <div class="buysell wide-xs m-auto">
       <!-- .buysell-nav -->
       <div class="buysell-title text-center">
-        <h5 class="title">What do you want to buy!</h5>
+        <h5 class="title">{{ $t("buy.title") }}</h5>
       </div>
       <!-- .buysell-title -->
       <div class="buysell-block">
         <form action="#" class="buysell-form">
           <div class="buysell-field form-group">
             <div class="form-label-group">
-              <label class="form-label">Choose what you want to get</label>
+              <label class="form-label">{{ $t("buy.token") }}</label>
             </div>
             <input
               type="hidden"
@@ -65,7 +65,7 @@
           <div class="buysell-field form-group">
             <div class="form-label-group">
               <label class="form-label" for="buysell-amount">
-                Amount to Buy
+                {{ $t("buy.amount") }}
               </label>
             </div>
             <div class="form-control-group">
@@ -101,7 +101,7 @@
             </div>
             <div class="form-note-group">
               <span class="buysell-min form-note-alt">
-                Minimum: {{ paymentToken.min }} {{ paymentToken.symbol }}
+                {{ $t("buy.minimum") }}: {{ buy.min }} {{ buy.symbol }}
               </span>
               <span class="buysell-rate form-note-alt">
                 {{ buy.exchange }} {{ buy.symbol }} =
@@ -126,7 +126,7 @@
               v-on:click="onBuy"
               v-if="connected"
             >
-              Continue to Buy
+              {{ $t("buy.continueToBuy") }}
             </a>
             <a
               href="#"
@@ -134,7 +134,7 @@
               v-on:click="onConnect"
               v-else
             >
-              Connecto Wallet
+              {{ $t("account.connectWallet") }}
             </a>
           </div>
           <!-- .buysell-field -->
@@ -152,12 +152,12 @@
             <div class="nk-modal">
               <q-spinner
                 color="secondary"
-                size="10em"
+                size="5em"
                 :thickness="2"
                 class="q-mb-lg"
               />
               <div class="nk-modal-text">
-                <p class="caption-text">Sending transaction ...</p>
+                <p class="caption-text">{{ $t("buy.sendTransaction") }}</p>
               </div>
             </div>
           </div>
@@ -183,9 +183,10 @@
                     <a
                       href="#"
                       data-dismiss="modal"
-                      class="btn btn-lg btn-mw btn-primary"
-                      >Return</a
+                      class="btn btn-lg btn-mw btn-light"
                     >
+                      {{ $t("buy.return") }}
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -201,7 +202,7 @@
               <em
                 class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"
               ></em>
-              <h4 class="nk-modal-title">Successfully sent payment!</h4>
+              <h4 class="nk-modal-title">{{ $t("buy.successfully") }}</h4>
               <div class="nk-modal-text">
                 <p class="caption-text">
                   You’ve successfully bought
@@ -212,8 +213,8 @@
                   {{ paymentToken.symbol }}.
                 </p>
                 <p class="sub-text-sm">
-                  Learn when you reciveve bitcoin in your wallet.
-                  <a href="#"> Click here</a>
+                  {{ $t("buy.howReceiveToken") }}
+                  <a href="#">{{ $t("buy.click") }}</a>
                 </p>
               </div>
               <div class="nk-modal-action-lg">
@@ -223,8 +224,9 @@
                       href="#"
                       data-dismiss="modal"
                       class="btn btn-lg btn-mw btn-primary"
-                      >Return</a
                     >
+                      {{ $t("buy.return") }}
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -234,8 +236,10 @@
           <div class="modal-footer bg-lighter">
             <div class="text-center w-100">
               <p>
-                Earn upto 10% for each friend your refer!
-                <a href="#/invite" data-dismiss="modal">Invite friends</a>
+                {{ $t("buy.referEarn") }}
+                <a href="#/invite" data-dismiss="modal">{{
+                  $t("buy.inviteFriends")
+                }}</a>
               </p>
             </div>
           </div>
@@ -248,7 +252,9 @@
   </q-page>
 </template>
 <script>
+import gql from "graphql-tag";
 import ConnectDialog from "../../plugins/WalletDialog/ConnectDialog";
+import { getTokenTransactions } from "../../utils/apis";
 
 export default {
   name: "Buy",
@@ -351,59 +357,20 @@ export default {
     onConnect() {
       this.$q
         .dialog({ component: ConnectDialog, parent: this })
-        .onOk(({ name, description, connector }) => {
-          console.log({ name, description, connector });
-          if (connector) {
-            connector.connect(
-              ({ accounts, chainId }) => {
-                console.log({ accounts, chainId });
-                const address = accounts[0];
-
-                this.$store.commit("connector/update", {
-                  name,
-                  description,
-                  accounts,
-                  chainId
-                });
-
-                // HT balance
-                this.$store
-                  .dispatch("connector/getBalance", address)
-                  .then(({ status, message, result }) => {
-                    if (status === "1") {
-                      this.$store.commit("account/ht", {
-                        balance: this.$web3.utils.fromWei(result)
-                      });
-                    } else {
-                      console.error(message);
-                    }
-                  });
-
-                // USDT balance
-                this.balanceOf(address, this.usdt.address).then(balance =>
-                  this.$store.commit("account/usdt", { balance })
-                );
-
-                // ETH balance
-                this.balanceOf(address, this.eth.address).then(balance =>
-                  this.$store.commit("account/eth", { balance })
-                );
-              },
-              err => {
-                this.$q.notify({
-                  type: "negative",
-                  message: err
-                });
-              }
-            );
-          }
-        });
+        .onOk(({ address, chainId }) => this.onBuy());
     },
 
     onBuy() {
+      if (!this.amount || parseFloat(this.amount) < this.buy.min) {
+        this.sending = false;
+        this.err = {
+          error: this.$t("buy.invalidAmount")
+        };
+        return;
+      }
+
       this.err = null;
       this.sending = true;
-
       const from = this.address;
       const to = this.contract.address;
       const token = this.paymentToken.address;
@@ -415,8 +382,19 @@ export default {
 
           this.$store
             .dispatch("connector/sendTransaction", tx)
-            .then(data => {
-              console.log({ tx, data });
+            .then(hash => {
+              getTokenTransactions(from, 1)
+                .then(results => {
+                  if (results.length > 0) {
+                    this.sendTransaction(results[0]);
+                  }
+                  this.reset();
+                  console.log({ tx, results });
+                })
+                .catch(err => {
+                  this.sending = false;
+                  this.err = err;
+                });
             })
             .catch(err => {
               this.sending = false;
@@ -466,7 +444,7 @@ export default {
       if (balanceNumber < amount) {
         throw {
           error: this.$t("transaction.insufficientBalance"),
-          message: `You''ve ${balanceNumber} ${this.paymentToken.symbol} in wallet, but need payment <strong>${amount}</strong> ${paymentToken.symbol}.`
+          message: `You''ve ${balanceNumber} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
         };
       }
 
@@ -490,6 +468,48 @@ export default {
       } catch (err) {
         throw { error: "", message: err };
       }
+    },
+
+    sendTransaction(tx) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation SendTransaction($tx: NewTransaction!) {
+              createTransaction(input: $tx) {
+                blockNumber
+              }
+            }
+          `,
+          variables: {
+            tx: {
+              blockNumber: tx.blockNumber,
+              timeStamp: tx.timeStamp,
+              hash: tx.hash,
+              nonce: tx.nonce,
+              blockHash: tx.blockHash,
+              from: tx.from,
+              contractAddress: tx.contractAddress,
+              to: tx.to,
+              value: tx.value,
+              tokenName: tx.tokenName,
+              tokenSymbol: tx.tokenSymbol,
+              tokenDecimal: tx.tokenDecimal,
+              transactionIndex: tx.transactionIndex,
+              gas: tx.gas,
+              gasPrice: tx.gasPrice,
+              gasUsed: tx.gasUsed,
+              cumulativeGasUsed: tx.cumulativeGasUsed,
+              input: tx.input,
+              confirmations: tx.confirmations
+            }
+          },
+          update: (store, { data: { createTransaction } }) => {
+            console.log({ createTransaction });
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };

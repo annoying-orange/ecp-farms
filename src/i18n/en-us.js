@@ -111,5 +111,26 @@ export default {
         terms: 'Terms',
         privacy: 'Privacy',
         help: 'Help'
+    },
+    buy: {
+        title: 'What do you want to buy!',
+        token: 'Choose what you want to get',
+        amount: 'Amount to Buy',
+        minimum: 'Minimum',
+        continueToBuy: 'Continue to Buy',
+        invalidAmount: 'Invalid Amount',
+        confirm: 'Confrim',
+        successfully: 'Successfully sent payment!',
+        failed: 'Transaction Failed',
+        insufficientBalance: 'Insufficient balance!',
+        sendTransaction: 'Sending transaction ...',
+        return: 'Return',
+        howReceiveToken: 'Learn when you receive token in your wallet.',
+        click: 'Click here',
+        referEarn: 'Earn upto 10% for each friend your refer!',
+        inviteFriends: 'Invite friends'
+    },
+    wallet: {
+        howToConnect: 'Learn how to connect'
     }
 }

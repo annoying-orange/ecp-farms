@@ -18,14 +18,16 @@ const connectors = [
     name: 'MetaMask',
     icon: 'svguse:icons/icons.svg#metamask',
     description: 'Connect With MetaMask',
-    connector: new MetaMaskConnector(128)
+    connector: new MetaMaskConnector(128),
+    enable: typeof window.ethereum !== 'undefined'
   },
   {
     name: 'WalletConnect',
     icon: 'svguse:icons/icons.svg#wallet-connect',
     description: 'Connect With WalletConnect',
-    connector: new WalletConnectConnector(128)
+    connector: new WalletConnectConnector(128),
+    enable: true
   }
 ]
 
-export default connectors;
+export default connectors.filter(c => c.enable === true);

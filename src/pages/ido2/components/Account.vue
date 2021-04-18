@@ -63,6 +63,7 @@
   </div>
 </template>
 <script>
+import gql from "graphql-tag";
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 
 export default {
@@ -98,71 +99,7 @@ export default {
     onConnect() {
       this.$q
         .dialog({ component: ConnectDialog, parent: this })
-        .onOk(({ name, description, connector }) => {
-          console.log({ name, description, connector });
-          if (connector) {
-            connector.connect(
-              ({ accounts, chainId }) => {
-                console.log({ accounts, chainId });
-                const address = accounts[0];
-
-                this.$store.commit("connector/update", {
-                  name,
-                  description,
-                  accounts,
-                  chainId
-                });
-
-                // HT balance
-                this.$store
-                  .dispatch("connector/getBalance", address)
-                  .then(({ status, message, result }) => {
-                    if (status === "1") {
-                      this.$store.commit("account/ht", {
-                        balance: this.$web3.utils.fromWei(result)
-                      });
-                    } else {
-                      console.error(message);
-                    }
-                  });
-
-                // USDT balance
-                this.balanceOf(address, this.usdt.address).then(balance =>
-                  this.$store.commit("account/usdt", { balance })
-                );
-
-                // ETH balance
-                this.balanceOf(address, this.eth.address).then(balance =>
-                  this.$store.commit("account/eth", { balance })
-                );
-              },
-              err => {
-                this.$q.notify({
-                  type: "negative",
-                  message: err
-                });
-              }
-            );
-          }
-        });
-    },
-
-    async balanceOf(address, token) {
-      const { status, message, result } = await this.$store.dispatch(
-        "connector/abi",
-        token
-      );
-
-      if (status === "1") {
-        const abi = JSON.parse(result);
-        const contract = new this.$web3.eth.Contract(abi, token);
-        const decimals = await contract.methods.decimals().call();
-        const balance = await contract.methods.balanceOf(address).call();
-        console.log({ balance });
-        return balance / Math.pow(10, decimals);
-      } else {
-        console.error(message);
-      }
+        .onOk(({ address, chainId }) => console.log({ address, chainId }));
     }
   }
 };

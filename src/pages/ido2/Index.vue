@@ -56,7 +56,7 @@
       <!-- .row -->
     </div>
     <!-- .nk-block -->
-    <refer-us v-model="invite" />
+    <refer-us v-model="inviteLink" />
     <partnership />
     <help />
   </q-page>
@@ -68,13 +68,13 @@ import PoolCard from "./components/PoolCard";
 import TokenCard from "./components/TokenCard";
 import ReferUs from "./components/ReferUs";
 import Partnership from "./components/Partnership";
+import Help from "./components/Help";
 
 import { CrowdsaleContract } from "../../utils/contracts";
 import {
   getTransactionStartBlock,
   getTransactionEndBlock
 } from "../../utils/apis";
-import Help from "./components/Help";
 
 export default {
   components: {
@@ -113,9 +113,6 @@ export default {
         totalSupply: 0,
         holders: 0,
         transfers: 0
-      },
-      invite: {
-        link: "https://etherswap.1ecp.com/?#/4945KD48"
       }
     };
   },
@@ -126,7 +123,6 @@ export default {
       CrowdsaleContract.address
     );
 
-    console.log({ contract });
     contract.methods
       .getInfo()
       .call()
@@ -165,6 +161,12 @@ export default {
       console.log({ tokenInformation: token });
       this.token = Object.assign(this.token, token);
     });
+  },
+
+  computed: {
+    inviteLink() {
+      return "https://etherswap.1ecp.com"; //`https://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
+    }
   },
 
   methods: {

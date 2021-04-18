@@ -8,14 +8,14 @@
           <a href="html/crypto/index.html" class="logo-link nk-sidebar-logo">
             <img
               class="logo-light logo-img"
-              src="assets/logo.png"
-              srcset="assets/logo2x.png 2x"
+              src="/assets/logo.png"
+              srcset="/assets/logo2x.png 2x"
               alt="logo"
             />
             <img
               class="logo-dark logo-img"
-              src="assets/logo-dark.png"
-              srcset="assets/logo-dark2x.png 2x"
+              src="/assets/logo-dark.png"
+              srcset="/assets/logo-dark2x.png 2x"
               alt="logo-dark"
             />
             <span class="nio-version">Crypto</span>
@@ -398,7 +398,7 @@
                         <li>
                           <a href="#" class="language-item">
                             <img
-                              src="assets/flags/english.png"
+                              src="/assets/flags/english.png"
                               alt=""
                               class="language-flag"
                             />
@@ -408,7 +408,7 @@
                         <li>
                           <a href="#" class="language-item">
                             <img
-                              src="assets/flags/spanish.png"
+                              src="/assets/flags/spanish.png"
                               alt=""
                               class="language-flag"
                             />
@@ -418,7 +418,7 @@
                         <li>
                           <a href="#" class="language-item">
                             <img
-                              src="assets/flags/french.png"
+                              src="/assets/flags/french.png"
                               alt=""
                               class="language-flag"
                             />
@@ -428,7 +428,7 @@
                         <li>
                           <a href="#" class="language-item">
                             <img
-                              src="assets/flags/turkey.png"
+                              src="/assets/flags/turkey.png"
                               alt=""
                               class="language-flag"
                             />
@@ -469,14 +469,14 @@
               <a href="html/crypto/index.html" class="logo-link">
                 <img
                   class="logo-light logo-img"
-                  src="assets/logo.png"
-                  srcset="assets/logo2x.png 2x"
+                  src="/assets/logo.png"
+                  srcset="/assets/logo2x.png 2x"
                   alt="logo"
                 />
                 <img
                   class="logo-dark logo-img"
-                  src="assets/logo-dark.png"
-                  srcset="assets/logo-dark2x.png 2x"
+                  src="/assets/logo-dark.png"
+                  srcset="/assets/logo-dark2x.png 2x"
                   alt="logo-dark"
                 />
                 <span class="nio-version">Crypto</span>
@@ -1079,7 +1079,7 @@
                             <div class="tranx-label">
                               Buy Ehtereum
                               <span class="tranx-icon sm"
-                                ><img src="assets/coins/eth.svg" alt=""
+                                ><img src="/assets/coins/eth.svg" alt=""
                               /></span>
                             </div>
                             <div class="tranx-date">Nov 12, 2019 11:34 PM</div>
@@ -1135,7 +1135,7 @@
                             <div class="tranx-label">
                               Buy Ehtereum
                               <span class="tranx-icon sm"
-                                ><img src="assets/coins/eth.svg" alt=""
+                                ><img src="/assets/coins/eth.svg" alt=""
                               /></span>
                             </div>
                             <div class="tranx-date">Nov 12, 2019 11:34 PM</div>

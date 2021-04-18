@@ -33,7 +33,7 @@ const routes = [
     children: [
       { path: '/', component: () => import('pages/ido2/Index.vue') },
       { path: '/buy', component: () => import('pages/ido2/Buy.vue') },
-      { path: '/:contract', component: () => import('pages/ido2/Index.vue') }
+      { path: '/:inviteCode', component: () => import('pages/ido2/Index.vue') }
     ]
   },
 

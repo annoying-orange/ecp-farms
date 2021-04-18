@@ -111,5 +111,26 @@ export default {
         terms: '条款',
         privacy: '隐私',
         help: '帮助'
+    },
+    buy: {
+        title: '购买代币',
+        token: '选择代币',
+        amount: '购买额度',
+        minimum: '最小额度',
+        continueToBuy: '确定购买',
+        invalidAmount: '无效金额',
+        confirm: '确定',
+        successfully: '支付成功！',
+        failed: '交易失败',
+        insufficientBalance: '余额不足！',
+        sendTransaction: '正在发送交易中 ...',
+        return: '返回',
+        howReceiveToken: '了解何时在钱包中收到代币。',
+        click: '点击这里',
+        referEarn: '您每推荐个朋友将可赚取高达10％的收益！',
+        inviteFriends: '邀请服友'
+    },
+    wallet: {
+        howToConnect: '学习如何连接钱包'
     }
 }

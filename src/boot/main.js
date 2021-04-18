@@ -1,12 +1,49 @@
 import Vue from 'vue'
-import VueClipboard from 'vue-clipboard2'
 import Web3 from 'web3'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
+import VueApollo from 'vue-apollo'
+import { ApolloLink, split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+import VueClipboard from 'vue-clipboard2'
 
 VueClipboard.config.autoSetContainer = true
+
+Vue.use(VueApollo)
 Vue.use(VueClipboard)
 
 const web3 = new Web3('https://http-testnet.hecochain.com')
 Vue.prototype.$web3 = web3
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+  operation.setContext({
+    headers: { }
+  })
+
+  return forward(operation)
+})
+
+const httpLink = new HttpLink({
+  uri: 'http://api.1ecp.com'
+})
+
+const wsLink = new WebSocketLink({
+  uri: 'ws://api.1ecp.com',
+  options: {
+    reconnect: true
+  }
+})
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' && operation === 'subscription'
+  },
+  wsLink,
+  httpLink
+)
 
 Vue.filter('address', function(val) {
   return val
@@ -91,6 +128,11 @@ Vue.directive('focus', {
 // "async" is optional;
 // more info on params: https://quasar.dev/quasar-cli/boot-files
 export default async ({ app, router, Vue, store }) => {
-  // Detect the connector
-
+  app.apolloProvider = new VueApollo({
+    defaultClient: new ApolloClient({
+      link: authMiddleware.concat(link),
+      cache: new InMemoryCache({ }),
+      connectToDevTools: true
+    })
+  })
 }

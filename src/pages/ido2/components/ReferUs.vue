@@ -34,7 +34,7 @@
                 type="text"
                 class="form-control copy-text"
                 id="refUrl"
-                :value="value.link"
+                :value="link"
               />
             </div>
           </div>
@@ -252,12 +252,18 @@ export default {
     }
   },
 
+  computed: {
+    link() {
+      return `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
+    }
+  },
+
   methods: {
     onInvite() {
       this.$q.dialog({
         component: InviteQrcode,
         parent: this,
-        value: this.value.link
+        value: this.link
       });
     }
   }
