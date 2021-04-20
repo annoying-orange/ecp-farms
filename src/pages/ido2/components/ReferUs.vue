@@ -55,11 +55,11 @@
             </div>
             <div class="nk-refwg-info g-3">
               <div class="nk-refwg-sub">
-                <div class="title">394</div>
+                <div class="title">{{ joined | number }}</div>
                 <div class="sub-text">{{ $t("referUs.totalJoined") }}</div>
               </div>
               <div class="nk-refwg-sub">
-                <div class="title">548.49</div>
+                <div class="title">{{ earn | number }}</div>
                 <div class="sub-text">{{ $t("referUs.referralEarn") }}</div>
               </div>
             </div>
@@ -71,29 +71,28 @@
                 ><em class="icon ni ni-more-h"></em
               ></a>
               <div class="dropdown-menu dropdown-menu-xs dropdown-menu-right">
-                <ul class="link-list-plain sm">
+                <ul class="link-list-plain">
                   <li>
-                    <a href="#">7 {{ $t("referUs.days") }}</a>
+                    <a href="javascript:void();" @click="days = 7">
+                      7 {{ $t("referUs.days") }}
+                    </a>
                   </li>
                   <li>
-                    <a href="#">15 {{ $t("referUs.days") }}</a>
+                    <a href="javascript:void();" @click="days = 15">
+                      15 {{ $t("referUs.days") }}
+                    </a>
                   </li>
                   <li>
-                    <a href="#">30 {{ $t("referUs.days") }}</a>
+                    <a href="javascript:void();" @click="days = 30">
+                      30 {{ $t("referUs.days") }}
+                    </a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="nk-refwg-ck">
-            <q-chart
-              identifier="refer-chart"
-              stilo="height:51px; width: 100%"
-              type="bar"
-              :labels="referChart.labels"
-              :datasets="referChart.datasets"
-              :options="referChart.options"
-            />
+            <canvas ref="chart" style="height:51px; width: 100%"></canvas>
           </div>
         </div>
         <!-- .nk-refwg-stats -->
@@ -104,155 +103,114 @@
   </div>
 </template>
 <script>
+import gql from "graphql-tag";
 import InviteQrcode from "./InviteQrcode";
+
+const days = 30;
+const now = new Date();
+var labels = [];
+var data = [];
+
+for (var i = 0; i < days; i++) {
+  var d = new Date();
+  d.setDate(now.getDate() - i);
+  labels.push(`${d.getMonth() + 1}-${d.getDate()}`);
+  data.push(0);
+}
 
 export default {
   name: "ReferUs",
 
   data() {
     return {
-      referChart: {
-        labels: [
-          "01 Nov",
-          "02 Nov",
-          "03 Nov",
-          "04 Nov",
-          "05 Nov",
-          "06 Nov",
-          "07 Nov",
-          "08 Nov",
-          "09 Nov",
-          "10 Nov",
-          "11 Nov",
-          "12 Nov",
-          "13 Nov",
-          "14 Nov",
-          "15 Nov",
-          "16 Nov",
-          "17 Nov",
-          "18 Nov",
-          "19 Nov",
-          "20 Nov",
-          "21 Nov",
-          "22 Nov",
-          "23 Nov",
-          "24 Nov",
-          "25 Nov",
-          "26 Nov",
-          "27 Nov",
-          "28 Nov",
-          "29 Nov",
-          "30 Nov"
-        ],
-        dataUnit: "People",
-        datasets: [
-          {
-            label: "Join",
-            backgroundColor: "#6baafe",
-            borderWidth: 2,
-            borderColor: "transparent",
-            hoverBorderColor: "transparent",
-            borderSkipped: "bottom",
-            barPercentage: 0.5,
-            categoryPercentage: 0.7,
-            data: [
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              75,
-              90
-            ]
-          }
-        ],
-        options: {
-          legend: {
-            display: false
-          },
-          maintainAspectRatio: false,
-          tooltips: {
-            enabled: true,
-            rtl: "right",
-            callbacks: {
-              title: function title(tooltipItem, data) {
-                return data.datasets[tooltipItem[0].datasetIndex].label;
-              },
-              label: function label(tooltipItem, data) {
-                return (
-                  data.datasets[tooltipItem.datasetIndex]["data"][
-                    tooltipItem["index"]
-                  ] +
-                  " " +
-                  _get_data.dataUnit
-                );
-              }
+      days,
+      joined: 0,
+      earn: 0,
+      labels,
+      dataUnit: "People",
+      datasets: [
+        {
+          label: "Join",
+          backgroundColor: "#6baafe",
+          borderWidth: 2,
+          borderColor: "transparent",
+          hoverBorderColor: "transparent",
+          borderSkipped: "bottom",
+          barPercentage: 0.5,
+          categoryPercentage: 0.7,
+          data
+        }
+      ],
+      options: {
+        legend: {
+          display: false
+        },
+        maintainAspectRatio: false,
+        tooltips: {
+          enabled: true,
+          rtl: "right",
+          callbacks: {
+            title: function title(tooltipItem, data) {
+              return data.datasets[tooltipItem[0].datasetIndex].label;
             },
-            backgroundColor: "#fff",
-            titleFontSize: 13,
-            titleFontColor: "#6783b8",
-            titleMarginBottom: 6,
-            bodyFontColor: "#9eaecf",
-            bodyFontSize: 12,
-            bodySpacing: 4,
-            yPadding: 10,
-            xPadding: 10,
-            footerMarginTop: 0,
-            displayColors: false
+            label: function label(tooltipItem, data) {
+              return (
+                data.datasets[tooltipItem.datasetIndex]["data"][
+                  tooltipItem["index"]
+                ] + " "
+              );
+            }
           },
-          scales: {
-            yAxes: [
-              {
-                display: false,
-                ticks: {
-                  beginAtZero: true
-                }
+          backgroundColor: "#fff",
+          titleFontSize: 13,
+          titleFontColor: "#6783b8",
+          titleMarginBottom: 6,
+          bodyFontColor: "#9eaecf",
+          bodyFontSize: 12,
+          bodySpacing: 4,
+          yPadding: 10,
+          xPadding: 10,
+          footerMarginTop: 0,
+          displayColors: false
+        },
+        scales: {
+          yAxes: [
+            {
+              display: false,
+              ticks: {
+                beginAtZero: false
               }
-            ],
-            xAxes: [
-              {
-                display: false,
-                ticks: {
-                  reverse: "right"
-                }
+            }
+          ],
+          xAxes: [
+            {
+              display: true,
+              ticks: {
+                reverse: "left"
               }
-            ]
-          }
+            }
+          ]
         }
       }
     };
   },
 
-  props: {
-    value: {
-      link: String
-    }
+  mounted() {
+    new Chart(this.$refs.chart, {
+      type: "bar",
+      data: {
+        labels: this.labels,
+        datasets: this.datasets
+      },
+      options: this.options
+    });
   },
 
   computed: {
+    address() {
+      return this.$store.state.account.address;
+    },
+
     link() {
       return `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
     }
@@ -265,6 +223,45 @@ export default {
         parent: this,
         value: this.link
       });
+    }
+  },
+
+  apollo: {
+    referral() {
+      return {
+        query: gql`
+          query referral($address: String!, $days: Int!) {
+            referral(address: $address, days: $days) {
+              address
+              joined
+              earn
+              labels
+              data
+            }
+          }
+        `,
+        variables() {
+          return {
+            address: this.address,
+            days: this.days
+          };
+        },
+        update: ({ referral }) => {
+          this.joined = referral.joined;
+          this.earn = referral.earn;
+          this.labels = referral.labels;
+          this.datasets[0].data = referral.data;
+
+          new Chart(this.$refs.chart, {
+            type: "bar",
+            data: {
+              labels: this.labels,
+              datasets: this.datasets
+            },
+            options: this.options
+          });
+        }
+      };
     }
   }
 };

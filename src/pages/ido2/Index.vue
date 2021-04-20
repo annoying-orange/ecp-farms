@@ -56,7 +56,7 @@
       <!-- .row -->
     </div>
     <!-- .nk-block -->
-    <refer-us v-model="inviteLink" />
+    <refer-us />
     <partnership />
     <help />
   </q-page>
@@ -103,7 +103,7 @@ export default {
         endBlock: 0,
         allocatedTime: 0,
         minAllocation: 100,
-        symbol: "USDT",
+        symbol: "ETH",
         qualification: "no"
       },
       token: {
@@ -127,18 +127,20 @@ export default {
       .getInfo()
       .call()
       .then(result => {
+        console.log({ info: result });
+        const fromWei = this.$web3.utils.fromWei;
         this.raise = Object.assign(this.raise, {
-          // expires: parseInt(result[1]),
-          rate: parseFloat(result[2]),
-          min: parseFloat(result[3]),
-          max: parseFloat(result[4]),
-          total: parseFloat(result[5]),
-          amount: parseFloat(this.$web3.utils.fromWei(result[6]))
+          expires: parseInt(result[1]),
+          rate: parseFloat(fromWei(result[2])),
+          min: parseFloat(fromWei(result[3])),
+          max: parseFloat(fromWei(result[4])),
+          total: parseFloat(fromWei(result[5])),
+          amount: parseFloat(fromWei(result[6]))
         });
 
         this.pool = Object.assign(this.pool, {
           allocatedTime: parseInt(result[0]),
-          minAllocation: parseFloat(result[3])
+          minAllocation: fromWei(result[3])
         });
       });
 
@@ -161,12 +163,6 @@ export default {
       console.log({ tokenInformation: token });
       this.token = Object.assign(this.token, token);
     });
-  },
-
-  computed: {
-    inviteLink() {
-      return "https://etherswap.1ecp.com"; //`https://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
-    }
   },
 
   methods: {

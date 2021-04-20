@@ -101,7 +101,8 @@
             </div>
             <div class="form-note-group">
               <span class="buysell-min form-note-alt">
-                {{ $t("buy.minimum") }}: {{ buy.min }} {{ buy.symbol }}
+                {{ $t("buy.minimum") }}: {{ buy.min }}
+                {{ buy.symbol }}
               </span>
               <span class="buysell-rate form-note-alt">
                 {{ buy.exchange }} {{ buy.symbol }} =
@@ -113,7 +114,7 @@
           <!-- .buysell-field -->
           <div class="buysell-field form-group">
             <div class="buysell-title text-center">
-              <h5 class="title">~ {{ expectPaymentAmount }}</h5>
+              <h5 class="title">~ {{ expectPaymentAmount }} USDT</h5>
             </div>
           </div>
 
@@ -224,6 +225,7 @@
                       href="#"
                       data-dismiss="modal"
                       class="btn btn-lg btn-mw btn-primary"
+                      @click="onReset"
                     >
                       {{ $t("buy.return") }}
                     </a>
@@ -254,7 +256,8 @@
 <script>
 import gql from "graphql-tag";
 import ConnectDialog from "../../plugins/WalletDialog/ConnectDialog";
-import { getTokenTransactions } from "../../utils/apis";
+import { getTokenTransactions, getTransactions } from "../../utils/apis";
+import { CrowdsaleContract, NULL_ADDRESS } from "../../utils/contracts";
 
 export default {
   name: "Buy",
@@ -264,10 +267,9 @@ export default {
       sending: true,
       amount: null,
       paymentToken: {
-        address: "0x1b248fa4374a36ed5474f8154ac4e7eeae3692b1",
+        address: "0xED02B442b0eF5bC681c08953c5122063a497E804",
         name: "Tether USD",
         symbol: "USDT",
-        decimals: 6,
         logoUri:
           "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
         min: 100.0,
@@ -275,51 +277,19 @@ export default {
         exchange: 0.3
       },
       buy: {
-        address: "0x1812d24b12a5d8117eab07958bb768fe76b29ff8",
-        name: "Angus",
-        symbol: "AGS",
+        address: "0xF22108A9f42EB64EF0603dE2484b506e88168084",
+        name: "Ether",
+        symbol: "ETH",
         decimals: 18,
         logoUri: "",
         min: 100.0,
         exchange: 1.0
       },
-      contract: {
-        address: "0x49fa04CFc1fbc13d5c29358ab96D852203aD5765"
-      },
       err: null
     };
   },
 
-  mounted() {
-    const ido = "0x8139B06A8bbE42E648Dd4b112148304F0DBfA549";
-    this.$store
-      .dispatch("connector/abi", ido)
-      .then(({ status, message, result }) => {
-        const abi = JSON.parse(result);
-        console.log(abi);
-        const contract = new this.$web3.eth.Contract(abi, ido);
-        const from = "0x59f5BDCCEE34E74cD15828bC43F1F96EB5e276B7";
-
-        contract.methods
-          .balanceOf(from)
-          .call()
-          .then(data => console.log({ balanceOf: data }));
-
-        const value = this.$web3.utils.toWei("100");
-
-        const data = contract.methods.subscribeToken(from).encodeABI();
-        console.log(data);
-
-        this.$web3.eth
-          .sendTransaction({
-            from,
-            data
-          })
-          .then(receipt => {
-            console.log(receipt);
-          });
-      });
-  },
+  mounted() {},
 
   computed: {
     connected: function() {
@@ -328,6 +298,10 @@ export default {
 
     address: function() {
       return this.$store.state.connector.address;
+    },
+
+    referrals: function() {
+      return this.$store.state.account.referrals;
     },
 
     ht: function() {
@@ -348,7 +322,7 @@ export default {
   },
 
   methods: {
-    reset() {
+    onReset() {
       this.sending = false;
       this.amount = null;
       this.err = null;
@@ -361,47 +335,33 @@ export default {
     },
 
     onBuy() {
-      if (!this.amount || parseFloat(this.amount) < this.buy.min) {
-        this.sending = false;
-        this.err = {
-          error: this.$t("buy.invalidAmount")
-        };
-        return;
-      }
+      // if (!this.amount || parseFloat(this.amount) < this.buy.min) {
+      //   this.sending = false;
+      //   this.err = {
+      //     error: this.$t("buy.invalidAmount")
+      //   };
+      //   return;
+      // }
 
       this.err = null;
       this.sending = true;
       const from = this.address;
-      const to = this.contract.address;
+      const to = CrowdsaleContract.address;
       const token = this.paymentToken.address;
       const amount = this.expectPaymentAmount;
 
-      this.genertaeTransaction({ from, to, token, amount })
+      this.sendTransaction({ from, to, token, amount })
         .then(tx => {
-          console.log(tx);
+          console.log({ sendTransaction: tx });
 
-          this.$store
-            .dispatch("connector/sendTransaction", tx)
-            .then(hash => {
-              getTokenTransactions(from, 1)
-                .then(results => {
-                  if (results.length > 0) {
-                    this.sendTransaction(results[0]);
-                  }
-                  this.reset();
-                  console.log({ tx, results });
-                })
-                .catch(err => {
-                  this.sending = false;
-                  this.err = err;
-                });
-            })
-            .catch(err => {
-              this.sending = false;
-              this.err = err;
-            });
+          this.sending = false;
+          this.err = null;
         })
         .catch(err => {
+          this.allowance(from, token).then(allowanceHash =>
+            console.log({ allowanceHash })
+          );
+
           this.sending = false;
           this.err = err;
         });
@@ -425,7 +385,7 @@ export default {
       }
     },
 
-    async genertaeTransaction({ from, to, token, amount }) {
+    async allowance(from, token) {
       const { status, message, result } = await this.$store.dispatch(
         "connector/abi",
         token
@@ -435,46 +395,157 @@ export default {
         throw { error: message, message: result };
       }
 
-      const abi = JSON.parse(result);
-      const contract = new this.$web3.eth.Contract(abi, token);
+      const contract = new this.$web3.eth.Contract(JSON.parse(result), token);
+      const value = await contract.methods
+        .allowance(from, CrowdsaleContract.address)
+        .call();
+
+      if (parseFloat(value) > 0) {
+        const data = await contract.methods
+          .approve(CrowdsaleContract.address, 0)
+          .encodeABI();
+
+        console.log({
+          allowance: { from, token, contract: CrowdsaleContract.address, value }
+        });
+
+        try {
+          var tx = {
+            from,
+            to: token,
+            data
+          };
+
+          const gas = await this.$web3.eth.estimateGas(tx);
+          tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+          console.log({ allowance: tx });
+          return await this.$store.dispatch("connector/sendTransaction", tx);
+        } catch (err) {
+          console.log(err);
+          throw { error: "", message: err };
+        }
+      }
+    },
+
+    async approve(from, token, amount) {
+      const { status, message, result } = await this.$store.dispatch(
+        "connector/abi",
+        token
+      );
+
+      if (status !== "1") {
+        throw { error: message, message: result };
+      }
+
+      const contract = new this.$web3.eth.Contract(JSON.parse(result), token);
+
       const decimals = await contract.methods.decimals().call();
       const balance = await contract.methods.balanceOf(from).call();
-      const balanceNumber = parseFloat(balance / Math.pow(10, decimals));
-      console.log({ balance, amount, balanceNumber });
-      if (balanceNumber < amount) {
+      const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
+      console.log({ balance, amount, balanceDecimals });
+      if (balanceDecimals < amount) {
         throw {
           error: this.$t("transaction.insufficientBalance"),
-          message: `You''ve ${balanceNumber} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
+          message: `You''ve ${balanceDecimals} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
         };
       }
 
-      const nonce = await this.$web3.eth.getTransactionCount(from);
-      const gasPrice = await this.$web3.eth.getGasPrice();
-      const value = this.$web3.utils.toWei(amount + "");
-      const data = await contract.methods.transfer(to, value).encodeABI();
+      const to = token;
+      const value = amount * Math.pow(10, decimals) + "";
+      const data = await contract.methods
+        .approve(CrowdsaleContract.address, value)
+        .encodeABI();
+
+      console.log({
+        approve: {
+          from,
+          to,
+          contract: CrowdsaleContract.address,
+          amount,
+          value
+        }
+      });
+
+      return { value };
+      // try {
+      //   var tx = {
+      //     from,
+      //     to,
+      //     data
+      //   };
+      //   const gas = await this.$web3.eth.estimateGas(tx);
+      //   tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+
+      //   const hash = await this.$store.dispatch(
+      //     "connector/sendTransaction",
+      //     tx
+      //   );
+      //   return { hash, value };
+      // } catch (err) {
+      //   console.log(err);
+      //   throw { error: "", message: err };
+      // }
+    },
+
+    async genertaeTransaction(from, to, value) {
+      const crowdsaleContract = new this.$web3.eth.Contract(
+        CrowdsaleContract.abi,
+        CrowdsaleContract.address
+      );
+
+      let data;
+
+      if (this.referrals && this.referrals.length > 0) {
+        if (this.referrals.length === 1) {
+          this.referrals.push(NULL_ADDRESS);
+        }
+
+        console.log({ referrals: this.referrals });
+        data = await crowdsaleContract.methods
+          .subscribeTokensHasInviter(value, this.referrals)
+          .encodeABI();
+      } else {
+        data = await crowdsaleContract.methods
+          .subscribeTokens(value)
+          .encodeABI();
+      }
+
+      console.log({ tx: { from, to, value, data } });
 
       try {
         var tx = {
           from,
-          to: token,
-          nonce,
-          gasPrice,
+          to,
           data
         };
-
         const gas = await this.$web3.eth.estimateGas(tx);
 
         return Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
       } catch (err) {
+        console.log(err);
         throw { error: "", message: err };
       }
     },
 
-    sendTransaction(tx) {
+    async sendTransaction({ from, to, token, amount }) {
+      // await this.allowance(from, token);
+      const { value } = await this.approve(from, token, amount);
+      const tx = await this.genertaeTransaction(from, to, value);
+      const hash = await this.$store.dispatch("connector/sendTransaction", tx);
+
+      console.log({ hash });
+
+      const tokenTx = await getTokenTransactions(from, 1);
+      await this.createTransaction(tokenTx);
+
+      return tokenTx;
+    },
+
+    createTransaction(tx) {
       this.$apollo
         .mutate({
           mutation: gql`
-            mutation SendTransaction($tx: NewTransaction!) {
+            mutation CreateTransaction($tx: NewTransaction!) {
               createTransaction(input: $tx) {
                 blockNumber
               }

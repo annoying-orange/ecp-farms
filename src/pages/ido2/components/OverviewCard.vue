@@ -15,14 +15,14 @@
                 <div class="nk-wg7-title">
                   {{ $t("crowdsale.totalRaise") }}
                 </div>
-                <div class="number-lg amount">{{ value.total }} AGS</div>
+                <div class="number-lg amount">{{ value.total }} ETH</div>
               </q-item-section>
               <q-item-section side top>
                 <q-item-label class="nk-wg7-title">
                   {{ $t("crowdsale.minAllocation") }}
                 </q-item-label>
                 <q-item-label class="number amount text-light">
-                  {{ value.min }} USDT
+                  {{ value.min }} ETH
                 </q-item-label>
               </q-item-section>
             </q-item>

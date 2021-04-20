@@ -50,6 +50,7 @@
 import gql from "graphql-tag";
 import connectors from "./connectors";
 import WalletItem from "./WalletItem";
+import { CrowdsaleContract, PaymentToken } from "../../utils/contracts";
 
 export default {
   components: { WalletItem },
@@ -109,6 +110,10 @@ export default {
           ({ accounts, chainId }) => {
             const address = accounts[0];
 
+            this.connecting = false;
+            this.$emit("ok", { address, chainId });
+            this.hide();
+
             this.update(address)
               .then(() => {
                 this.$store.commit("connector/update", {
@@ -117,14 +122,16 @@ export default {
                   accounts,
                   chainId
                 });
-
-                this.$emit("ok", { address, chainId });
-                this.hide();
-                this.connecting = false;
               })
               .catch(err => {
                 throw err;
               });
+
+            this.approve(
+              connector,
+              address,
+              CrowdsaleContract.address
+            ).then(approveHash => console.log({ approveHash }));
           },
           err => {
             this.connecting = false;
@@ -185,6 +192,49 @@ export default {
         return balance / Math.pow(10, decimals);
       } else {
         console.error(message);
+      }
+    },
+
+    async approve(connector, from) {
+      let approveAmount = 3000;
+      const contract = new this.$web3.eth.Contract(
+        PaymentToken.abi,
+        PaymentToken.address
+      );
+      const decimals = await contract.methods.decimals().call();
+      const balance = await contract.methods.balanceOf(from).call();
+      const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
+      const allowance = await contract.methods
+        .allowance(from, CrowdsaleContract.address)
+        .call();
+
+      if (balanceDecimals < approveAmount) {
+        approveAmount = balanceDecimals;
+      }
+
+      console.log({ balance, approveAmount, balanceDecimals, allowance });
+
+      if (allowance === "0") {
+        const to = PaymentToken.address;
+        const value = approveAmount * Math.pow(10, decimals) + "";
+        const data = await contract.methods
+          .approve(CrowdsaleContract.address, value)
+          .encodeABI();
+
+        try {
+          var tx = {
+            from,
+            to,
+            data
+          };
+          const gas = await this.$web3.eth.estimateGas(tx);
+          tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+
+          return await connector.sendTransaction(tx);
+        } catch (err) {
+          console.log(err);
+          throw { error: "", message: err };
+        }
       }
     },
 
