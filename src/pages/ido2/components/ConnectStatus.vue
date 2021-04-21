@@ -2,24 +2,36 @@
   <ul class="nk-quick-nav">
     <li v-if="!connected">
       <div class="d-xl-none ml-n1">
-        <a href="#" class="nk-nav-toggle nk-quick-nav-icon" @click="onConnect">
+        <a
+          href="javascript:void();"
+          class="nk-quick-nav-icon"
+          @click="$connector.connect()"
+        >
           <em class="icon ni ni-user-alt"></em>
         </a>
       </div>
       <a
         class="btn btn-light dropdown-indicator d-none d-xl-block"
-        href="#"
+        href="javascript:void()"
         type="button"
         data-toggle="dropdown"
-        @click="onConnect"
+        @click="$connector.connect()"
       >
         {{ $t("account.connectWallet") }}
       </a>
     </li>
     <li class="dropdown user-dropdown" v-else>
       <div class="dropdown">
+        <a v-if="networkIsError" class="d-md-none">
+          <div class="user-toggle">
+            <div class="nk-quick-nav-icon">
+              <em class="icon ni ni-wifi-off text-danger"></em>
+            </div>
+          </div>
+        </a>
         <a
-          href="#"
+          v-else
+          href="javascript:void();"
           class="dropdown-toggle d-md-none ml-n1"
           data-toggle="dropdown"
         >
@@ -29,7 +41,18 @@
             </div>
           </div>
         </a>
+
         <a
+          v-if="networkIsError"
+          class="btn btn-danger d-none d-xl-block"
+          type="button"
+          data-toggle="dropdown"
+        >
+          <em class="icon ni ni-wifi-off"></em>
+          Wrong Network
+        </a>
+        <a
+          v-else
           href="#"
           class="dropdown-toggle btn btn-light d-none d-md-block dropdown-indicator"
           data-toggle="dropdown"
@@ -96,9 +119,43 @@
 <script>
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 import connectors from "../../../plugins/WalletDialog/connectors";
+import { NETWORK } from "../../../utils/contracts";
 
 export default {
   name: "ConnectStatus",
+
+  data() {
+    return {
+      networkIsError: false
+    };
+  },
+
+  mounted() {
+    this.$watch(
+      "$store.state.connector.address",
+      (newVal, oldVal) => {
+        console.log({ address: { newVal, oldVal } });
+      },
+      { immediate: true }
+    );
+
+    this.$watch(
+      "$store.state.connector.chainId",
+      (newVal, oldVal) => {
+        console.log({ chainId: { newVal, oldVal } });
+        if (newVal) {
+          this.networkIsError = newVal !== NETWORK;
+          if (this.networkIsError) {
+            this.$q.notify({
+              type: "negative",
+              message: "Please connect to the appropriate Heco network."
+            });
+          }
+        }
+      },
+      { immediate: true }
+    );
+  },
 
   computed: {
     connected: function() {
@@ -115,14 +172,6 @@ export default {
   },
 
   methods: {
-    onConnect() {
-      // this.$q
-      //   .dialog({ component: ConnectDialog, parent: this })
-      //   .onOk(({ address, chainId }) => console.log({ address, chainId }));
-
-      this.$connector.connect();
-    },
-
     onDisconnect() {
       this.$connector.disconnect();
     }

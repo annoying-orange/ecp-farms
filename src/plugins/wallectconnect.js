@@ -13,7 +13,6 @@ class Connector {
         const bridge = "https://bridge.walletconnect.org";
         // create new connector
         const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-        console.log(this._store.state.account)
 
         this._connector = connector
 
@@ -50,7 +49,7 @@ class Connector {
             }
 
             const { chainId, accounts } = payload.params[0];
-            this.onSessionUpdate(accounts, chainId);
+            this.onSessionUpdate(chainId, accounts);
         });
 
         connector.on("connect", (error, payload) => {
@@ -60,7 +59,8 @@ class Connector {
                 throw error;
             }
 
-            this.onConnect(payload);
+            const { chainId, accounts } = payload.params[0];
+            this.onConnect(chainId, accounts);
         });
 
         connector.on("disconnect", (error, payload) => {
@@ -77,23 +77,13 @@ class Connector {
             console.log(`connector.connected: ${connector.connected}`);
 
             const { chainId, accounts } = connector;
-            const address = accounts[0];
-            
-            this._store.commit("connector/set", {
-                connected: true,
-                chainId,
-                accounts,
-                address,
-            });
-
-            this.onSessionUpdate(accounts, chainId);
+            this.onConnect(chainId, accounts);
         }
 
         this._connector = connector;
     }
 
-    onConnect(payload) {
-        const { chainId, accounts } = payload.params[0];
+    onConnect(chainId, accounts) {
         const address = accounts[0];
 
         this._store.commit("connector/set", {
@@ -111,9 +101,15 @@ class Connector {
         this._store.commit("connector/init");
     }
 
-    onSessionUpdate(accounts, chainId) {
+    onSessionUpdate(chainId, accounts) {
         const address = accounts[0];
-        console.log({ chainId, accounts, address });
+
+        this._store.commit("connector/set", {
+            chainId,
+            accounts,
+            address,
+        });
+            
         // await this.getAccountAssets();
     }
 }
