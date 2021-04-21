@@ -5,20 +5,7 @@
       <div class="nk-sidebar nk-sidebar-fixed " data-content="sidebarMenu">
         <div class="nk-sidebar-element nk-sidebar-head">
           <div class="nk-sidebar-brand">
-            <a href="/" class="logo-link nk-sidebar-logo">
-              <img
-                class="logo-light logo-img"
-                src="assets/logo.png"
-                srcset="assets/logo2x.png 2x"
-                alt="logo"
-              />
-              <img
-                class="logo-dark logo-img"
-                src="assets/logo-dark.png"
-                srcset="assets/logo-dark2x.png 2x"
-                alt="logo-dark"
-              />
-            </a>
+            <h4>EtherSwap</h4>
           </div>
           <div class="nk-menu-trigger mr-n2">
             <a
@@ -255,19 +242,7 @@
               </div>
               <div class="nk-header-brand d-xl-none">
                 <a href="/#/" class="logo-link">
-                  <img
-                    class="logo-light logo-img"
-                    src="assets/logo.png"
-                    srcset="assets/logo2x.png 2x"
-                    alt="logo"
-                  />
-                  <img
-                    class="logo-dark logo-img"
-                    src="assets/logo-dark.png"
-                    srcset="assets/logo-dark2x.png 2x"
-                    alt="logo-dark"
-                  />
-                  <span class="nio-version">Crypto</span>
+                  <h5>EtherSwap</h5>
                 </a>
               </div>
               <div class="nk-header-news d-none d-xl-block">
