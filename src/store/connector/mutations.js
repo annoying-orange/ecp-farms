@@ -1,4 +1,4 @@
-import { NETWORK } from "../../utils/contracts"
+import { Network } from "../../utils/contracts"
 
 export function update (state, { name, description, accounts, chainId }) {
     if (accounts.length === 0) {
@@ -26,7 +26,7 @@ export function init (state) {
         description: '',
         fetching: false,
         connected: false,
-        chainId: NETWORK,
+        chainId: Network.chainId,
         accounts: [],
         address: "",
         assets: []

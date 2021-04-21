@@ -10,13 +10,14 @@ import { getMainDefinition } from 'apollo-utilities'
 import VueClipboard from 'vue-clipboard2'
 
 import { Connector } from '../plugins/wallectconnect'
+import { Network } from '../utils/contracts'
 
 VueClipboard.config.autoSetContainer = true
 
 Vue.use(VueApollo)
 Vue.use(VueClipboard)
 
-const web3 = new Web3('https://http-testnet.hecochain.com')
+const web3 = new Web3(Network.rpc)
 Vue.prototype.$web3 = web3
 
 const authMiddleware = new ApolloLink((operation, forward) => {

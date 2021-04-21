@@ -112,7 +112,7 @@ import gql from "graphql-tag";
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 import connectors from "../../../plugins/WalletDialog/connectors";
 import {
-  NETWORK,
+  Network,
   PaymentToken,
   CrowdsaleContract
 } from "../../../utils/contracts";
@@ -144,7 +144,7 @@ export default {
       (newVal, oldVal) => {
         console.log({ chainId: { newVal, oldVal } });
         if (newVal) {
-          this.networkIsError = newVal !== NETWORK;
+          this.networkIsError = newVal !== Network.chainId;
           if (this.networkIsError) {
             this.$q.notify({
               type: "negative",

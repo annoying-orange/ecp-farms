@@ -1,4 +1,4 @@
-import { NETWORK } from "../../utils/contracts"
+import { Network } from "../../utils/contracts"
 
 export default function () {
   return {
@@ -6,7 +6,7 @@ export default function () {
     description: '',
     fetching: false,
     connected: false,
-    chainId: NETWORK,
+    chainId: Network.chainId,
     accounts: [],
     address: "",
     assets: []

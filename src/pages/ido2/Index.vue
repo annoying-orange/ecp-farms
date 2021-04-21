@@ -123,6 +123,12 @@ export default {
       CrowdsaleContract.address
     );
 
+    console.log(contract.methods);
+
+    contract.methods
+      .owner()
+      .call()
+      .then(owner => console.log(owner));
     contract.methods
       .getInfo()
       .call()
