@@ -96,14 +96,15 @@ export default {
         amount: 0,
         min: 100,
         max: 10000,
-        transactionCount: 0
+        transactionCount: 0,
+        tokenSymbol: CrowdsaleContract.token.symbol
       },
       pool: {
         startBlock: 0,
         endBlock: 0,
         allocatedTime: 0,
         minAllocation: 100,
-        symbol: "ETH",
+        tokenSymbol: CrowdsaleContract.token.symbol,
         qualification: "no"
       },
       token: {
@@ -168,8 +169,7 @@ export default {
 
       console.log({ info });
 
-      // const fromWei = this.$web3.utils.fromWei;
-      const fromWei = val => parseFloat(val) / Math.pow(10, 6);
+      const fromWei = this.$web3.utils.fromWei;
 
       return {
         allocatedTime: parseInt(info[0]),

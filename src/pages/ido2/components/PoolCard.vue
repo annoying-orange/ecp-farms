@@ -78,7 +78,7 @@
           <div class="tranx-amount">
             <div class="number">
               {{ value.minAllocation }}
-              <span class="currency">{{ value.symbol }}</span>
+              <span class="currency">{{ value.tokenSymbol }}</span>
             </div>
           </div>
         </div>

@@ -1,3 +1,5 @@
+import { CrowdsaleContract, PaymentToken } from "../../utils/contracts"
+
 export default function () {
   return {
     id: 0,
@@ -11,15 +13,15 @@ export default function () {
       balance: 0
     },
     usdt: {
-      name: 'Tether USD',
-      symbol: 'USDT',
-      address: '0xED02B442b0eF5bC681c08953c5122063a497E804',
+      address: PaymentToken.address,
+      name: PaymentToken.name,
+      symbol: PaymentToken.symbol,
       balance: 0
     },
     eth: {
-      name: 'Ether',
-      address: '0xF22108A9f42EB64EF0603dE2484b506e88168084',
-      symbol: 'ETH',
+      address: CrowdsaleContract.token.address,
+      name: CrowdsaleContract.token.name,
+      symbol: CrowdsaleContract.token.symbol,
       balance: 0
     },
     minAllocation: 0,

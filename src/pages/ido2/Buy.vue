@@ -101,12 +101,12 @@
             </div>
             <div class="form-note-group">
               <span class="buysell-min form-note-alt">
-                {{ $t("buy.minimum") }}: {{ buy.min }}
+                {{ $t("buy.minimum") }}: {{ minAllocation }}
                 {{ buy.symbol }}
               </span>
               <span class="buysell-rate form-note-alt">
                 1 {{ buy.symbol }} =
-                {{ exchange }}
+                {{ rate }}
                 {{ paymentToken.symbol }}
               </span>
             </div>
@@ -155,13 +155,19 @@ export default {
     return {
       sending: false,
       amount: null,
+      minAllocation: 1,
+      rate: 0.3,
       paymentToken: PaymentToken,
-      buy: CrowdsaleContract.token,
-      exchange: 0.3
+      buy: CrowdsaleContract.token
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.info().then(({ min, rate }) => {
+      this.minAllocation = min;
+      this.rate = rate;
+    });
+  },
 
   computed: {
     connected: function() {
@@ -189,7 +195,7 @@ export default {
     },
 
     expectPaymentAmount: function() {
-      return this.amount * this.exchange;
+      return this.amount * this.rate;
     }
   },
 
@@ -219,6 +225,13 @@ export default {
       });
 
       this.allocation().then(({ min, max, balance }) => {
+        console.log({
+          min,
+          max,
+          balance,
+          expectPayment: this.expectPaymentAmount,
+          amount: this.amount
+        });
         if (!this.expectPaymentAmount || parseFloat(this.amount) < min) {
           notify({
             type: "negative",
@@ -259,16 +272,39 @@ export default {
               .onDismiss(() => this.reset());
           })
           .catch(err => {
-            console.error(err);
+            console.log(err);
             notify({
               type: "negative",
               timeout: 1500,
               spinner: false,
-              message: err
+              message: err.message
             });
             this.sending = false;
           });
       });
+    },
+
+    async info() {
+      const contract = new this.$web3.eth.Contract(
+        CrowdsaleContract.abi,
+        CrowdsaleContract.address
+      );
+
+      const fromWei = this.$web3.utils.fromWei;
+      const info = await contract.methods.getInfo().call();
+
+      console.log({ info });
+
+      return {
+        allocatedTime: parseInt(info[0]),
+        expires: parseInt(info[1]),
+        rate: parseFloat(fromWei(info[2])),
+        min: parseFloat(fromWei(info[3])),
+        max: parseFloat(fromWei(info[4])),
+        total: parseFloat(fromWei(info[5])),
+        amount: parseFloat(fromWei(info[6])),
+        status: info[7] // INACTIVE = 0, ACTIVE = 1, PAUSE = 2, CLOSE = 3
+      };
     },
 
     async allocation() {
@@ -278,14 +314,13 @@ export default {
         CrowdsaleContract.address
       );
 
-      // const fromWei = this.$web3.utils.fromWei;
-      const fromWei = val => parseFloat(val) / Math.pow(10, 6);
+      const fromWei = this.$web3.utils.fromWei;
 
       const info = await contract.methods.getInfo().call();
       const min = parseFloat(fromWei(info[3]));
       const max = parseFloat(fromWei(info[4]));
       const balance = await this.balanceOf(this.address, token);
-
+      console.log({ allocation: { min, max, balance } });
       return { min, max, balance };
     },
 
@@ -307,10 +342,11 @@ export default {
       const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
 
       if (balanceDecimals < amount) {
-        throw {
-          error: this.$t("transaction.insufficientBalance"),
-          message: `You''ve ${balanceDecimals} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
-        };
+        // throw {
+        //   error: this.$t("transaction.insufficientBalance"),
+        //   message: `You''ve ${balanceDecimals} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
+        // };
+        throw { message: this.$t("transaction.insufficientBalance") };
       }
 
       const to = PaymentToken.address;
@@ -349,7 +385,7 @@ export default {
           return { hash, value };
         } catch (err) {
           console.log(err);
-          throw { error: "", message: err };
+          throw err;
         }
       }
 
@@ -372,11 +408,14 @@ export default {
               referrals[i] = element;
             }
           });
-
+          console.log(
+            `methods.subscribeTokensHasInviter(${value}, ${referrals})`
+          );
           data = await crowdsaleContract.methods
             .subscribeTokensHasInviter(value, referrals)
             .encodeABI();
         } else {
+          console.log(`methods.subscribeTokens(${value})`);
           data = await crowdsaleContract.methods
             .subscribeTokens(value)
             .encodeABI();
@@ -387,12 +426,13 @@ export default {
           to,
           data
         };
+        console.log(tx);
         const gas = await this.$web3.eth.estimateGas(tx);
 
         return Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
       } catch (err) {
         console.log(err);
-        throw { error: "", message: err };
+        throw err;
       }
     },
 
@@ -406,17 +446,17 @@ export default {
 
         console.log({ hash });
 
-        const results = await getTokenTransactions(from, 10);
-        console.log({ TokenTransactions: results });
-        const tokenTx = results.filter(r => r.from === from);
-        if (tokenTx.length > 0) {
-          await this.createTransaction(tokenTx[0]);
-        }
+        // const results = await getTokenTransactions(from, 10);
+        // console.log({ TokenTransactions: results });
+        // const tokenTx = results.filter(r => r.from === from);
+        // if (tokenTx.length > 0) {
+        //   await this.createTransaction(tokenTx[0]);
+        // }
 
-        return tokenTx;
+        return hash;
       } catch (err) {
         console.log(err);
-        throw { error: "", message: err };
+        throw err;
       }
     },
 

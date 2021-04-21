@@ -26,12 +26,11 @@ class Connector {
         this._subscribeToEvents();
     }
 
-    disconnect() {
+    async disconnect() {
         const connector = this._connector;
         if (connector) {
-            connector.killSession();
+            await connector.killSession();
         }
-        //
     }
 
     async sendTransaction(tx) {

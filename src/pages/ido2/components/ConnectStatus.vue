@@ -109,8 +109,7 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
-import connectors from "../../../plugins/WalletDialog/connectors";
+
 import {
   Network,
   PaymentToken,
@@ -133,7 +132,7 @@ export default {
         if (address) {
           this.onRefresh();
           this.createAccount(address, this.inviteCode);
-          this.approve(address);
+          // this.approve(address);
         }
       },
       { immediate: true }
@@ -197,7 +196,7 @@ export default {
             const balance = this.$web3.utils.fromWei(result);
             this.$store.commit("account/ht", { balance });
           } else {
-            console.error(message);
+            console.error(result);
           }
         });
 
@@ -226,7 +225,7 @@ export default {
 
         return balance / Math.pow(10, decimals);
       } else {
-        console.error(message);
+        console.error(result);
       }
     },
 
