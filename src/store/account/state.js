@@ -21,6 +21,8 @@ export default function () {
       address: '0xF22108A9f42EB64EF0603dE2484b506e88168084',
       symbol: 'ETH',
       balance: 0
-    }
+    },
+    minAllocation: 0,
+    maxAllocation: 99999999
   }
 }

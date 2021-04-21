@@ -105,8 +105,8 @@
                 {{ buy.symbol }}
               </span>
               <span class="buysell-rate form-note-alt">
-                {{ buy.exchange }} {{ buy.symbol }} =
-                {{ paymentToken.exchange }}
+                1 {{ buy.symbol }} =
+                {{ exchange }}
                 {{ paymentToken.symbol }}
               </span>
             </div>
@@ -122,20 +122,10 @@
             <a
               href="#"
               class="btn btn-lg btn-block btn-primary"
-              data-toggle="modal"
-              data-target="#confirm-coin"
               v-on:click="onBuy"
-              v-if="connected"
+              v-if="!sending"
             >
               {{ $t("buy.continueToBuy") }}
-            </a>
-            <a
-              href="#"
-              class="btn btn-lg btn-block btn-primary"
-              v-on:click="onConnect"
-              v-else
-            >
-              {{ $t("account.connectWallet") }}
             </a>
           </div>
           <!-- .buysell-field -->
@@ -145,147 +135,29 @@
       <!-- .buysell-block -->
     </div>
     <!-- .buysell -->
-    <!-- @@ Confirm Coin Modal @e -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="confirm-coin">
-      <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content" v-if="sending">
-          <div class="modal-body modal-body-lg text-center">
-            <div class="nk-modal">
-              <q-spinner
-                color="secondary"
-                size="5em"
-                :thickness="2"
-                class="q-mb-lg"
-              />
-              <div class="nk-modal-text">
-                <p class="caption-text">{{ $t("buy.sendTransaction") }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-content" v-else-if="err">
-          <a href="#" class="close" data-dismiss="modal"
-            ><em class="icon ni ni-cross-sm"></em
-          ></a>
-          <div class="modal-body modal-body-lg text-center">
-            <div class="nk-modal">
-              <em
-                class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"
-              ></em>
-              <h4 class="nk-modal-title">{{ err.error }}</h4>
-              <div class="nk-modal-text">
-                <p class="caption-text">
-                  {{ err.message }}
-                </p>
-              </div>
-              <div class="nk-modal-action-lg">
-                <ul class="btn-group gx-4">
-                  <li>
-                    <a
-                      href="#"
-                      data-dismiss="modal"
-                      class="btn btn-lg btn-mw btn-light"
-                    >
-                      {{ $t("buy.return") }}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-content" v-else>
-          <a href="#" class="close" data-dismiss="modal"
-            ><em class="icon ni ni-cross-sm"></em
-          ></a>
-          <div class="modal-body modal-body-lg text-center">
-            <div class="nk-modal">
-              <em
-                class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"
-              ></em>
-              <h4 class="nk-modal-title">{{ $t("buy.successfully") }}</h4>
-              <div class="nk-modal-text">
-                <p class="caption-text">
-                  You’ve successfully bought
-                  <strong>{{ amount }}</strong>
-                  {{ buy.symbol }}
-                  for
-                  <strong>{{ expectPaymentAmount }}</strong>
-                  {{ paymentToken.symbol }}.
-                </p>
-                <p class="sub-text-sm">
-                  {{ $t("buy.howReceiveToken") }}
-                  <a href="#">{{ $t("buy.click") }}</a>
-                </p>
-              </div>
-              <div class="nk-modal-action-lg">
-                <ul class="btn-group gx-4">
-                  <li>
-                    <a
-                      href="#"
-                      data-dismiss="modal"
-                      class="btn btn-lg btn-mw btn-primary"
-                      @click="onReset"
-                    >
-                      {{ $t("buy.return") }}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- .modal-body -->
-          <div class="modal-footer bg-lighter">
-            <div class="text-center w-100">
-              <p>
-                {{ $t("buy.referEarn") }}
-                <a href="#/invite" data-dismiss="modal">{{
-                  $t("buy.inviteFriends")
-                }}</a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- .modal-content -->
-      </div>
-      <!-- .modla-dialog -->
-    </div>
-    <!-- .modal -->
   </q-page>
 </template>
 <script>
 import gql from "graphql-tag";
 import ConnectDialog from "../../plugins/WalletDialog/ConnectDialog";
 import { getTokenTransactions, getTransactions } from "../../utils/apis";
-import { CrowdsaleContract, NULL_ADDRESS } from "../../utils/contracts";
+import {
+  CrowdsaleContract,
+  PaymentToken,
+  NULL_ADDRESS
+} from "../../utils/contracts";
+import TransactionSuccessfully from "./components/TransactionSuccessfully";
 
 export default {
   name: "Buy",
 
   data() {
     return {
-      sending: true,
+      sending: false,
       amount: null,
-      paymentToken: {
-        address: "0xED02B442b0eF5bC681c08953c5122063a497E804",
-        name: "Tether USD",
-        symbol: "USDT",
-        logoUri:
-          "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
-        min: 100.0,
-        mxn: 10000.0,
-        exchange: 0.3
-      },
-      buy: {
-        address: "0xF22108A9f42EB64EF0603dE2484b506e88168084",
-        name: "Ether",
-        symbol: "ETH",
-        decimals: 18,
-        logoUri: "",
-        min: 100.0,
-        exchange: 1.0
-      },
-      err: null
+      paymentToken: PaymentToken,
+      buy: CrowdsaleContract.token,
+      exchange: 0.3
     };
   },
 
@@ -317,114 +189,108 @@ export default {
     },
 
     expectPaymentAmount: function() {
-      return this.amount * this.paymentToken.exchange;
+      return this.amount * this.exchange;
     }
   },
 
   methods: {
-    onReset() {
+    reset() {
       this.sending = false;
       this.amount = null;
-      this.err = null;
-    },
-
-    onConnect() {
-      this.$q
-        .dialog({ component: ConnectDialog, parent: this })
-        .onOk(({ address, chainId }) => this.onBuy());
     },
 
     onBuy() {
-      // if (!this.amount || parseFloat(this.amount) < this.buy.min) {
-      //   this.sending = false;
-      //   this.err = {
-      //     error: this.$t("buy.invalidAmount")
-      //   };
-      //   return;
-      // }
-
-      this.err = null;
-      this.sending = true;
-      const from = this.address;
-      const to = CrowdsaleContract.address;
-      const token = this.paymentToken.address;
-      const amount = this.expectPaymentAmount;
-
-      this.sendTransaction({ from, to, token, amount })
-        .then(tx => {
-          console.log({ sendTransaction: tx });
-
-          this.sending = false;
-          this.err = null;
-        })
-        .catch(err => {
-          this.allowance(from, token).then(allowanceHash =>
-            console.log({ allowanceHash })
-          );
-
-          this.sending = false;
-          this.err = err;
+      if (!this.connected) {
+        this.$q.notify({
+          type: "negative",
+          message: `Please connect to your wallet.`
         });
+
+        return;
+      }
+
+      this.sending = true;
+
+      const notify = this.$q.notify({
+        group: false, // required to be updatable
+        timeout: 0, // we want to be in control when it gets dismissed
+        spinner: true,
+        message: this.$t("buy.sendTransaction")
+      });
+
+      this.allocation().then(({ min, max, balance }) => {
+        if (!this.expectPaymentAmount || parseFloat(this.amount) < min) {
+          notify({
+            type: "negative",
+            timeout: 1500,
+            spinner: false,
+            message: `Min Allocation amount ${min} ${this.eth.symbol}`
+          });
+          this.sending = false;
+          return;
+        }
+
+        if (parseFloat(this.amount) + balance > max) {
+          notify({
+            type: "negative",
+            timeout: 1500,
+            spinner: false,
+            message: `Max Allocation no more than ${max} ${this.eth.symbol}`
+          });
+          this.sending = false;
+          return;
+        }
+
+        const from = this.address;
+        const to = CrowdsaleContract.address;
+        const token = this.paymentToken.address;
+        const amount = this.expectPaymentAmount;
+
+        this.sendTransaction({ from, to, token, amount })
+          .then(tx => {
+            console.log({ sendTransaction: tx });
+            notify({ timeout: 1, spinner: false });
+
+            this.$q
+              .dialog({
+                component: TransactionSuccessfully,
+                parent: this,
+                message: `You’ve successfully bought ${this.amount} ${this.buy.symbol} for ${this.expectPaymentAmount} ${this.paymentToken.symbol}.`
+              })
+              .onDismiss(() => this.reset());
+          })
+          .catch(err => {
+            console.error(err);
+            notify({
+              type: "negative",
+              timeout: 1500,
+              spinner: false,
+              message: err
+            });
+          });
+      });
+    },
+
+    async allocation() {
+      const { token } = CrowdsaleContract;
+      const contract = new this.$web3.eth.Contract(
+        CrowdsaleContract.abi,
+        CrowdsaleContract.address
+      );
+
+      const info = await contract.methods.getInfo().call();
+      const min = parseFloat(this.$web3.utils.fromWei(info[3]));
+      const max = parseFloat(this.$web3.utils.fromWei(info[4]));
+      const balance = await this.balanceOf(this.address, token);
+
+      return { min, max, balance };
     },
 
     async balanceOf(address, token) {
-      const { status, message, result } = await this.$store.dispatch(
-        "connector/abi",
-        token
-      );
-
-      if (status === "1") {
-        const abi = JSON.parse(result);
-        const contract = new this.$web3.eth.Contract(abi, token);
-        const decimals = await contract.methods.decimals().call();
-        const balance = await contract.methods.balanceOf(address).call();
-        console.log({ balance });
-        return balance / Math.pow(10, decimals);
-      } else {
-        console.error(message);
-      }
-    },
-
-    async allowance(from, token) {
-      const { status, message, result } = await this.$store.dispatch(
-        "connector/abi",
-        token
-      );
-
-      if (status !== "1") {
-        throw { error: message, message: result };
-      }
-
-      const contract = new this.$web3.eth.Contract(JSON.parse(result), token);
-      const value = await contract.methods
-        .allowance(from, CrowdsaleContract.address)
-        .call();
-
-      if (parseFloat(value) > 0) {
-        const data = await contract.methods
-          .approve(CrowdsaleContract.address, 0)
-          .encodeABI();
-
-        console.log({
-          allowance: { from, token, contract: CrowdsaleContract.address, value }
-        });
-
-        try {
-          var tx = {
-            from,
-            to: token,
-            data
-          };
-
-          const gas = await this.$web3.eth.estimateGas(tx);
-          tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
-          console.log({ allowance: tx });
-          return await this.$store.dispatch("connector/sendTransaction", tx);
-        } catch (err) {
-          console.log(err);
-          throw { error: "", message: err };
-        }
-      }
+      const contract = new this.$web3.eth.Contract(token.abi, token.address);
+      const decimals = await contract.methods.decimals().call();
+      const balance = await contract.methods.balanceOf(address).call();
+      return balance / Math.pow(10, decimals);
     },
 
     async approve(from, token, amount) {
@@ -442,7 +308,7 @@ export default {
       const decimals = await contract.methods.decimals().call();
       const balance = await contract.methods.balanceOf(from).call();
       const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
-      console.log({ balance, amount, balanceDecimals });
+
       if (balanceDecimals < amount) {
         throw {
           error: this.$t("transaction.insufficientBalance"),
@@ -452,39 +318,45 @@ export default {
 
       const to = token;
       const value = amount * Math.pow(10, decimals) + "";
-      const data = await contract.methods
-        .approve(CrowdsaleContract.address, value)
-        .encodeABI();
+      const allowance = await contract.methods
+        .allowance(from, CrowdsaleContract.address)
+        .call();
 
-      console.log({
-        approve: {
-          from,
-          to,
-          contract: CrowdsaleContract.address,
-          amount,
-          value
+      console.log({ balance, amount, balanceDecimals, allowance });
+
+      if (allowance === "0") {
+        const data = await contract.methods
+          .approve(CrowdsaleContract.address, value)
+          .encodeABI();
+
+        console.log({
+          approve: {
+            from,
+            to,
+            contract: CrowdsaleContract.address,
+            amount,
+            value
+          }
+        });
+
+        try {
+          var tx = {
+            from,
+            to,
+            data
+          };
+          const gas = await this.$web3.eth.estimateGas(tx);
+          tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+          console.log(this.$connector);
+          const hash = await this.$connector.sendTransaction(tx);
+          return { hash, value };
+        } catch (err) {
+          console.log(err);
+          throw { error: "", message: err };
         }
-      });
+      }
 
-      return { value };
-      // try {
-      //   var tx = {
-      //     from,
-      //     to,
-      //     data
-      //   };
-      //   const gas = await this.$web3.eth.estimateGas(tx);
-      //   tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
-
-      //   const hash = await this.$store.dispatch(
-      //     "connector/sendTransaction",
-      //     tx
-      //   );
-      //   return { hash, value };
-      // } catch (err) {
-      //   console.log(err);
-      //   throw { error: "", message: err };
-      // }
+      return { hash: "", value };
     },
 
     async genertaeTransaction(from, to, value) {
@@ -493,26 +365,26 @@ export default {
         CrowdsaleContract.address
       );
 
-      let data;
+      try {
+        let data;
+        const referrals = [NULL_ADDRESS, NULL_ADDRESS];
 
-      if (this.referrals && this.referrals.length > 0) {
-        if (this.referrals.length === 1) {
-          this.referrals.push(NULL_ADDRESS);
+        if (this.referrals && this.referrals.length > 0) {
+          this.referrals.forEach((element, i) => {
+            if (i < referrals.length) {
+              referrals[i] = element;
+            }
+          });
+
+          data = await crowdsaleContract.methods
+            .subscribeTokensHasInviter(value, referrals)
+            .encodeABI();
+        } else {
+          data = await crowdsaleContract.methods
+            .subscribeTokens(value)
+            .encodeABI();
         }
 
-        console.log({ referrals: this.referrals });
-        data = await crowdsaleContract.methods
-          .subscribeTokensHasInviter(value, this.referrals)
-          .encodeABI();
-      } else {
-        data = await crowdsaleContract.methods
-          .subscribeTokens(value)
-          .encodeABI();
-      }
-
-      console.log({ tx: { from, to, value, data } });
-
-      try {
         var tx = {
           from,
           to,
@@ -528,20 +400,50 @@ export default {
     },
 
     async sendTransaction({ from, to, token, amount }) {
-      // await this.allowance(from, token);
       const { value } = await this.approve(from, token, amount);
+      console.log({ value });
       const tx = await this.genertaeTransaction(from, to, value);
-      const hash = await this.$store.dispatch("connector/sendTransaction", tx);
+      console.log({ tx });
+      try {
+        const hash = await this.$connector.sendTransaction(tx);
 
-      console.log({ hash });
+        console.log({ hash });
 
-      const tokenTx = await getTokenTransactions(from, 1);
-      await this.createTransaction(tokenTx);
+        const results = await getTokenTransactions(from, 10);
+        console.log({ TokenTransactions: results });
+        const tokenTx = results.filter(r => r.from === from);
+        if (tokenTx.length > 0) {
+          await this.createTransaction(tokenTx[0]);
+        }
 
-      return tokenTx;
+        return tokenTx;
+      } catch (err) {
+        console.log(err);
+        throw { error: "", message: err };
+      }
     },
 
-    createTransaction(tx) {
+    createTransaction({
+      blockNumber,
+      timeStamp,
+      hash,
+      nonce,
+      blockHash,
+      from,
+      contractAddress,
+      to,
+      value,
+      tokenName,
+      tokenSymbol,
+      tokenDecimal,
+      transactionIndex,
+      gas,
+      gasPrice,
+      gasUsed,
+      cumulativeGasUsed,
+      input,
+      confirmations
+    }) {
       this.$apollo
         .mutate({
           mutation: gql`
@@ -553,25 +455,25 @@ export default {
           `,
           variables: {
             tx: {
-              blockNumber: tx.blockNumber,
-              timeStamp: tx.timeStamp,
-              hash: tx.hash,
-              nonce: tx.nonce,
-              blockHash: tx.blockHash,
-              from: tx.from,
-              contractAddress: tx.contractAddress,
-              to: tx.to,
-              value: tx.value,
-              tokenName: tx.tokenName,
-              tokenSymbol: tx.tokenSymbol,
-              tokenDecimal: tx.tokenDecimal,
-              transactionIndex: tx.transactionIndex,
-              gas: tx.gas,
-              gasPrice: tx.gasPrice,
-              gasUsed: tx.gasUsed,
-              cumulativeGasUsed: tx.cumulativeGasUsed,
-              input: tx.input,
-              confirmations: tx.confirmations
+              blockNumber,
+              timeStamp,
+              hash,
+              nonce,
+              blockHash,
+              from,
+              contractAddress,
+              to,
+              value,
+              tokenName,
+              tokenSymbol,
+              tokenDecimal,
+              transactionIndex,
+              gas,
+              gasPrice,
+              gasUsed,
+              cumulativeGasUsed,
+              input,
+              confirmations
             }
           },
           update: (store, { data: { createTransaction } }) => {

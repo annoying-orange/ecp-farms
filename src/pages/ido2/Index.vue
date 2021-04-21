@@ -142,6 +142,11 @@ export default {
           allocatedTime: parseInt(result[0]),
           minAllocation: fromWei(result[3])
         });
+
+        this.$store.commit("account/update", {
+          minAllocation: parseFloat(fromWei(result[3])),
+          maxAllocation: parseFloat(fromWei(result[4]))
+        });
       });
 
     this.$web3.eth

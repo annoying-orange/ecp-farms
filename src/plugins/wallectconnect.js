@@ -34,6 +34,15 @@ class Connector {
         //
     }
 
+    async sendTransaction(tx) {
+        const connector = this._connector;
+        
+        if (connector) {
+            console.log({ event: "connector.sendTransaction", payload: tx })
+            return await connector.sendTransaction(tx);
+        }
+    }
+
     _subscribeToEvents() {
         const connector = this._connector;
 

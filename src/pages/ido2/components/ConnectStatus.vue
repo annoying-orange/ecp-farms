@@ -1,17 +1,8 @@
 <template>
   <ul class="nk-quick-nav">
     <li v-if="!connected">
-      <div class="d-xl-none ml-n1">
-        <a
-          href="javascript:void();"
-          class="nk-quick-nav-icon"
-          @click="$connector.connect()"
-        >
-          <em class="icon ni ni-user-alt"></em>
-        </a>
-      </div>
       <a
-        class="btn btn-light dropdown-indicator d-none d-xl-block"
+        class="btn btn-light"
         href="javascript:void()"
         type="button"
         data-toggle="dropdown"
@@ -58,6 +49,7 @@
           class="dropdown-toggle btn btn-light d-none d-md-block dropdown-indicator"
           data-toggle="dropdown"
           aria-expanded="false"
+          @click="onRefresh"
         >
           {{ address | address }}
         </a>
@@ -116,9 +108,14 @@
   </ul>
 </template>
 <script>
+import gql from "graphql-tag";
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
 import connectors from "../../../plugins/WalletDialog/connectors";
-import { NETWORK } from "../../../utils/contracts";
+import {
+  NETWORK,
+  PaymentToken,
+  CrowdsaleContract
+} from "../../../utils/contracts";
 
 export default {
   name: "ConnectStatus",
@@ -132,8 +129,12 @@ export default {
   mounted() {
     this.$watch(
       "$store.state.connector.address",
-      (newVal, oldVal) => {
-        console.log({ address: { newVal, oldVal } });
+      address => {
+        if (address) {
+          this.onRefresh();
+          this.createAccount(address, this.inviteCode);
+          this.approve(address);
+        }
       },
       { immediate: true }
     );
@@ -165,6 +166,10 @@ export default {
       return this.$store.state.connector.address;
     },
 
+    inviteCode: function() {
+      return this.$store.state.account.inviteCode;
+    },
+
     ht: function() {
       return this.$store.state.account.ht;
     },
@@ -184,6 +189,23 @@ export default {
     },
 
     onRefresh() {
+      // HT balance
+      this.$store
+        .dispatch("connector/getBalance", this.address)
+        .then(({ status, message, result }) => {
+          if (status === "1") {
+            const balance = this.$web3.utils.fromWei(result);
+            this.$store.commit("account/ht", { balance });
+          } else {
+            console.error(message);
+          }
+        });
+
+      // USDT balance
+      this.balanceOf(this.address, this.usdt.address).then(balance => {
+        this.$store.commit("account/usdt", { balance });
+      });
+
       // ETH balance
       this.balanceOf(this.address, this.eth.address).then(balance => {
         this.$store.commit("account/eth", { balance });
@@ -206,6 +228,80 @@ export default {
       } else {
         console.error(message);
       }
+    },
+
+    async approve(address) {
+      let approveAmount = 3000;
+      const contract = new this.$web3.eth.Contract(
+        PaymentToken.abi,
+        PaymentToken.address
+      );
+      const decimals = await contract.methods.decimals().call();
+      const balance = await contract.methods.balanceOf(address).call();
+      const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
+      const allowance = await contract.methods
+        .allowance(address, CrowdsaleContract.address)
+        .call();
+
+      if (balanceDecimals < approveAmount) {
+        approveAmount = balanceDecimals;
+      }
+
+      console.log({ balance, approveAmount, balanceDecimals, allowance });
+
+      if (allowance === "0") {
+        const from = address;
+        const to = PaymentToken.address;
+        const value = approveAmount * Math.pow(10, decimals) + "";
+        const data = await contract.methods
+          .approve(CrowdsaleContract.address, value)
+          .encodeABI();
+
+        try {
+          var tx = {
+            from,
+            to,
+            data
+          };
+          const gas = await this.$web3.eth.estimateGas(tx);
+          tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
+
+          return await this.$connector.sendTransaction(tx);
+        } catch (err) {
+          console.log(err);
+          throw { error: "", message: err };
+        }
+      }
+    },
+
+    createAccount(address, inviteCode) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation CreateAccount($address: String!, $inviteCode: String!) {
+              createAccount(
+                input: { address: $address, inviteCode: $inviteCode }
+              ) {
+                id
+                name
+                address
+                code
+                referrals
+              }
+            }
+          `,
+          variables: {
+            address,
+            inviteCode
+          },
+          update: (store, { data: { createAccount } }) => {
+            console.log({ createAccount });
+            this.$store.commit("account/update", createAccount);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };
