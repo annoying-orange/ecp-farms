@@ -2,6 +2,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import MetaMask from "./connectors"
+import { NETWORK } from "../../utils/contracts"
 
 const connectors = [
 //   {
@@ -83,7 +84,7 @@ const connectors = [
             
             if (!connector.connected) {
                 console.log("Waiting for create session with wallet connection ...");
-                connector.createSession({ chainId: 128 });
+                connector.createSession({ chainId: NETWORK });
             } else {
                 console.log("The wallet connected.");
 

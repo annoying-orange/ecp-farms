@@ -1,3 +1,5 @@
+import { NETWORK } from "../../utils/contracts"
+
 export function update (state, { name, description, accounts, chainId }) {
     if (accounts.length === 0) {
         state = Object.assign(state, {
@@ -24,7 +26,7 @@ export function init (state) {
         description: '',
         fetching: false,
         connected: false,
-        chainId: 128,
+        chainId: NETWORK,
         accounts: [],
         address: "",
         assets: []

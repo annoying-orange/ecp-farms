@@ -34,6 +34,7 @@
           href="javascript:void();"
           class="dropdown-toggle d-md-none ml-n1"
           data-toggle="dropdown"
+          @click="onRefresh"
         >
           <div class="user-toggle">
             <div class="nk-quick-nav-icon">
@@ -53,7 +54,7 @@
         </a>
         <a
           v-else
-          href="#"
+          href="javascript:void();"
           class="dropdown-toggle btn btn-light d-none d-md-block dropdown-indicator"
           data-toggle="dropdown"
           aria-expanded="false"
@@ -64,9 +65,7 @@
         <div
           class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-menu-s1"
         >
-          <div
-            class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block"
-          >
+          <div class="dropdown-inner user-card-wrap bg-lighter d-md-block">
             <div class="user-card">
               <div class="user-avatar">
                 <em class="icon ni ni-user-alt"></em>
@@ -166,6 +165,14 @@ export default {
       return this.$store.state.connector.address;
     },
 
+    ht: function() {
+      return this.$store.state.account.ht;
+    },
+
+    usdt: function() {
+      return this.$store.state.account.usdt;
+    },
+
     eth: function() {
       return this.$store.state.account.eth;
     }
@@ -174,6 +181,31 @@ export default {
   methods: {
     onDisconnect() {
       this.$connector.disconnect();
+    },
+
+    onRefresh() {
+      // ETH balance
+      this.balanceOf(this.address, this.eth.address).then(balance => {
+        this.$store.commit("account/eth", { balance });
+      });
+    },
+
+    async balanceOf(address, token) {
+      const { status, message, result } = await this.$store.dispatch(
+        "connector/abi",
+        token
+      );
+
+      if (status === "1") {
+        const abi = JSON.parse(result);
+        const contract = new this.$web3.eth.Contract(abi, token);
+        const decimals = await contract.methods.decimals().call();
+        const balance = await contract.methods.balanceOf(address).call();
+
+        return balance / Math.pow(10, decimals);
+      } else {
+        console.error(message);
+      }
     }
   }
 };

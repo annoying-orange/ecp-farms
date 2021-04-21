@@ -3,6 +3,7 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import MetaMaskConnector from "./MetaMaskConnector"
 import WalletConnectConnector from "./WalletConnectConnector"
+import { NETWORK } from "../../../utils/contracts"
 
 const connectors = [
 //   {
@@ -18,14 +19,14 @@ const connectors = [
     name: 'MetaMask',
     icon: 'svguse:icons/icons.svg#metamask',
     description: 'Connect With MetaMask',
-    connector: new MetaMaskConnector(128),
+    connector: new MetaMaskConnector(NETWORK),
     enable: typeof window.ethereum !== 'undefined'
   },
   {
     name: 'WalletConnect',
     icon: 'svguse:icons/icons.svg#wallet-connect',
     description: 'Connect With WalletConnect',
-    connector: new WalletConnectConnector(128),
+    connector: new WalletConnectConnector(NETWORK),
     enable: true
   }
 ]
