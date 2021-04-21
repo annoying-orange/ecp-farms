@@ -69,7 +69,7 @@ export default {
       this.$q.notify({
         type: "primary",
         timeout: 1000,
-        message: this.$t("invite.copyLink")
+        message: this.$t("referUs.copiedMessage")
       });
     }
   }

@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { NETWORK_API_URI } from './contracts'
 
 const heco = axios.create({
-  baseURL: "https://api-testnet.hecoinfo.com",
+  baseURL: NETWORK_API_URI,
   timeout: 30000, // 30 secs
   headers: {
     Accept: "application/json",

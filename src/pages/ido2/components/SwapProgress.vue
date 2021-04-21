@@ -17,7 +17,7 @@
           <q-item class="nk-wgw nk-wgw-name">
             <q-item-section></q-item-section>
             <q-item-section side class="nk-wgw-title title">
-              1 AGS = {{ value.rate }} USDT
+              1 {{ buyTokenSymbol }} = {{ value.rate }} {{ paymentTokenSymbol }}
             </q-item-section>
           </q-item>
           <q-item class="q-pt-none q-pb-none swap-progress">
@@ -99,6 +99,7 @@
 </template>
 <script>
 import QChart from "quasar-components-chart";
+import { CrowdsaleContract, PaymentToken } from "../../../utils/contracts";
 
 export default {
   components: { QChart },
@@ -106,6 +107,8 @@ export default {
 
   data() {
     return {
+      buyTokenSymbol: CrowdsaleContract.token.symbol,
+      paymentTokenSymbol: PaymentToken.symbol,
       transactionChart: {
         labels: [
           "22:00",
