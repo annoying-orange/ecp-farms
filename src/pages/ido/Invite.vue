@@ -6,7 +6,7 @@
         <q-btn icon="fas fa-times-circle" flat round dense to="/" />
       </q-card-section>
       <q-card-section class="text-center q-pt-xl">
-        <q-item-label>{{ $t("invite.text") }}</q-item-label>
+        <q-item-label>{{ $t("referUs.title") }}</q-item-label>
       </q-card-section>
       <q-card-section class="text-center">
         <vue-qrcode :value="link" :options="{ width: 250 }" />

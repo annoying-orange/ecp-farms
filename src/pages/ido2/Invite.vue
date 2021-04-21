@@ -1,49 +1,32 @@
 <template>
-  <div>
-    <q-card flat class="transparent">
-      <q-card-section class="row items-center q-pb-none">
-        <q-space />
-        <q-btn icon="fas fa-times-circle" flat round dense to="/" />
-      </q-card-section>
-      <q-card-section class="text-center q-pt-xl">
-        <q-item-label>{{ $t("invite.text") }}</q-item-label>
-      </q-card-section>
-      <q-card-section class="text-center">
-        <vue-qrcode :value="link" :options="{ width: 250 }" />
-      </q-card-section>
-      <q-card-section class="text-center q-pt-none">
-        <q-item-label>{{ link }}</q-item-label>
-      </q-card-section>
-      <q-card-actions align="center">
-        <q-btn flat round icon="far fa-copy" @click="onCopy" />
-        <q-btn
-          flat
-          round
-          icon="fas fa-share-alt"
-          @click="shareDialog = !shareDialog"
-          class="hidden"
-        />
-      </q-card-actions>
-    </q-card>
-    <q-dialog v-model="shareDialog" position="bottom">
-      <q-card class="q-pb-md">
-        <q-list separator>
-          <q-item
-            clickable
-            class="text-center"
-            v-for="share in shares"
-            :key="share.label"
-            @click="shareDialog = false"
-          >
-            <q-item-section>
-              {{ share.label }}
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-card-section />
-      </q-card>
-    </q-dialog>
-  </div>
+  <q-card flat>
+    <q-card-section class="row items-center q-pb-none">
+      <q-space />
+      <q-btn icon="fas fa-times-circle" flat round dense to="/" />
+    </q-card-section>
+    <q-card-section class="text-center q-pt-xl">
+      <h5 class="title">{{ $t("referUs.title") }}</h5>
+      <div class="title-sub">
+        {{ $t("referUs.description") }}
+      </div>
+    </q-card-section>
+    <q-card-section class="text-center">
+      <vue-qrcode :value="link" :options="{ width: 250 }" />
+    </q-card-section>
+    <q-card-section class="text-center q-pt-none">
+      <q-item-label>{{ link }}</q-item-label>
+    </q-card-section>
+    <q-card-actions align="center">
+      <q-btn flat round icon="far fa-copy" @click="onCopy" />
+      <q-btn
+        flat
+        round
+        icon="fas fa-share-alt"
+        @click="shareDialog = !shareDialog"
+        class="hidden"
+      />
+    </q-card-actions>
+  </q-card>
 </template>
 <script>
 import VueQrcode from "@chenfengyuan/vue-qrcode";
@@ -66,7 +49,7 @@ export default {
           label: "Twitter"
         }
       ],
-      link: "https://etherswap.1ecp.com/#Y9mT1c8K"
+      link: `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`
     };
   },
 
@@ -92,3 +75,13 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.q-card {
+  background-color: #f7f8fa;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+</style>
