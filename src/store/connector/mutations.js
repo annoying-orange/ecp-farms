@@ -17,3 +17,20 @@ export function update (state, { name, description, accounts, chainId }) {
         })
     }
 }
+
+export function init (state) {
+    state = Object.assign(state, {
+        name: '',
+        description: '',
+        fetching: false,
+        connected: false,
+        chainId: 128,
+        accounts: [],
+        address: "",
+        assets: []
+    })
+}
+
+export function set(state, value) {
+    state = Object.assign(state, value)
+}

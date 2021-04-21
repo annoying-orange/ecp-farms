@@ -9,6 +9,8 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import VueClipboard from 'vue-clipboard2'
 
+import { Connector } from '../plugins/wallectconnect'
+
 VueClipboard.config.autoSetContainer = true
 
 Vue.use(VueApollo)
@@ -135,4 +137,6 @@ export default async ({ app, router, Vue, store }) => {
       connectToDevTools: true
     })
   })
+
+  Vue.prototype.$connector = new Connector(store, 256)
 }

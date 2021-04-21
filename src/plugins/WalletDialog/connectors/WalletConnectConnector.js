@@ -61,6 +61,13 @@ export default class WalletConnectConnector {
       return await this.provider.sendTransaction(tx);
     }
 
+    close() {
+      console.log('Closing connection.')
+      if (this.provider) {
+        this.provider.killSession();
+      }
+    }
+
     _newProvider(success, err) {
       const provider = new WalletConnect({
           bridge: "https://bridge.walletconnect.org", // Required

@@ -82,7 +82,7 @@
           <div class="dropdown-inner">
             <ul class="link-list">
               <li>
-                <a href="#">
+                <a href="javascript:void();" @click="onDisconnect">
                   <em class="icon ni ni-signout"></em><span>Disconnect</span>
                 </a>
               </li>
@@ -95,6 +95,7 @@
 </template>
 <script>
 import ConnectDialog from "../../../plugins/WalletDialog/ConnectDialog";
+import connectors from "../../../plugins/WalletDialog/connectors";
 
 export default {
   name: "ConnectStatus",
@@ -115,9 +116,15 @@ export default {
 
   methods: {
     onConnect() {
-      this.$q
-        .dialog({ component: ConnectDialog, parent: this })
-        .onOk(({ address, chainId }) => console.log({ address, chainId }));
+      // this.$q
+      //   .dialog({ component: ConnectDialog, parent: this })
+      //   .onOk(({ address, chainId }) => console.log({ address, chainId }));
+
+      this.$connector.connect();
+    },
+
+    onDisconnect() {
+      this.$connector.disconnect();
     }
   }
 };
