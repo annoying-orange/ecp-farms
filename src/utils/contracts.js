@@ -27,7 +27,7 @@
 //     rpc: "https://http-testnet.hecochain.com",
 //     chainId: 256,
 //     symbol: "HT",
-//     browser: "https://api-testnet.hecoinfo.com"
+//     api: "https://api-testnet.hecoinfo.com"
 // }
 
 // const NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -61,7 +61,7 @@ const Network = {
     rpc: "https://http-mainnet-node.huobichain.com",
     chainId: 128,
     symbol: "HT",
-    browser: "https://api.hecoinfo.com"
+    api: "https://api.hecoinfo.com"
 }
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000"

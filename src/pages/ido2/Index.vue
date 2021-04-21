@@ -123,37 +123,23 @@ export default {
       CrowdsaleContract.address
     );
 
-    console.log(contract.methods);
-
-    contract.methods
-      .owner()
-      .call()
-      .then(owner => console.log(owner));
-    contract.methods
-      .getInfo()
-      .call()
-      .then(result => {
-        console.log({ info: result });
-        const fromWei = this.$web3.utils.fromWei;
+    this.info(contract).then(
+      ({ allocatedTime, expires, rate, min, max, total, amount, status }) => {
         this.raise = Object.assign(this.raise, {
-          expires: parseInt(result[1]),
-          rate: parseFloat(fromWei(result[2])),
-          min: parseFloat(fromWei(result[3])),
-          max: parseFloat(fromWei(result[4])),
-          total: parseFloat(fromWei(result[5])),
-          amount: parseFloat(fromWei(result[6]))
+          expires,
+          rate,
+          min,
+          max,
+          total,
+          amount
         });
 
         this.pool = Object.assign(this.pool, {
-          allocatedTime: parseInt(result[0]),
-          minAllocation: fromWei(result[3])
+          allocatedTime,
+          minAllocation: min
         });
-
-        this.$store.commit("account/update", {
-          minAllocation: parseFloat(fromWei(result[3])),
-          maxAllocation: parseFloat(fromWei(result[4]))
-        });
-      });
+      }
+    );
 
     this.$web3.eth
       .getTransactionCount(CrowdsaleContract.token.address)
@@ -177,6 +163,26 @@ export default {
   },
 
   methods: {
+    async info(contract) {
+      const info = await contract.methods.getInfo().call();
+
+      console.log({ info });
+
+      // const fromWei = this.$web3.utils.fromWei;
+      const fromWei = val => parseFloat(val) / Math.pow(10, 6);
+
+      return {
+        allocatedTime: parseInt(info[0]),
+        expires: parseInt(info[1]),
+        rate: parseFloat(fromWei(info[2])),
+        min: parseFloat(fromWei(info[3])),
+        max: parseFloat(fromWei(info[4])),
+        total: parseFloat(fromWei(info[5])),
+        amount: parseFloat(fromWei(info[6])),
+        status: info[7]
+      };
+    },
+
     async poolInformation({ address, abi }) {
       const startBlock = await getTransactionStartBlock(address);
       const endBlock = await getTransactionEndBlock(address);

@@ -1,8 +1,9 @@
 import axios from 'axios'
 import connectors from '../../plugins/WalletDialog/connectors'
+import { Network } from '../../utils/contracts'
 
 const heco = axios.create({
-  baseURL: "https://api-testnet.hecoinfo.com",
+  baseURL: Network.api,
   timeout: 30000, // 30 secs
   headers: {
     Accept: "application/json",

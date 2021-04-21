@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Network } from './contracts'
 
 const heco = axios.create({
-  baseURL: Network.browser,
+  baseURL: Network.api,
   timeout: 30000, // 30 secs
   headers: {
     Accept: "application/json",

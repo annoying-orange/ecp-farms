@@ -243,10 +243,9 @@ export default {
 
         const from = this.address;
         const to = CrowdsaleContract.address;
-        const token = this.paymentToken.address;
         const amount = this.expectPaymentAmount;
 
-        this.sendTransaction({ from, to, token, amount })
+        this.sendTransaction({ from, to, amount })
           .then(tx => {
             console.log({ sendTransaction: tx });
             notify({ timeout: 1, spinner: false });
@@ -267,6 +266,7 @@ export default {
               spinner: false,
               message: err
             });
+            this.sending = false;
           });
       });
     },
@@ -278,9 +278,12 @@ export default {
         CrowdsaleContract.address
       );
 
+      // const fromWei = this.$web3.utils.fromWei;
+      const fromWei = val => parseFloat(val) / Math.pow(10, 6);
+
       const info = await contract.methods.getInfo().call();
-      const min = parseFloat(this.$web3.utils.fromWei(info[3]));
-      const max = parseFloat(this.$web3.utils.fromWei(info[4]));
+      const min = parseFloat(fromWei(info[3]));
+      const max = parseFloat(fromWei(info[4]));
       const balance = await this.balanceOf(this.address, token);
 
       return { min, max, balance };
@@ -293,17 +296,11 @@ export default {
       return balance / Math.pow(10, decimals);
     },
 
-    async approve(from, token, amount) {
-      const { status, message, result } = await this.$store.dispatch(
-        "connector/abi",
-        token
+    async approve(from, amount) {
+      const contract = new this.$web3.eth.Contract(
+        PaymentToken.abi,
+        PaymentToken.address
       );
-
-      if (status !== "1") {
-        throw { error: message, message: result };
-      }
-
-      const contract = new this.$web3.eth.Contract(JSON.parse(result), token);
 
       const decimals = await contract.methods.decimals().call();
       const balance = await contract.methods.balanceOf(from).call();
@@ -316,7 +313,7 @@ export default {
         };
       }
 
-      const to = token;
+      const to = PaymentToken.address;
       const value = amount * Math.pow(10, decimals) + "";
       const allowance = await contract.methods
         .allowance(from, CrowdsaleContract.address)
@@ -399,8 +396,8 @@ export default {
       }
     },
 
-    async sendTransaction({ from, to, token, amount }) {
-      const { value } = await this.approve(from, token, amount);
+    async sendTransaction({ from, to, amount }) {
+      const { value } = await this.approve(from, amount);
       console.log({ value });
       const tx = await this.genertaeTransaction(from, to, value);
       console.log({ tx });
