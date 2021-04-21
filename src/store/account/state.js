@@ -23,8 +23,6 @@ export default function () {
       name: CrowdsaleContract.token.name,
       symbol: CrowdsaleContract.token.symbol,
       balance: 0
-    },
-    minAllocation: 0,
-    maxAllocation: 99999999
+    }
   }
 }

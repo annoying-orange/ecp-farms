@@ -31,6 +31,7 @@ class Connector {
         if (connector) {
             await connector.killSession();
         }
+        this._store.commit("account/reset");
     }
 
     async sendTransaction(tx) {
