@@ -29,11 +29,11 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const httpLink = new HttpLink({
-  uri: 'http://api.1ecp.com'
+  uri: 'https://api.1ecp.com'
 })
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://api.1ecp.com',
+  uri: 'wss://api.1ecp.com',
   options: {
     reconnect: true
   }
