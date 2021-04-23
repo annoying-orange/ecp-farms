@@ -1,87 +1,256 @@
 <template>
-  <q-card flat>
-    <q-card-section class="row items-center q-pb-none">
-      <q-space />
-      <q-btn icon="fas fa-times-circle" flat round dense to="/" />
-    </q-card-section>
-    <q-card-section class="text-center q-pt-xl">
-      <h5 class="title">{{ $t("referUs.title") }}</h5>
-      <div class="title-sub">
-        {{ $t("referUs.description") }}
+  <q-page class="nk-content-body">
+    <div class="nk-block-head">
+      <div class="nk-block-between-md g-4">
+        <div class="nk-block-head-content">
+          <h5 class="nk-block-title fw-normal">{{ $t("invite.referUs") }}</h5>
+          <div class="nk-block-des">
+            <p>{{ $t("invite.description") }}</p>
+          </div>
+          <div class="nk-refwg-url q-mt-md">
+            <div class="form-control-wrap">
+              <div
+                class="form-clip clipboard-init"
+                data-clipboard-target="#refUrl"
+                data-success="Copied"
+                :data-text="$t('invite.copyLink')"
+              >
+                <em class="clipboard-icon icon ni ni-copy"></em>
+                <span class="clipboard-text">{{ $t("invite.copyLink") }}</span>
+              </div>
+              <div class="form-icon">
+                <em class="icon ni ni-link-alt"></em>
+              </div>
+              <input
+                type="text"
+                class="form-control copy-text"
+                id="refUrl"
+                :value="link"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- .nk-block-head-content -->
+        <div class="nk-block-head-content">
+          <ul class="nk-block-tools gx-3">
+            <li>
+              <a href="#" class="btn btn-primary" @click="onInvite">{{
+                $t("invite.invite")
+              }}</a>
+            </li>
+          </ul>
+        </div>
+        <!-- .nk-block-head-content -->
       </div>
-    </q-card-section>
-    <q-card-section class="text-center">
-      <vue-qrcode :value="link" :options="{ width: 250 }" />
-    </q-card-section>
-    <q-card-section class="text-center q-pt-none">
-      <q-item-label>{{ link }}</q-item-label>
-    </q-card-section>
-    <q-card-actions align="center">
-      <q-btn flat round icon="far fa-copy" @click="onCopy" />
-      <q-btn
-        flat
-        round
-        icon="fas fa-share-alt"
-        @click="shareDialog = !shareDialog"
-        class="hidden"
-      />
-    </q-card-actions>
-  </q-card>
+      <!-- .nk-block-between -->
+    </div>
+
+    <div class="nk-block">
+      <div class="row g-2">
+        <div class="col-xs-6 col-3">
+          <div class="card bg-light">
+            <div class="nk-wgw sm">
+              <div class="nk-wgw-inner">
+                <div class="nk-wgw-name">
+                  <h5 class="nk-wgw-title title">
+                    {{ $t("invite.totalJoined") }}
+                  </h5>
+                </div>
+                <div class="nk-wgw-balance">
+                  <div class="amount">
+                    {{ refer.totalJoined | number }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-3">
+          <div class="card bg-light">
+            <div class="nk-wgw sm">
+              <div class="nk-wgw-inner">
+                <div class="nk-wgw-name">
+                  <h5 class="nk-wgw-title title">
+                    {{ $t("invite.totalEarn") }}
+                  </h5>
+                </div>
+                <div class="nk-wgw-balance">
+                  <div class="amount">
+                    {{ refer.totalEarn | number
+                    }}<span class="currency text-caption">ETS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-3">
+          <div class="card bg-light">
+            <div class="nk-wgw sm">
+              <div class="nk-wgw-inner">
+                <div class="nk-wgw-name">
+                  <h5 class="nk-wgw-title title">
+                    {{ $t("invite.earn1") }}
+                  </h5>
+                </div>
+                <div class="nk-wgw-balance">
+                  <div class="amount">
+                    {{ refer.earn1 | number
+                    }}<span class="currency text-caption">ETS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-3">
+          <div class="card bg-light">
+            <div class="nk-wgw sm">
+              <div class="nk-wgw-inner">
+                <div class="nk-wgw-name">
+                  <h5 class="nk-wgw-title title">
+                    {{ $t("invite.earn2") }}
+                  </h5>
+                </div>
+                <div class="nk-wgw-balance">
+                  <div class="amount">
+                    {{ refer.earn2 | number
+                    }}<span class="currency currency-btc">ETS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nk-block" v-if="earns.length">
+      <div class="card-title">
+        <h5 class="title">{{ $t("invite.earn") }}</h5>
+      </div>
+      <q-list separator>
+        <q-item v-for="(e, i) in earns" :key="`earn-${i}`">
+          <q-item-section>
+            <q-item-label lines="1">{{ e.from }}</q-item-label>
+            <q-item-label caption>{{ e.timeStamp | ago }}</q-item-label>
+          </q-item-section>
+          <q-item-section side top>
+            {{ e.amount | number }} ETS
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
+    <div class="nk-block" v-else>
+      <div class="text-center q-pa-md">
+        <span class="text-caption">{{ $t("invite.earnsHint") }}</span>
+      </div>
+    </div>
+  </q-page>
 </template>
 <script>
-import VueQrcode from "@chenfengyuan/vue-qrcode";
+import gql from "graphql-tag";
+import InviteQrcode from "./components/InviteQrcode";
 
 export default {
-  components: { VueQrcode },
   name: "Invite",
 
   data() {
     return {
-      shareDialog: false,
-      shares: [
-        {
-          label: "Wechat"
-        },
-        {
-          label: "Webo"
-        },
-        {
-          label: "Twitter"
-        }
-      ],
-      link: `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`
+      refer: {
+        totalJoined: 0,
+        totalEarn: 0,
+        earn1: 0,
+        earn2: 0
+      },
+      earns: []
     };
   },
 
-  methods: {
-    onCopy() {
-      console.log(window.clipboardData);
-      const el = document.createElement("textarea");
-      el.value = this.link;
-      el.setAttribute("readonly", "");
-      el.style.position = "absolute";
-      el.style.left = "-9999px";
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand("copy");
-      document.body.removeChild(el);
+  computed: {
+    address() {
+      return this.$store.state.account.address;
+    },
 
-      this.$q.notify({
-        type: "primary",
-        timeout: 1000,
-        message: this.$t("referUs.copiedMessage")
+    link() {
+      return `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
+    }
+  },
+
+  methods: {
+    onInvite() {
+      this.$q.dialog({
+        component: InviteQrcode,
+        parent: this,
+        value: this.link
       });
+    }
+  },
+
+  apollo: {
+    referralEarn() {
+      return {
+        query: gql`
+          query referralEarn($address: String!, $offset: Int!, $size: Int!) {
+            referralEarn(address: $address, offset: $offset, size: $size) {
+              total
+              result {
+                from
+                amount
+                timeStamp
+              }
+              earn1
+              earn2
+              totalJoined
+              totalEarn
+            }
+          }
+        `,
+        variables() {
+          return {
+            address: this.address,
+            offset: 0,
+            size: 50
+          };
+        },
+        update: ({ referralEarn }) => {
+          const { totalJoined, totalEarn, earn1, earn2, result } = referralEarn;
+          console.log({ totalJoined, totalEarn, earn1, earn2, result });
+          this.refer = Object.assign(this.refer, {
+            totalJoined,
+            totalEarn,
+            earn1,
+            earn2
+          });
+          this.earns = result;
+        }
+      };
+    }
+  },
+
+  filters: {
+    ago: function(val) {
+      var diff = Math.round(new Date().getTime() / 1000 - val);
+      if (diff < 60) {
+        return `${diff} secs ago`;
+      } else if (diff < 60 * 60) {
+        return `${Math.round(diff / 60)} mins ago`;
+      } else if (diff < 60 * 60 * 24) {
+        return `${Math.round(diff / (60 * 60))} hours ago`;
+      } else {
+        return `${Math.round(diff / (60 * 60 * 24))} days ago`;
+      }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.q-card {
-  background-color: #f7f8fa;
+.nk-wgw.sm {
+  display: block !important;
 }
 
 .row {
-  margin-right: 0;
   margin-left: 0;
+  margin-right: 0;
 }
 </style>

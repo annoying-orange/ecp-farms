@@ -12,7 +12,11 @@ export default {
         day: '天',
         hour: '时',
         minute: '分',
-        second: '秒'
+        second: '秒',
+        secondsAgo: '秒前',
+        minutesAgo: '分钟前',
+        hoursAgo: '小时前',
+        daysAgo: '天前'
     },
     account: {
         availableBalance: "可用额度",
@@ -88,13 +92,13 @@ export default {
         insufficientBalance: '您的账户余额不足'
     },
     referUs: {
-        title: '推荐与收入',
+        title: '推荐与收益',
         description: '使用以下链接邀请您的朋友',
         copyLink: '复制链接',
         copied: '已复制',
         myReferral: '我的推荐人',
         totalJoined: '推荐总数',
-        referralEarn: '推荐收入',
+        referralEarn: '推荐收益',
         days: "天",
         invite: '邀请',
         copiedMessage: '邀请链接已复制到剪贴板'
@@ -129,6 +133,21 @@ export default {
         click: '点击这里',
         referEarn: '您每推荐个朋友将可赚取高达10％的收益！',
         inviteFriends: '邀请服友'
+    },
+    invite: {
+        referUs: '邀请朋友',
+        earn: '邀请收益',
+        description: '使用以下链接邀请您的朋友',
+        copyLink: '复制链接',
+        copied: '已复制',
+        totalJoined: '邀请人数',
+        totalEarn: 'ETS奖励',
+        earn1: '邀请收益',
+        earn2: "B级收益",
+        earnsHint: '暂无邀请收益',
+        days: "天",
+        invite: '邀请',
+        copiedMessage: '邀请链接已复制到剪贴板'
     },
     wallet: {
         howToConnect: '学习如何连接钱包'

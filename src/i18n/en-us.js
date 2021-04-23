@@ -12,7 +12,11 @@ export default {
         day: 'Day',
         hour: 'Hour',
         minute: 'Minute',
-        second: 'Second'
+        second: 'Second',
+        secondsAgo: 'secs ago',
+        minutesAgo: 'mins ago',
+        hoursAgo: 'hours ago',
+        daysAgo: 'days ago'
     },
     account: { 
         availableBalance: "Available Balance",
@@ -129,6 +133,21 @@ export default {
         click: 'Click here',
         referEarn: 'Earn upto 10% for each friend your refer!',
         inviteFriends: 'Invite friends'
+    },
+    invite: {
+        referUs: 'Refer Us',
+        earn: 'Earn',
+        description: 'Use the bellow link to invite your friends',
+        copyLink: 'CopyLink',
+        copied: 'Copied',
+        totalJoined: 'Total Joined',
+        totalEarn: 'Total Earn',
+        earn1: 'Referral Earn',
+        earn2: "B Level Earn",
+        earnsHint: 'Your earns will appear here...',
+        days: "days",
+        invite: 'Invite',
+        copiedMessage: 'The invite link copied to the clipboard'
     },
     wallet: {
         howToConnect: 'Learn how to connect'

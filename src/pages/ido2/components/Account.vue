@@ -27,7 +27,7 @@
         <div class="user-account-value">
           <span class="lead-text">
             + 0.0526
-            <span class="currency currency-btc">BTC</span>
+            <span class="currency currency-btc"></span>
           </span>
           <span class="text-success ml-2">
             3.1% <em class="icon ni ni-arrow-long-up"></em>

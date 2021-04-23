@@ -21,11 +21,6 @@ const routes = [
       { path: '/ido1/detail', component: () => import('pages/ido/Detail.vue') }
     ]
   },
-
-  { 
-    path: '/invite', 
-    component: () => import('pages/ido2/Invite.vue') 
-  },
   
   {
     path: '/',
@@ -33,6 +28,7 @@ const routes = [
     children: [
       { path: '/', component: () => import('pages/ido2/Index.vue') },
       { path: '/buy', component: () => import('pages/ido2/Buy.vue') },
+      { path: '/invite', component: () => import('pages/ido2/Invite.vue') },
       { path: '/:inviteCode', component: () => import('pages/ido2/Index.vue') }
     ]
   },
