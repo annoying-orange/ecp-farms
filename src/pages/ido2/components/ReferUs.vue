@@ -184,7 +184,7 @@ export default {
           ],
           xAxes: [
             {
-              display: true,
+              display: false,
               ticks: {
                 reverse: "left"
               }

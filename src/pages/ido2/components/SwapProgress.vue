@@ -63,7 +63,7 @@
               </div>
               <div class="nk-wgw-balance">
                 <div class="amount">
-                  {{ value.transactionCount | number }}
+                  {{ transactionTotal | number }}
                 </div>
               </div>
             </div>
@@ -79,14 +79,10 @@
                 </h5>
               </div>
               <div>
-                <q-chart
-                  identifier="transaction-chart"
-                  stilo="height:51px; width: 100%"
-                  type="bar"
-                  :labels="transactionChart.labels"
-                  :datasets="transactionChart.datasets"
-                  :options="transactionChart.options"
-                />
+                <canvas
+                  ref="transactionChart"
+                  style="height:51px; width: 100%"
+                ></canvas>
               </div>
             </div>
           </div>
@@ -98,44 +94,34 @@
   </div>
 </template>
 <script>
-import QChart from "quasar-components-chart";
+import gql from "graphql-tag";
 import { CrowdsaleContract, PaymentToken } from "../../../utils/contracts";
 
+var hours = new Date().getHours();
+var labels = [];
+var data = [];
+
+for (var i = 0; i < 24; i++) {
+  labels.push(`${(hours + "").padStart(2, "0")}:00`);
+  data.push(0);
+
+  if (hours === 0) {
+    hours = 24;
+  }
+
+  --hours;
+}
+
 export default {
-  components: { QChart },
   name: "SwapProgress",
 
   data() {
     return {
       buyTokenSymbol: CrowdsaleContract.token.symbol,
       paymentTokenSymbol: PaymentToken.symbol,
+      transactionTotal: 0,
       transactionChart: {
-        labels: [
-          "22:00",
-          "23:00",
-          "00:00",
-          "01:00",
-          "02:00",
-          "03:00",
-          "04:00",
-          "05:00",
-          "06:00",
-          "07:00",
-          "08:00",
-          "09:00",
-          "10:00",
-          "11:00",
-          "12:00",
-          "13:00",
-          "14:00",
-          "15:00",
-          "16:00",
-          "17:00",
-          "18:00",
-          "19:00",
-          "20:00",
-          "21:00"
-        ],
+        labels,
         dataUnit: "People",
         datasets: [
           {
@@ -147,32 +133,7 @@ export default {
             borderSkipped: "bottom",
             barPercentage: 0.5,
             categoryPercentage: 0.7,
-            data: [
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              110,
-              80,
-              125,
-              55,
-              95,
-              75,
-              90,
-              75,
-              90
-            ]
+            data
           }
         ],
         options: {
@@ -237,6 +198,44 @@ export default {
   computed: {
     progress() {
       return parseFloat((this.value.amount / this.value.total).toFixed(2));
+    }
+  },
+
+  apollo: {
+    referral() {
+      return {
+        query: gql`
+          query crowdsale($address: String!) {
+            crowdsale(address: $address) {
+              recentTransactions {
+                total
+                labels
+                data
+              }
+            }
+          }
+        `,
+        variables() {
+          return {
+            address: ""
+          };
+        },
+        update: ({ crowdsale: { recentTransactions } }) => {
+          console.log({ recentTransactions });
+          this.transactionTotal = recentTransactions.total;
+          this.transactionChart.label = recentTransactions.labels;
+          this.transactionChart.datasets[0].data = recentTransactions.data;
+
+          new Chart(this.$refs.transactionChart, {
+            type: "bar",
+            data: {
+              labels: this.transactionChart.labels,
+              datasets: this.transactionChart.datasets
+            },
+            options: this.transactionChart.options
+          });
+        }
+      };
     }
   }
 };
