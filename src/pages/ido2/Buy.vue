@@ -144,7 +144,8 @@ import { getTokenTransactions, getTransactions } from "../../utils/apis";
 import {
   CrowdsaleContract,
   PaymentToken,
-  NULL_ADDRESS
+  NULL_ADDRESS,
+  Network
 } from "../../utils/contracts";
 import TransactionSuccessfully from "./components/TransactionSuccessfully";
 
@@ -421,10 +422,17 @@ export default {
             .encodeABI();
         }
 
+        const customChain = {
+          name: Network.name,
+          networkId: Network.networkId,
+          chainId: Network.chainId
+        };
+
         var tx = {
           from,
           to,
-          data
+          data,
+          common: { customChain }
         };
         console.log(tx);
         const gas = await this.$web3.eth.estimateGas(tx);

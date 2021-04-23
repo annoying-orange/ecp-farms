@@ -19,7 +19,7 @@ class Connector {
         // check if already connected
         if (!connector.connected) {
             // create new session
-            await connector.createSession();
+            await connector.createSession({ chainId: this._chaninId });
         }
 
         // subscribe to events

@@ -25,6 +25,7 @@
 // const Network = {
 //     name: "Heco Testnet",
 //     rpc: "https://http-testnet.hecochain.com",
+//     networkId: 256,
 //     chainId: 256,
 //     symbol: "HT",
 //     api: "https://api-testnet.hecoinfo.com"
@@ -59,6 +60,7 @@ const PaymentToken = {
 const Network = {
     name: "Heco Mainnet",
     rpc: "https://http-mainnet-node.huobichain.com",
+    networkId: 128,
     chainId: 128,
     symbol: "HT",
     api: "https://api.hecoinfo.com"

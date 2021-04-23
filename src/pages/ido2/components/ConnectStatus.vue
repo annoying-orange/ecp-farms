@@ -138,22 +138,22 @@ export default {
       { immediate: true }
     );
 
-    this.$watch(
-      "$store.state.connector.chainId",
-      (newVal, oldVal) => {
-        console.log({ chainId: { newVal, oldVal } });
-        if (newVal) {
-          this.networkIsError = newVal !== Network.chainId;
-          if (this.networkIsError) {
-            this.$q.notify({
-              type: "negative",
-              message: "Please connect to the appropriate Heco network."
-            });
-          }
-        }
-      },
-      { immediate: true }
-    );
+    // this.$watch(
+    //   "$store.state.connector.chainId",
+    //   (newVal, oldVal) => {
+    //     console.log({ chainId: { newVal, oldVal } });
+    //     if (newVal) {
+    //       this.networkIsError = newVal !== Network.chainId;
+    //       if (this.networkIsError) {
+    //         this.$q.notify({
+    //           type: "negative",
+    //           message: "Please connect to the appropriate Heco network."
+    //         });
+    //       }
+    //     }
+    //   },
+    //   { immediate: true }
+    // );
   },
 
   computed: {

@@ -139,5 +139,5 @@ export default async ({ app, router, Vue, store }) => {
     })
   })
 
-  Vue.prototype.$connector = new Connector(store, 256)
+  Vue.prototype.$connector = new Connector(store, Network.chainId)
 }
