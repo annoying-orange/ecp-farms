@@ -360,9 +360,14 @@ export default {
   },
 
   mounted() {
-    this.$store.commit("account/update", {
-      inviteCode: this.$route.params.inviteCode || ""
-    });
+    const inviteCode = this.$route.params.inviteCode;
+    console.log({ inviteCode });
+    if (inviteCode) {
+      this.$store.commit("account/update", { inviteCode });
+    }
+
+    // Auto connect to wallet
+    this.$connector.connect();
   },
 
   watch: {
