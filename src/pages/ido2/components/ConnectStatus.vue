@@ -4,8 +4,6 @@
       <a
         class="btn btn-light"
         href="javascript:void()"
-        type="button"
-        data-toggle="dropdown"
         @click="$connector.connect()"
       >
         {{ $t("account.connectWallet") }}

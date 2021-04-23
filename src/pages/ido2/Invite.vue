@@ -130,7 +130,7 @@
         <h5 class="title">{{ $t("invite.earn") }}</h5>
       </div>
       <q-list separator>
-        <q-item v-for="(e, i) in earns" :key="`earn-${i}`">
+        <q-item v-for="(e, i) in earns" :key="`earn-${i}`" class="q-pa-md">
           <q-item-section>
             <q-item-label lines="1">{{ e.from }}</q-item-label>
             <q-item-label caption>{{ e.timeStamp | ago }}</q-item-label>

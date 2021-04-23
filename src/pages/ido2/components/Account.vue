@@ -1,5 +1,5 @@
 <template>
-  <div class="nk-sidebar-widget d-none d-xl-block">
+  <div class="nk-sidebar-widget d-xl-block">
     <div class="user-account-info between-center">
       <div class="user-account-main">
         <h6 class="overline-title-alt">{{ $t("account.availableBalance") }}</h6>
@@ -20,20 +20,6 @@
       ></a>
     </div>
     <ul class="user-account-data gy-1">
-      <li>
-        <div class="user-account-label">
-          <span class="sub-text">{{ $t("account.profits7d") }}</span>
-        </div>
-        <div class="user-account-value">
-          <span class="lead-text">
-            + 0.0526
-            <span class="currency currency-btc"></span>
-          </span>
-          <span class="text-success ml-2">
-            3.1% <em class="icon ni ni-arrow-long-up"></em>
-          </span>
-        </div>
-      </li>
       <li>
         <div class="user-account-label">
           <span class="sub-text">{{ $t("account.depositInOrders") }}</span>
@@ -268,5 +254,9 @@ export default {
 <style lang="scss" scoped>
 .user-account-actions ul li {
   width: 100% !important;
+}
+
+.user-account-actions .btn {
+  text-transform: none !important;
 }
 </style>
