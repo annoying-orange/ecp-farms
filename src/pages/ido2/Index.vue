@@ -198,8 +198,8 @@ export default {
       const name = await contract.methods.name().call();
       const symbol = await contract.methods.symbol().call();
       const totalSupply = await contract.methods.totalSupply().call();
-      const holders = 12;
-      const transfers = 12;
+      const holders = 2;
+      const transfers = 0;
 
       return {
         name,

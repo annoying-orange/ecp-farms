@@ -221,7 +221,6 @@ export default {
           };
         },
         update: ({ crowdsale: { recentTransactions } }) => {
-          console.log({ recentTransactions });
           this.transactionTotal = recentTransactions.total;
           this.transactionChart.label = recentTransactions.labels;
           this.transactionChart.datasets[0].data = recentTransactions.data;

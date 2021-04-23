@@ -2,18 +2,22 @@
   <q-layout view="lHh Lpr lff" class="nk-app-root">
     <q-page-container class="nk-main">
       <!-- sidebar @s -->
-      <div class="nk-sidebar nk-sidebar-fixed " data-content="sidebarMenu">
+      <div
+        class="nk-sidebar nk-sidebar-fixed"
+        :class="{ 'nk-sidebar-active': leftDrawerOpen }"
+      >
         <div class="nk-sidebar-element nk-sidebar-head">
           <div class="nk-sidebar-brand">
             <h4>EtherSwap</h4>
           </div>
           <div class="nk-menu-trigger mr-n2">
             <a
-              href="#"
+              href="javascript:void();"
               class="nk-nav-toggle nk-quick-nav-icon d-xl-none"
-              data-target="sidebarMenu"
-              ><em class="icon ni ni-arrow-left"></em
-            ></a>
+              @click="leftDrawerOpen = !leftDrawerOpen"
+            >
+              <em class="icon ni ni-arrow-left"></em>
+            </a>
           </div>
         </div>
         <!-- .nk-sidebar-element -->
@@ -143,7 +147,13 @@
                   <li class="nk-menu-heading">
                     <h6 class="overline-title">{{ $t("menu.title") }}</h6>
                   </li>
-                  <li class="nk-menu-item">
+                  <li
+                    class="nk-menu-itemn"
+                    :class="{
+                      active: path === '/',
+                      'current-page': path === '/'
+                    }"
+                  >
                     <a href="#/" class="nk-menu-link">
                       <span class="nk-menu-icon"
                         ><em class="icon ni ni-home"></em
@@ -151,7 +161,13 @@
                       <span class="nk-menu-text">{{ $t("menu.home") }}</span>
                     </a>
                   </li>
-                  <li class="nk-menu-item">
+                  <li
+                    class="nk-menu-item"
+                    :class="{
+                      active: path === '/buy',
+                      'current-page': path === '/buy'
+                    }"
+                  >
                     <a href="#/buy" class="nk-menu-link">
                       <span class="nk-menu-icon"
                         ><em class="icon ni ni-coins"></em
@@ -159,7 +175,13 @@
                       <span class="nk-menu-text">{{ $t("menu.buy") }}</span>
                     </a>
                   </li>
-                  <li class="nk-menu-item">
+                  <li
+                    class="nk-menu-item"
+                    :class="{
+                      active: path === '/invite',
+                      'current-page': path === '/invite'
+                    }"
+                  >
                     <a href="#/invite" class="nk-menu-link">
                       <span class="nk-menu-icon"
                         ><em class="icon ni ni-account-setting"></em
@@ -226,6 +248,11 @@
         <!-- .nk-sidebar-element -->
       </div>
       <!-- sidebar @e -->
+      <div
+        class="nk-sidebar-overlay"
+        v-if="leftDrawerOpen"
+        @click="leftDrawerOpen = !leftDrawerOpen"
+      ></div>
       <!-- wrap @s -->
       <div class="nk-wrap ">
         <!-- main header @s -->
@@ -234,10 +261,11 @@
             <div class="nk-header-wrap">
               <div class="nk-menu-trigger d-xl-none ml-n1">
                 <a
-                  href="#"
+                  href="javascript:void();"
                   class="nk-nav-toggle nk-quick-nav-icon"
-                  data-target="sidebarMenu"
-                  ><em class="icon ni ni-menu"></em>
+                  @click="leftDrawerOpen = !leftDrawerOpen"
+                >
+                  <em class="icon ni ni-menu"></em>
                 </a>
               </div>
               <div class="nk-header-brand d-xl-none">
@@ -318,10 +346,17 @@ export default {
 
   data() {
     return {
-      leftDrawerOpen: true,
+      leftDrawerOpen: false,
+      path: "/",
       languages,
       locale: this.$i18n.locale
     };
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    this.leftDrawerOpen = false;
+    this.path = to.path;
+    next();
   },
 
   mounted() {

@@ -276,22 +276,21 @@
     },
         attr = opt ? extend(def, opt) : def;
 
-    console.log({ toggle: $toggle, class: toggle })
-    $toggle.on('click', function (e) {
-      console.log(e)
-      NioApp.Toggle.trigger($(this).data('target'), attr);
-      e.preventDefault();
-    });
-    $doc.on('mouseup', function (e) {
-      if (!$toggle.is(e.target) && $toggle.has(e.target).length === 0 && !$contentD.is(e.target) && $contentD.has(e.target).length === 0 && NioApp.Win.width < toggleBreak) {
-        NioApp.Toggle.removed($toggle.data('target'), attr);
-      }
-    });
-    $win.on('resize', function () {
-      if (NioApp.Win.width < _break.xl || NioApp.Win.width < toggleBreak) {
-        NioApp.Toggle.removed($toggle.data('target'), attr);
-      }
-    });
+    // $toggle.on('click', function (e) {
+    //   console.log(e)
+    //   NioApp.Toggle.trigger($(this).data('target'), attr);
+    //   e.preventDefault();
+    // });
+    // $doc.on('mouseup', function (e) {
+    //   if (!$toggle.is(e.target) && $toggle.has(e.target).length === 0 && !$contentD.is(e.target) && $contentD.has(e.target).length === 0 && NioApp.Win.width < toggleBreak) {
+    //     NioApp.Toggle.removed($toggle.data('target'), attr);
+    //   }
+    // });
+    // $win.on('resize', function () {
+    //   if (NioApp.Win.width < _break.xl || NioApp.Win.width < toggleBreak) {
+    //     NioApp.Toggle.removed($toggle.data('target'), attr);
+    //   }
+    // });
   }; // Animate FormSearch @v1.0
 
 
