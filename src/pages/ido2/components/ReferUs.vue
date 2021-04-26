@@ -73,17 +73,17 @@
               <div class="dropdown-menu dropdown-menu-xs dropdown-menu-right">
                 <ul class="link-list-plain">
                   <li>
-                    <a href="javascript:void();" @click="days = 7">
+                    <a href="javascript:;" @click="days = 7">
                       7 {{ $t("referUs.days") }}
                     </a>
                   </li>
                   <li>
-                    <a href="javascript:void();" @click="days = 15">
+                    <a href="javascript:;" @click="days = 15">
                       15 {{ $t("referUs.days") }}
                     </a>
                   </li>
                   <li>
-                    <a href="javascript:void();" @click="days = 30">
+                    <a href="javascript:;" @click="days = 30">
                       30 {{ $t("referUs.days") }}
                     </a>
                   </li>
@@ -130,7 +130,7 @@ export default {
       dataUnit: "People",
       datasets: [
         {
-          label: "Join",
+          label: "",
           backgroundColor: "#6baafe",
           borderWidth: 2,
           borderColor: "transparent",

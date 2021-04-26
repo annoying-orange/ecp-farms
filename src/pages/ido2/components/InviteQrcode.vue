@@ -7,11 +7,7 @@
     <q-card>
       <q-card-section class="row items-center q-pb-none">
         <q-space />
-        <a
-          href="javascript:void();"
-          class="nk-quick-nav-icon"
-          @click="onCancel"
-        >
+        <a href="javascript:;" class="nk-quick-nav-icon" @click="onCancel">
           <em class="icon ni ni-cross"></em>
         </a>
       </q-card-section>

@@ -5,11 +5,7 @@
     :position="$q.platform.is.mobile ? 'bottom' : 'standard'"
   >
     <div class="modal-content">
-      <a
-        href="javascript:void();"
-        class="nk-quick-nav-icon close"
-        @click="onCancel"
-      >
+      <a href="javascript:;" class="nk-quick-nav-icon close" @click="onCancel">
         <em class="icon ni ni-cross"></em>
       </a>
       <div class="modal-body modal-body-lg text-center">

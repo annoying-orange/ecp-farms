@@ -18,6 +18,10 @@ export default {
         hoursAgo: '小时前',
         daysAgo: '天前'
     },
+    error: {
+        invalidAmount: "数额无效",
+        insufficientBalance: '余额不足'
+    },
     account: {
         availableBalance: "可用额度",
         profits7d: "收益（7天）",
@@ -85,11 +89,24 @@ export default {
         crossChainDescription: '多个公共链上的每个DEX服务提供商都集成了各种DEX流动性和定价，从而为用户提供最佳的交易价格和最小的费用。'
     },
     transaction: {
-        buy: '认购',
-        confirm: '确定',
-        successfully: '交易成功',
-        failed: '交易失败',
-        insufficientBalance: '您的账户余额不足'
+        confirmOrder: "确定购买",
+        amount: "数额",
+        payTotal: "需支付",
+        confirm: "确定",
+        cancel: "取消",
+        ok: "确定",
+        unableToProcess: "无法处理！",
+        return: "返回",
+        buy: '购买',
+        successfully: '已成功支付！',
+        failed: '支付失败',
+        insufficientBalance: '余额不足',
+        confirmMessage: "您将获得 <strong>${amount}</strong> ETS，需支付 <strong>${paymentAmount}</strong> USDT。",
+        exchangeRate: "汇率",
+        successfullyMessage: "您已成功支付 <strong>${paymentAmount}</strong> USDT 购买 <strong>${amount}</strong> ETS。",
+        minAllocationMessage: "数额不能小于 <strong>${min}</strong> ETS。",
+        maxAllocationMessage: "您已购买 <strong>${balance}</strong> ETS，最多购买不能超过 <strong>${max}</strong> ETS。",
+        insufficientBalanceMessage: "在您钱包有 <strong>${balance}</strong> USDT，但需要支付 <strong>${paymentAmount}</strong> USDT。"
     },
     referUs: {
         title: '推荐与收益',
@@ -119,9 +136,9 @@ export default {
     buy: {
         title: '购买代币',
         token: '选择代币',
-        amount: '购买额度',
-        minimum: '最小额度',
-        continueToBuy: '确定购买',
+        amount: '数额',
+        minimum: '最小数额',
+        continueToBuy: '购买',
         invalidAmount: '无效金额',
         confirm: '确定',
         successfully: '支付成功！',

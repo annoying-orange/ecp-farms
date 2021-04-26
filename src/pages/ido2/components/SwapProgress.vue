@@ -125,7 +125,7 @@ export default {
         dataUnit: "People",
         datasets: [
           {
-            label: "Join",
+            label: "",
             backgroundColor: "#6baafe",
             borderWidth: 2,
             borderColor: "transparent",

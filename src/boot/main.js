@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuelidate from 'vuelidate'
 import Web3 from 'web3'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -14,6 +15,7 @@ import { Network } from '../utils/contracts'
 
 VueClipboard.config.autoSetContainer = true
 
+Vue.use(Vuelidate)
 Vue.use(VueApollo)
 Vue.use(VueClipboard)
 

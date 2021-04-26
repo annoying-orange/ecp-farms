@@ -41,6 +41,19 @@ class Connector {
             console.log({ event: "connector.sendTransaction", payload: tx })
             return await connector.sendTransaction(tx);
         }
+        
+        throw 'The connector is undefined.'
+    }
+
+    async signTransaction(tx) {
+        const connector = this._connector;
+
+        if (connector) {
+            console.log({ event: "connector.signTransaction", payload: tx })
+            return await connector.signTransaction(tx);
+        }
+
+        throw 'The connector is undefined.'
     }
 
     _subscribeToEvents() {
@@ -101,7 +114,8 @@ class Connector {
             accounts,
             address,
         });
-
+        
+        this._store.dispatch("account/balanceOf", address);
         // this.getAccountAssets();
     }
 

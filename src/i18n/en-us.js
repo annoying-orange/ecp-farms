@@ -18,6 +18,10 @@ export default {
         hoursAgo: 'hours ago',
         daysAgo: 'days ago'
     },
+    error: {
+        invalidAmount: "Invalid Amount",
+        insufficientBalance: 'Insufficient Balance'
+    },
     account: { 
         availableBalance: "Available Balance",
         profits7d: "Profits (7d)",
@@ -85,11 +89,24 @@ export default {
         crossChainDescription: 'Each DEX service provider on multiple public chains integrate all kinds of DEX liquidity and pricing to provide users with optimal trading price and minimum slippage.'
     },
     transaction: {
+        confirmOrder: "Confirm Order",
+        amount: "Amount",
+        payTotal: "Pay Total",
+        confirm: "Confirm the Order",
+        cancel: "Cancel Order",
+        ok: "OK",
+        unableToProcess: "Unable to Process!",
+        return: "Return",
         buy: 'Buy',
-        confirm: 'Confrim',
-        successfully: 'Transaction Successfully',
+        successfully: 'Successfully Sent Payment!',
         failed: 'Transaction Failed',
-        insufficientBalance: 'Insufficient balance'
+        insufficientBalance: 'Insufficient balance',
+        confirmMessage: "You are about to get <strong>${amount}</strong> ETS for <strong>${paymentAmount}</strong> USDT",
+        exchangeRate: "Exchange rate",
+        successfullyMessage: "You’ve successfully bought <strong>${amount}</strong> ETS for <strong>${paymentAmount}</strong> USDT.",
+        minAllocationMessage: "The amount you want be less than <strong>${min}</strong> ETS.",
+        maxAllocationMessage: "You've bought <strong>${balance}</strong> ETS, the max allocation cannot be more than <strong>${max}</strong> ETS.`",
+        insufficientBalanceMessage: "You've <strong>${balance}</strong> USDT in wallet, but need payment <strong>${paymentAmount}</strong> USDT."
     },
     referUs: {
         title: 'Refer Us & Earn',

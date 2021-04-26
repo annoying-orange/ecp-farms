@@ -71,7 +71,6 @@ export default {
         if (address) {
           this.onRefresh();
           this.createAccount(address, this.inviteCode);
-          this.approve(address);
         }
       },
       { immediate: true }

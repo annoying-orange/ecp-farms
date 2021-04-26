@@ -7,7 +7,7 @@
       </div>
       <!-- .buysell-title -->
       <div class="buysell-block">
-        <form action="#" class="buysell-form">
+        <form class="buysell-form">
           <div class="buysell-field form-group">
             <div class="form-label-group">
               <label class="form-label">{{ $t("buy.token") }}</label>
@@ -74,9 +74,11 @@
                 class="form-control form-control-lg form-control-number"
                 id="buysell-amount"
                 name="bs-amount"
+                ref="amount"
                 placeholder="0.000000"
                 v-model="amount"
                 v-on:focus="amount = null"
+                :class="{ error: $v.amount.required && $v.amount.$invalid }"
               />
               <div class="form-dropdown">
                 <div class="text">{{ buy.symbol }}<span>/</span></div>
@@ -120,13 +122,18 @@
 
           <div class="buysell-field form-action">
             <a
-              href="#"
+              href="javascript:;"
               class="btn btn-lg btn-block btn-primary"
-              v-on:click="onBuy"
+              v-on:click="onConfirm"
               v-if="!sending"
             >
               {{ $t("buy.continueToBuy") }}
             </a>
+            <div class="d-flex justify-content-center" v-if="sending">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
           </div>
           <!-- .buysell-field -->
         </form>
@@ -139,6 +146,7 @@
 </template>
 <script>
 import gql from "graphql-tag";
+import { required, decimal } from "vuelidate/lib/validators";
 import ConnectDialog from "../../plugins/WalletDialog/ConnectDialog";
 import { getTokenTransactions, getTransactions } from "../../utils/apis";
 import {
@@ -148,6 +156,13 @@ import {
   Network
 } from "../../utils/contracts";
 import TransactionSuccessfully from "./components/TransactionSuccessfully";
+import TransactionConfirm from "./components/TransactionConfirm";
+import TransactionFailed from "./components/TransactionFailed";
+
+const ERROR = {
+  INVALID_AMOUNT: "error.invalidAmount",
+  INSUFFICIENT_BALANCE: "error.insufficientBalance"
+};
 
 export default {
   name: "Buy",
@@ -161,6 +176,13 @@ export default {
       paymentToken: PaymentToken,
       buy: CrowdsaleContract.token
     };
+  },
+
+  validations: {
+    amount: {
+      required,
+      decimal
+    }
   },
 
   mounted() {
@@ -196,7 +218,7 @@ export default {
     },
 
     expectPaymentAmount: function() {
-      return this.amount * this.rate;
+      return this.$v.amount.$invalid ? 0 : this.amount * this.rate;
     }
   },
 
@@ -206,83 +228,62 @@ export default {
       this.amount = null;
     },
 
-    onBuy() {
-      if (!this.connected) {
-        this.$q.notify({
-          type: "negative",
-          message: `Please connect to your wallet.`
-        });
+    fromWei(value) {
+      return this.$web3.utils.fromWei(value);
+    },
 
+    onConfirm() {
+      this.$v.amount.$touch();
+      if (this.$v.$invalid) {
+        this.$refs.amount.focus();
         return;
       }
 
+      const amount = parseFloat(this.amount);
+      const paymentAmount = this.expectPaymentAmount;
+
       this.sending = true;
 
-      const notify = this.$q.notify({
-        group: false, // required to be updatable
-        timeout: 0, // we want to be in control when it gets dismissed
-        spinner: true,
-        message: this.$t("buy.sendTransaction")
-      });
+      this.approve(this.address, amount, paymentAmount)
+        .then(value => {
+          const token = this.buy;
+          const from = this.address;
+          const to = CrowdsaleContract.address;
+          const rate = this.rate;
+          const referrals = this.referrals;
 
-      this.allocation().then(({ min, max, balance }) => {
-        console.log({
-          min,
-          max,
-          balance,
-          expectPayment: this.expectPaymentAmount,
-          amount: this.amount
+          this.$q
+            .dialog({
+              component: TransactionConfirm,
+              parent: this,
+              token,
+              from,
+              to,
+              value,
+              rate,
+              referrals,
+              amount,
+              paymentAmount
+            })
+            .onDismiss(() => this.reset());
+        })
+        .catch(err => {
+          this.sending = false;
+          console.log({ err });
+
+          this.$q
+            .dialog({
+              component: TransactionFailed,
+              parent: this,
+              message: `
+                <h5 class="nk-modal-title">${this.$t(err.error)}</h5>
+                <div class="nk-modal-text">
+                  <p class="lead">${err.message}</p>
+                </div>
+              `
+            })
+            .onDismiss(() => this.reset());
         });
-        if (!this.expectPaymentAmount || parseFloat(this.amount) < min) {
-          notify({
-            type: "negative",
-            timeout: 1500,
-            spinner: false,
-            message: `Min Allocation amount ${min} ${this.eth.symbol}`
-          });
-          this.sending = false;
-          return;
-        }
-
-        if (parseFloat(this.amount) + balance > max) {
-          notify({
-            type: "negative",
-            timeout: 1500,
-            spinner: false,
-            message: `Max Allocation no more than ${max} ${this.eth.symbol}`
-          });
-          this.sending = false;
-          return;
-        }
-
-        const from = this.address;
-        const to = CrowdsaleContract.address;
-        const amount = this.expectPaymentAmount;
-
-        this.sendTransaction({ from, to, amount })
-          .then(tx => {
-            console.log({ sendTransaction: tx });
-            notify({ timeout: 1, spinner: false });
-
-            this.$q
-              .dialog({
-                component: TransactionSuccessfully,
-                parent: this,
-                message: `You’ve successfully bought ${this.amount} ${this.buy.symbol} for ${this.expectPaymentAmount} ${this.paymentToken.symbol}.`
-              })
-              .onDismiss(() => this.reset());
-          })
-          .catch(err => {
-            console.log(err);
-            notify({
-              type: "negative",
-              timeout: 1500,
-              spinner: false,
-              message: err.message
-            });
-            this.sending = false;
-          });
-      });
     },
 
     async info() {
@@ -308,23 +309,6 @@ export default {
       };
     },
 
-    async allocation() {
-      const { token } = CrowdsaleContract;
-      const contract = new this.$web3.eth.Contract(
-        CrowdsaleContract.abi,
-        CrowdsaleContract.address
-      );
-
-      const fromWei = this.$web3.utils.fromWei;
-
-      const info = await contract.methods.getInfo().call();
-      const min = parseFloat(fromWei(info[3]));
-      const max = parseFloat(fromWei(info[4]));
-      const balance = await this.balanceOf(this.address, token);
-      console.log({ allocation: { min, max, balance } });
-      return { min, max, balance };
-    },
-
     async balanceOf(address, token) {
       const contract = new this.$web3.eth.Contract(token.abi, token.address);
       const decimals = await contract.methods.decimals().call();
@@ -332,7 +316,38 @@ export default {
       return balance / Math.pow(10, decimals);
     },
 
-    async approve(from, amount) {
+    async allocation() {
+      const { token } = CrowdsaleContract;
+      const { min, max } = await this.info();
+      const balance = await this.balanceOf(this.address, token);
+
+      console.log({ allocation: { min, max, balance } });
+
+      return { min, max, balance };
+    },
+
+    async approve(from, amount, paymentAmount) {
+      const allocation = await this.allocation();
+
+      if (allocation.min > amount) {
+        throw {
+          error: ERROR.INVALID_AMOUNT,
+          message: this.$t("transaction.minAllocationMessage").replace(
+            "${min}",
+            allocation.min
+          )
+        };
+      }
+
+      if (allocation.max < allocation.balance + amount) {
+        throw {
+          error: ERROR.INVALID_AMOUNT,
+          message: this.$t("transaction.maxAllocationMessage")
+            .replace("${max}", allocation.max)
+            .replace("${balance}", allocation.balance)
+        };
+      }
+
       const contract = new this.$web3.eth.Contract(
         PaymentToken.abi,
         PaymentToken.address
@@ -340,38 +355,28 @@ export default {
 
       const decimals = await contract.methods.decimals().call();
       const balance = await contract.methods.balanceOf(from).call();
-      const balanceDecimals = parseFloat(balance / Math.pow(10, decimals));
+      const decimalBalance = parseFloat(balance / Math.pow(10, decimals));
 
-      if (balanceDecimals < amount) {
-        // throw {
-        //   error: this.$t("transaction.insufficientBalance"),
-        //   message: `You''ve ${balanceDecimals} ${this.paymentToken.symbol} in wallet, but need payment ${amount} ${this.paymentToken.symbol}.`
-        // };
-        throw { message: this.$t("transaction.insufficientBalance") };
+      if (decimalBalance < paymentAmount) {
+        throw {
+          error: ERROR.INSUFFICIENT_BALANCE,
+          message: this.$t("transaction.insufficientBalanceMessage")
+            .replace("${balance}", decimalBalance)
+            .replace("${paymentAmount}", paymentAmount)
+        };
       }
 
-      const to = PaymentToken.address;
-      const value = amount * Math.pow(10, decimals) + "";
-      const allowance = await contract.methods
+      const value = paymentAmount * Math.pow(10, decimals) + "";
+
+      var allowance = await contract.methods
         .allowance(from, CrowdsaleContract.address)
         .call();
 
-      console.log({ balance, amount, balanceDecimals, allowance });
-
-      if (allowance === "0") {
+      if (parseFloat(allowance / Math.pow(10, decimals)) < paymentAmount) {
+        const to = PaymentToken.address;
         const data = await contract.methods
           .approve(CrowdsaleContract.address, value)
           .encodeABI();
-
-        console.log({
-          approve: {
-            from,
-            to,
-            contract: CrowdsaleContract.address,
-            amount,
-            value
-          }
-        });
 
         try {
           var tx = {
@@ -379,18 +384,25 @@ export default {
             to,
             data
           };
+
           const gas = await this.$web3.eth.estimateGas(tx);
           tx = Object.assign(tx, { gas: this.$web3.utils.toHex(gas) });
-          console.log(this.$connector);
           const hash = await this.$connector.sendTransaction(tx);
-          return { hash, value };
+
+          console.log({ approve: { hash, tx } });
+
+          allowance = value;
+          // const sginTx = await this.$connector.signTransaction(tx);
+          // console.log({ sginTx });
         } catch (err) {
           console.log(err);
           throw err;
         }
       }
 
-      return { hash: "", value };
+      console.log({ approve: { allowance, value } });
+
+      return value;
     },
 
     async genertaeTransaction(from, to, value) {
@@ -468,27 +480,7 @@ export default {
       }
     },
 
-    createTransaction({
-      blockNumber,
-      timeStamp,
-      hash,
-      nonce,
-      blockHash,
-      from,
-      contractAddress,
-      to,
-      value,
-      tokenName,
-      tokenSymbol,
-      tokenDecimal,
-      transactionIndex,
-      gas,
-      gasPrice,
-      gasUsed,
-      cumulativeGasUsed,
-      input,
-      confirmations
-    }) {
+    submitTransaction({ hash, from, to, value }) {
       this.$apollo
         .mutate({
           mutation: gql`
@@ -500,25 +492,10 @@ export default {
           `,
           variables: {
             tx: {
-              blockNumber,
-              timeStamp,
               hash,
-              nonce,
-              blockHash,
               from,
-              contractAddress,
               to,
-              value,
-              tokenName,
-              tokenSymbol,
-              tokenDecimal,
-              transactionIndex,
-              gas,
-              gasPrice,
-              gasUsed,
-              cumulativeGasUsed,
-              input,
-              confirmations
+              value
             }
           },
           update: (store, { data: { createTransaction } }) => {

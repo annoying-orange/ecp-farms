@@ -12,7 +12,7 @@
           </div>
           <div class="nk-menu-trigger mr-n2">
             <a
-              href="javascript:void();"
+              href="javascript:;"
               class="nk-nav-toggle nk-quick-nav-icon d-xl-none"
               @click="leftDrawerOpen = !leftDrawerOpen"
             >
@@ -145,7 +145,7 @@
             <div class="nk-header-wrap">
               <div class="nk-menu-trigger d-xl-none ml-n1">
                 <a
-                  href="javascript:void();"
+                  href="javascript:;"
                   class="nk-nav-toggle nk-quick-nav-icon"
                   @click="leftDrawerOpen = !leftDrawerOpen"
                 >

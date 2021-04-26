@@ -115,7 +115,7 @@
                 <div class="nk-wgw-balance">
                   <div class="amount">
                     {{ refer.earn2 | number
-                    }}<span class="currency currency-btc">ETS</span>
+                    }}<span class="currency text-caption">ETS</span>
                   </div>
                 </div>
               </div>

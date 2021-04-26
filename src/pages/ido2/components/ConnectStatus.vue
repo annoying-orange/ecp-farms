@@ -3,7 +3,7 @@
     <li v-if="!connected">
       <a
         class="btn btn-light"
-        href="javascript:void()"
+        href="javascript:;"
         @click="$connector.connect()"
       >
         {{ $t("account.connectWallet") }}
@@ -20,7 +20,7 @@
         </a>
         <a
           v-else
-          href="javascript:void();"
+          href="javascript:;"
           class="dropdown-toggle d-md-none ml-n1"
           data-toggle="dropdown"
           @click="onRefresh"
@@ -43,7 +43,7 @@
         </a>
         <a
           v-else
-          href="javascript:void();"
+          href="javascript:;"
           class="dropdown-toggle btn btn-light d-none d-md-block dropdown-indicator"
           data-toggle="dropdown"
           aria-expanded="false"
@@ -94,7 +94,7 @@
           <div class="dropdown-inner">
             <ul class="link-list">
               <li>
-                <a href="javascript:void();" @click="onDisconnect">
+                <a href="javascript:;" @click="onDisconnect">
                   <em class="icon ni ni-signout"></em><span>Disconnect</span>
                 </a>
               </li>
@@ -130,7 +130,6 @@ export default {
         if (address) {
           this.onRefresh();
           this.createAccount(address, this.inviteCode);
-          // this.approve(address);
         }
       },
       { immediate: true }
@@ -198,19 +197,19 @@ export default {
           }
         });
 
-      // USDT balance
-      this.balanceOf(this.address, this.usdt.address).then(balance => {
-        this.$store.commit("account/usdt", { balance });
-      });
+      // // USDT balance
+      // this.balanceOf(this.address, this.usdt.address).then(balance => {
+      //   this.$store.commit("account/usdt", { balance });
+      // });
 
-      // ETH balance
-      this.balanceOf(this.address, this.eth.address).then(balance => {
-        this.$store.commit("account/eth", { balance });
-      });
+      // // ETH balance
+      // this.balanceOf(this.address, this.eth.address).then(balance => {
+      //   this.$store.commit("account/eth", { balance });
+      // });
     },
 
     async balanceOf(address, token) {
-      const { status, message, result } = await this.$store.dispatch(
+      const { status, message, result } = await this.$store.balanceOf(
         "connector/abi",
         token
       );
