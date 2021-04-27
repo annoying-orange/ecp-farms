@@ -217,6 +217,7 @@
   </q-layout>
 </template>
 <script>
+import gql from "graphql-tag";
 import Account from "./components/Account";
 import ConnectStatus from "./components/ConnectStatus";
 
@@ -233,7 +234,8 @@ export default {
       leftDrawerOpen: false,
       path: "/",
       languages,
-      locale: this.$i18n.locale
+      locale: this.$i18n.locale,
+      inviteCode: this.$route.params.inviteCode
     };
   },
 
@@ -244,11 +246,19 @@ export default {
   },
 
   mounted() {
-    const inviteCode = this.$route.params.inviteCode;
-    console.log({ inviteCode });
-    if (inviteCode) {
+    if (this.inviteCode) {
       this.$store.commit("account/update", { inviteCode });
     }
+
+    this.$watch(
+      "$store.state.connector.address",
+      address => {
+        if (address) {
+          this.createAccount(address, this.inviteCode || "");
+        }
+      },
+      { immediate: true }
+    );
 
     // Auto connect to wallet
     this.$connector.connect();
@@ -257,6 +267,38 @@ export default {
   watch: {
     locale(val) {
       this.$i18n.locale = val;
+    }
+  },
+
+  methods: {
+    createAccount(address, inviteCode) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation CreateAccount($address: String!, $inviteCode: String!) {
+              createAccount(
+                input: { address: $address, inviteCode: $inviteCode }
+              ) {
+                id
+                name
+                address
+                code
+                referrals
+              }
+            }
+          `,
+          variables: {
+            address,
+            inviteCode
+          },
+          update: (store, { data: { createAccount } }) => {
+            console.log({ createAccount });
+            this.$store.commit("account/update", createAccount);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };

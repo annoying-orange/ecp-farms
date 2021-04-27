@@ -11,10 +11,17 @@ const heco = axios.create({
 });
 
 
-const getBalance = (address) => {
+const balanceOfHT = (address) => {
   return new Promise((resolve, reject) => {
     heco.get(`/api?module=account&action=balance&address=${address}&tag=latest`)
-        .then(({ data }) => resolve(data))
+        .then(({ data }) => {
+          const { status, message, result } = data
+          if (status === "1") {
+            resolve(result)
+          } else {
+            reject(result);
+          }
+        })
         .catch(err => reject(err))
   })
 }
@@ -90,7 +97,7 @@ const getTokenTransactions = (address, count) => {
 }
 
 export {
-    getBalance,
+    balanceOfHT,
     getTransactions,
     getTransactionByHash,
     getTransactionStartBlock,

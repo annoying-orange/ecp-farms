@@ -14,7 +14,14 @@ const heco = axios.create({
 export function getBalance({ state }, address) {
   return new Promise((resolve, reject) => {
     heco.get(`/api?module=account&action=balance&address=${address}&tag=latest`)
-        .then(({ data }) => resolve(data))
+        .then(({ data }) => {
+          const { status, message, result } = data
+          if (status === "1") {
+            resolve(result)
+          } else {
+            reject(result);
+          }
+        })
         .catch(err => reject(err))
   })
 }

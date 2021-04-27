@@ -233,7 +233,11 @@ export default {
     },
 
     onConfirm() {
-      this.$v.amount.$touch();
+      if (!this.connected) {
+        this.$connector.connect();
+        return;
+      }
+
       if (this.$v.$invalid) {
         this.$refs.amount.focus();
         return;
