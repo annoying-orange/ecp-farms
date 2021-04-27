@@ -49,7 +49,7 @@ export default {
           label: "Twitter"
         }
       ],
-      link: `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`
+      link: `https://chiax.io/?#/${this.$store.state.account.code}`
     };
   },
 

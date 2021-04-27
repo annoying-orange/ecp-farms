@@ -183,7 +183,7 @@ export default {
 
   methods: {
     onInvite() {
-      const value = "https://etherswap.1ecp.com/#Y9mT1c8K";
+      const value = "https://chiax.io/#Y9mT1c8K";
       this.$q.dialog({ component: InviteDialog, parent: this, value });
     },
 

@@ -212,7 +212,7 @@ export default {
     },
 
     link() {
-      return `http://etherswap.1ecp.com/?#/${this.$store.state.account.code}`;
+      return `https://chiax.io/?#/${this.$store.state.account.code}`;
     }
   },
 
