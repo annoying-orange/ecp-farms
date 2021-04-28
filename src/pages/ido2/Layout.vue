@@ -83,7 +83,7 @@
                   <li class="nk-menu-item ml-auto">
                     <div class="dropup">
                       <a
-                        href="#"
+                        href="javascript:;"
                         class="nk-menu-link dropdown-indicator has-indicator"
                         data-toggle="dropdown"
                         data-offset="0,10"
@@ -197,13 +197,17 @@
               <div class="nk-footer-links">
                 <ul class="nav nav-sm">
                   <li class="nav-item">
-                    <a class="nav-link" href="#">{{ $t("footer.terms") }}</a>
+                    <a class="nav-link" href="javascript:;">{{
+                      $t("footer.terms")
+                    }}</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">{{ $t("footer.privacy") }}</a>
+                    <a class="nav-link" href="javascript:;">{{
+                      $t("footer.privacy")
+                    }}</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">GitHub</a>
+                    <a class="nav-link" href="javascript:;">GitHub</a>
                   </li>
                 </ul>
               </div>
@@ -246,7 +250,9 @@ export default {
   },
 
   mounted() {
-    if (this.inviteCode) {
+    const inviteCode = this.inviteCode;
+
+    if (inviteCode) {
       this.$store.commit("account/update", { inviteCode });
     }
 

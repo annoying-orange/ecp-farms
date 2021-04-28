@@ -165,7 +165,7 @@ export default {
         </p>
         <p class="sub-text-sm">
           ${this.$t("buy.howReceiveToken")}
-          <a href="#">${this.$t("buy.click")}</a>
+          <a href="javascript:;">${this.$t("buy.click")}</a>
         </p>
       `;
     }

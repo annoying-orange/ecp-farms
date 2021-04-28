@@ -2,11 +2,11 @@
   <div class="nk-sidebar-widget">
     <div class="widget-title">
       <h6 class="overline-title">Crypto Accounts <span>(4)</span></h6>
-      <a href="#" class="link">View All</a>
+      <a href="javascript:;" class="link">View All</a>
     </div>
     <ul class="wallet-list">
       <li class="wallet-item">
-        <a href="#">
+        <a href="javascript:;">
           <div class="wallet-icon">
             <em class="icon ni ni-sign-kobo"></em>
           </div>
@@ -19,7 +19,7 @@
         </a>
       </li>
       <li class="wallet-item">
-        <a href="#">
+        <a href="javascript:;">
           <div class="wallet-icon">
             <em class="icon ni ni-sign-btc"></em>
           </div>
@@ -32,7 +32,7 @@
         </a>
       </li>
       <li class="wallet-item wallet-item-add">
-        <a href="#">
+        <a href="javascript:;">
           <div class="wallet-icon">
             <em class="icon ni ni-plus"></em>
           </div>

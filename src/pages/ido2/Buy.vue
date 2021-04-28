@@ -20,7 +20,7 @@
             />
             <div class="dropdown buysell-cc-dropdown">
               <a
-                href="#"
+                href="javascript:;"
                 class="buysell-cc-choosen dropdown-indicator"
                 data-toggle="dropdown"
               >
@@ -39,7 +39,11 @@
               <div class="dropdown-menu dropdown-menu-auto dropdown-menu-mxh">
                 <ul class="buysell-cc-list">
                   <li class="buysell-cc-item selected">
-                    <a href="#" class="buysell-cc-opt" data-currency="btc">
+                    <a
+                      href="javascript:;"
+                      class="buysell-cc-opt"
+                      data-currency="btc"
+                    >
                       <div class="coin-item coin-btc">
                         <div class="coin-icon">
                           <em class="icon ni ni-sign-btc-alt"></em>
@@ -84,7 +88,7 @@
                 <div class="text">{{ buy.symbol }}<span>/</span></div>
                 <div class="dropdown">
                   <a
-                    href="#"
+                    href="javascript:;"
                     class="dropdown-indicator-caret"
                     data-toggle="dropdown"
                     data-offset="0,2"
@@ -95,7 +99,7 @@
                     class="dropdown-menu dropdown-menu-xxs dropdown-menu-right text-center"
                   >
                     <ul class="link-list-plain">
-                      <li><a href="#">USDT</a></li>
+                      <li><a href="javascript:;">USDT</a></li>
                     </ul>
                   </div>
                 </div>

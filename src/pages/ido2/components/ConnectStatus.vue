@@ -85,7 +85,7 @@
           <div class="dropdown-inner">
             <ul class="link-list">
               <li>
-                <a class="dark-switch" href="#">
+                <a class="dark-switch" href="javascript:;">
                   <em class="icon ni ni-moon"></em><span>Dark Mode</span>
                 </a>
               </li>

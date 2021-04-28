@@ -21,7 +21,7 @@
               </a>
             </li>
             <li>
-              <a href="#" class="btn btn-white btn-light">
+              <a href="javascript:;" class="btn btn-white btn-light">
                 <span>{{ $t("token.whitePaper") }}</span>
                 <em class="icon ni ni-external"></em>
               </a>

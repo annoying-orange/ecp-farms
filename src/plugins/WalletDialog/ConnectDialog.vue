@@ -15,7 +15,7 @@
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6">{{ $t("account.connectWallet") }}</div>
         <q-space />
-        <a href="#" class="nk-quick-nav-icon" @click="onCancel">
+        <a href="javascript:;" class="nk-quick-nav-icon" @click="onCancel">
           <em class="icon ni ni-cross"></em>
         </a>
       </q-card-section>

@@ -11,9 +11,12 @@
               </div>
             </div>
             <div class="nk-refwg-action">
-              <a href="#" class="btn btn-primary" @click="onInvite">{{
-                $t("referUs.invite")
-              }}</a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary"
+                @click="onInvite"
+                >{{ $t("referUs.invite") }}</a
+              >
             </div>
           </div>
           <div class="nk-refwg-url">
@@ -65,7 +68,7 @@
             </div>
             <div class="nk-refwg-more dropdown mt-n1 mr-n1">
               <a
-                href="#"
+                href="javascript:;"
                 class="btn btn-icon btn-trigger"
                 data-toggle="dropdown"
                 ><em class="icon ni ni-more-h"></em

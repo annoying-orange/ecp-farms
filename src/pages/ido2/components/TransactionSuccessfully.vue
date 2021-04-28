@@ -20,14 +20,14 @@
             </p>
             <p class="sub-text-sm">
               {{ $t("buy.howReceiveToken") }}
-              <a href="#">{{ $t("buy.click") }}</a>
+              <a href="javascript:;">{{ $t("buy.click") }}</a>
             </p>
           </div>
           <div class="nk-modal-action-lg">
             <ul class="btn-group gx-4">
               <li>
                 <a
-                  href="#"
+                  href="javascript:;"
                   data-dismiss="modal"
                   class="btn btn-lg btn-mw btn-primary"
                   @click="onOK"

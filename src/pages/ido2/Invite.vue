@@ -34,9 +34,12 @@
         <div class="nk-block-head-content">
           <ul class="nk-block-tools gx-3">
             <li>
-              <a href="#" class="btn btn-primary" @click="onInvite">{{
-                $t("invite.invite")
-              }}</a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary"
+                @click="onInvite"
+                >{{ $t("invite.invite") }}</a
+              >
             </li>
           </ul>
         </div>

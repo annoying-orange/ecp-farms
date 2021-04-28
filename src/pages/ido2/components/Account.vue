@@ -36,7 +36,7 @@
       <ul class="g-3">
         <li v-if="!connected">
           <a
-            href="#"
+            href="javascript:;"
             class="btn btn-lg btn-primary"
             @click="$connector.connect()"
           >
@@ -44,7 +44,11 @@
           </a>
         </li>
         <li v-else>
-          <a href="#" class="btn btn-lg btn-warning" @click="onChangeWallet">
+          <a
+            href="javascript:;"
+            class="btn btn-lg btn-warning"
+            @click="onChangeWallet"
+          >
             <span>{{ $t("account.changeWallet") }}</span>
           </a>
         </li>
