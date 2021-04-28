@@ -63,7 +63,8 @@ export default {
         minAllocation: 'Min Allocation',
         qualification: 'Qualification',
         yes: 'Yes',
-        no: 'No'
+        no: 'No',
+        inactive: 'Inactive'
     },
     token: {
         title: 'Token Information',
@@ -168,5 +169,11 @@ export default {
     },
     wallet: {
         howToConnect: 'Learn how to connect'
+    },
+    status: {
+        inactive: "Coming Soon",
+        active: "Buying",
+        pause: "Pause",
+        close: "Finish"
     }
 }

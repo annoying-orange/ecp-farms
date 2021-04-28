@@ -124,7 +124,7 @@
             </div>
           </div>
 
-          <div class="buysell-field form-action">
+          <div class="buysell-field form-action" v-if="status === '1'">
             <a
               href="javascript:;"
               class="btn btn-lg btn-block btn-primary"
@@ -138,6 +138,9 @@
                 <span class="sr-only">Loading...</span>
               </div>
             </div>
+          </div>
+          <div v-else class="alert alert-fill alert-primary text-center h6">
+            {{ $t(allStatus[status]) }}
           </div>
           <!-- .buysell-field -->
         </form>
@@ -168,6 +171,13 @@ const ERROR = {
   INSUFFICIENT_BALANCE: "error.insufficientBalance"
 };
 
+const allStatus = {
+  "0": "status.inactive",
+  "1": "status.active",
+  "2": "status.pause",
+  "3": "status.close"
+};
+
 export default {
   name: "Buy",
 
@@ -178,7 +188,9 @@ export default {
       minAllocation: 1,
       rate: 0.3,
       paymentToken: PaymentToken,
-      buy: CrowdsaleContract.token
+      buy: CrowdsaleContract.token,
+      status: "1",
+      allStatus
     };
   },
 
@@ -190,9 +202,10 @@ export default {
   },
 
   mounted() {
-    this.info().then(({ min, rate }) => {
+    this.info().then(({ min, rate, status }) => {
       this.minAllocation = min;
       this.rate = rate;
+      this.status = status;
     });
   },
 
@@ -326,16 +339,23 @@ export default {
 
     async allocation() {
       const { token } = CrowdsaleContract;
-      const { min, max } = await this.info();
+      const { min, max, status } = await this.info();
       const balance = await this.balanceOf(this.address, token);
 
-      console.log({ allocation: { min, max, balance } });
+      console.log({ allocation: { min, max, status, balance } });
 
-      return { min, max, balance };
+      return { min, max, status, balance };
     },
 
     async approve(from, amount, paymentAmount) {
       const allocation = await this.allocation();
+
+      if (allocation.status !== "1") {
+        throw {
+          error: this.$t(this.allStatus[allocation.status]),
+          message: ""
+        };
+      }
 
       if (allocation.min > amount) {
         throw {

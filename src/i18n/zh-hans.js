@@ -63,7 +63,8 @@ export default {
         minAllocation: '最低参与资金',
         qualification: '资质',
         yes: '有',
-        no: '无'
+        no: '无',
+        inactive: '未激活'
     },
     token: {
         title: '代币',
@@ -168,5 +169,11 @@ export default {
     },
     wallet: {
         howToConnect: '学习如何连接钱包'
+    },
+    status: {
+        inactive: "即将推出",
+        active: "认购中",
+        pause: "已暂停",
+        close: "已结束"
     }
 }

@@ -28,7 +28,7 @@
                 </q-item-label>
               </q-item-section>
             </q-item>
-            <q-item class="nk-wg7-stats q-pa-md">
+            <q-item class="nk-wg7-stats q-pa-md" v-if="value.status === '1'">
               <q-item-section>
                 <q-item-label class="nk-wg7-title q-pt-md q-pb-md">
                   {{ $t("crowdsale.estimatedCountdown") }}
@@ -36,10 +36,18 @@
                 <countdown :end="value.expires" />
               </q-item-section>
             </q-item>
+            <q-item class="nk-wg7-stats q-pa-md text-center" v-else>
+              <q-item-section>
+                <q-item-label class="status">
+                  {{ $t(allStatus[value.status]) }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
             <div class="nk-wg7-foot">
               <span class="nk-wg7-note">
                 {{ $t("crowdsale.endTime") }}:
-                <span>{{ value.expires | datetime }}</span>
+                <span v-if="value.expires === 0">--</span>
+                <span v-else>{{ value.expires | datetime }}</span>
               </span>
             </div>
           </div>
@@ -55,9 +63,22 @@
 <script>
 import Countdown from "./Countdown";
 
+const allStatus = {
+  "0": "status.inactive",
+  "1": "status.active",
+  "2": "status.pause",
+  "3": "status.close"
+};
+
 export default {
   components: { Countdown },
   name: "OverviewCard",
+
+  data() {
+    return {
+      allStatus
+    };
+  },
 
   props: {
     value: Object
@@ -67,5 +88,11 @@ export default {
 <style lang="scss" scoped>
 .nk-wg7-foot {
   padding-top: 5px;
+}
+
+.status {
+  padding: 16px;
+  font-size: 2.5rem;
+  line-height: 103px !important;
 }
 </style>

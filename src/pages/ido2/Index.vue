@@ -90,12 +90,13 @@ export default {
   data() {
     return {
       raise: {
-        expires: 1619827199,
+        expires: 0,
         rate: 0.1,
         total: 0,
         amount: 0,
         min: 100,
         max: 10000,
+        status: "0",
         transactionCount: 0,
         tokenSymbol: CrowdsaleContract.token.symbol
       },
@@ -132,7 +133,8 @@ export default {
           min,
           max,
           total,
-          amount
+          amount,
+          status
         });
 
         this.pool = Object.assign(this.pool, {
