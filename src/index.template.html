@@ -18,8 +18,34 @@
   <body class="nk-body npc-crypto bg-white has-sidebar">
     <!-- DO NOT touch the following DIV -->
     <div id="q-app" class="nk-app-root"></div>
-     <script src="./assets/js/bundle.js?ver=2.2.0"></script>
+    <script src="./assets/js/bundle.js?ver=2.2.0"></script>
     <script src="./assets/js/scripts.js?ver=2.2.0"></script>
     <script src="./assets/js/charts/chart-crypto.js?ver=2.2.0"></script>
+    <script lang="javascript">
+      // Add walletconnect hint
+      let observer = new MutationObserver(() => {
+        const wc_wrapper = document.getElementById('walletconnect-wrapper')
+        
+        if (wc_wrapper && wc_wrapper.getElementsByClassName("walletconnect-hint").length === 0) {
+          const text = document.createTextNode("推荐使用火币钱包")
+
+          const link = document.createElement("A")
+          link.setAttribute("href", "https://www.huobiwallet.com/")
+          link.setAttribute("target", "_blank")
+          link.innerText = "下载火币钱包"
+
+          const hint = document.createElement("DIV")
+          hint.setAttribute("class", "walletconnect-hint");
+          hint.appendChild(text)
+          hint.appendChild(link)
+
+          wc_wrapper.children[0].children[0].appendChild(hint)
+        }
+      })
+
+      observer.observe(document.body, {
+        'childList': true
+      })
+    </script>
   </body>
 </html>

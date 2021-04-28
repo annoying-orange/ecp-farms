@@ -201,3 +201,27 @@ html {
 .nk-sidebar-footer {
   background: transparent !important;
 }
+
+.walletconnect-hint {
+  color: white;
+  font-size: 16px;
+  position: absolute;
+  bottom: -40px;
+  left: 0px;
+  width: 100%;
+  text-align: center;
+
+  a {
+    font-size: 16px;
+    text-decoration: underline;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    color: #0971fe;
+    margin-left: 16px;
+  }
+}
+
+.walletconnect-qrcode__notification.notification__show {
+  z-index: 999;
+}
