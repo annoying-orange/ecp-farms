@@ -8,7 +8,7 @@
       >
         <div class="nk-sidebar-element nk-sidebar-head">
           <div class="nk-sidebar-brand">
-            <h4>EtherSwap</h4>
+            <h4>ChiaX</h4>
           </div>
           <div class="nk-menu-trigger mr-n2">
             <a
@@ -154,7 +154,7 @@
               </div>
               <div class="nk-header-brand d-xl-none">
                 <a href="/#/" class="logo-link">
-                  <h5>EtherSwap</h5>
+                  <h5>ChiaX</h5>
                 </a>
               </div>
               <div class="nk-header-news d-none d-xl-block">
@@ -165,7 +165,7 @@
                     </div>
                     <div class="nk-news-text">
                       <p>
-                        Do you know EtherSwap online of 2021?
+                        Do you know ChiaX online of 2021?
                         <span>Buying ...</span>
                       </p>
                       <em class="icon ni ni-external"></em>
@@ -192,7 +192,7 @@
           <div class="container-fluid">
             <div class="nk-footer-wrap">
               <div class="nk-footer-copyright">
-                &copy; 2021 EtherSwap.
+                &copy; 2021 ChiaX.
               </div>
               <div class="nk-footer-links">
                 <ul class="nav nav-sm">

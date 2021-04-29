@@ -22,7 +22,7 @@
           </div>
         </q-item-section>
         <q-item-section side class="copyright">
-          <p>© 2020 EtherSwap</p>
+          <p>© 2020 ChiaX</p>
         </q-item-section>
       </q-item>
     </div>

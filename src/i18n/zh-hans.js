@@ -37,7 +37,7 @@ export default {
         daysAgo: '天前'
     },
     crowdsale: {
-        title: 'EtherSwap',
+        title: 'ChiaX',
         description: '火币生态链Heco和以太坊的双链，DEX创新交易平台；一个去中心化的交易平台，采取双链挖矿机制。',
         whitePaper: '白皮书',
         welcome: '欢迎光临!',

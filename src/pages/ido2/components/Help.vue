@@ -184,7 +184,7 @@
           <div class="nk-block-content flex-shrink-0">
             <div class="container">
               <a
-                href="https://t.me/etherSwap?lang=zh-CN"
+                href="https://t.me/chiax?lang=zh-CN"
                 target="_blank"
                 title="Telegram"
                 class="q-ma-sm"
@@ -209,7 +209,7 @@
                 />
               </a>
               <a
-                href="https://twitter.com/etherSwap"
+                href="https://twitter.com/chiax"
                 target="_blank"
                 title="Twitter"
                 class="q-ma-sm"

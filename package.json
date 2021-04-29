@@ -1,8 +1,8 @@
 {
   "name": "ecp-farms",
   "version": "0.0.1",
-  "description": "ECP Finance",
-  "productName": "EtherSwap",
+  "description": "ChiaX",
+  "productName": "ChiaX",
   "author": "orange@ecp.com",
   "private": true,
   "scripts": {

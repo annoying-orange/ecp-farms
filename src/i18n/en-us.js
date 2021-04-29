@@ -37,7 +37,7 @@ export default {
         daysAgo: 'days ago'
     },
     crowdsale: {
-        title: 'EtherSwap',
+        title: 'ChiaX',
         description: 'HECO and Ethereum\'s double chains, Dex innovative trading platform, a decentralized trading platform, take double-chain mining mechanism.',
         whitePaper: 'White Paper',
         welcome: 'Welcome!',

@@ -8,7 +8,7 @@
           </q-avatar>
         </q-item-section>
         <q-item-section>
-          <q-item-label lines="1" class="text-h6">EtherSwap</q-item-label>
+          <q-item-label lines="1" class="text-h6">ChiaX</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div>

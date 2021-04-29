@@ -17,7 +17,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
         <q-toolbar-title>
-          EtherSwap
+          ChiaX
         </q-toolbar-title>
         <div class="q-gutter-md desktop-only">
           <q-btn flat no-caps :label="$t('menu.home')" to="/ido" />
