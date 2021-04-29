@@ -245,8 +245,8 @@ export default {
       this.amount = null;
     },
 
-    fromWei(value) {
-      return this.$web3.utils.fromWei(value);
+    fromWei(val) {
+      return parseFloat(val) / Math.pow(10, CrowdsaleContract.token.decimals);
     },
 
     onConfirm() {
@@ -313,20 +313,19 @@ export default {
         CrowdsaleContract.address
       );
 
-      const fromWei = this.$web3.utils.fromWei;
       const info = await contract.methods.getInfo().call();
 
       console.log({ info });
 
       return {
-        allocatedTime: 0, //parseInt(info[0]),
-        expires: 0, //parseInt(info[1]),
-        rate: parseFloat(fromWei(info[2])),
-        min: parseFloat(fromWei(info[3])),
-        max: parseFloat(fromWei(info[4])),
-        total: parseFloat(fromWei(info[5])),
-        amount: parseFloat(fromWei(info[6])),
-        status: "0" //info[7] // INACTIVE = 0, ACTIVE = 1, PAUSE = 2, CLOSE = 3
+        allocatedTime: parseInt(info[0]),
+        expires: parseInt(info[1]),
+        rate: this.fromWei(info[2]),
+        min: this.fromWei(info[3]),
+        max: this.fromWei(info[4]),
+        total: this.fromWei(info[5]),
+        amount: this.fromWei(info[6]),
+        status: info[7] // INACTIVE = 0, ACTIVE = 1, PAUSE = 2, CLOSE = 3
       };
     },
 

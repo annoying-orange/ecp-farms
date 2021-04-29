@@ -28,7 +28,9 @@
               </li>
               <li class="buysell-overview-item">
                 <span class="pm-title">{{ $t("transaction.amount") }}</span>
-                <span class="pm-currency"> {{ amount | number }} ETS </span>
+                <span class="pm-currency">
+                  {{ amount | number }} {{ token.symbol }}
+                </span>
               </li>
               <li class="buysell-overview-item">
                 <span class="pm-title">{{ $t("transaction.payTotal") }}</span>
@@ -150,9 +152,9 @@ export default {
             .replace("${amount}", this.amount)
             .replace("${paymentAmount}", this.paymentAmount)}
         </div>
-        <span class="sub-text-sm">${this.$t(
-          "transaction.exchangeRate"
-        )}: 1 ETS = ${this.rate} USDT</span>
+        <span class="sub-text-sm">${this.$t("transaction.exchangeRate")}: 1 ${
+        this.token.symbol
+      } = ${this.rate} USDT</span>
       `;
     },
 

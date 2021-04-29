@@ -80,7 +80,9 @@
                 <div class="nk-wgw-balance">
                   <div class="amount">
                     {{ refer.totalEarn | number
-                    }}<span class="currency text-caption">ETS</span>
+                    }}<span class="currency text-caption">{{
+                      token.symbol
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -99,7 +101,9 @@
                 <div class="nk-wgw-balance">
                   <div class="amount">
                     {{ refer.earn1 | number
-                    }}<span class="currency text-caption">ETS</span>
+                    }}<span class="currency text-caption">{{
+                      token.symbol
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -118,7 +122,9 @@
                 <div class="nk-wgw-balance">
                   <div class="amount">
                     {{ refer.earn2 | number
-                    }}<span class="currency text-caption">ETS</span>
+                    }}<span class="currency text-caption">{{
+                      token.symbol
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -139,7 +145,7 @@
             <q-item-label caption>{{ e.timeStamp | ago }}</q-item-label>
           </q-item-section>
           <q-item-section side top>
-            {{ e.amount | number }} ETS
+            {{ e.amount | number }} {{ token.symbol }}
           </q-item-section>
         </q-item>
       </q-list>
@@ -155,6 +161,8 @@
 import gql from "graphql-tag";
 import InviteQrcode from "./components/InviteQrcode";
 
+import { CrowdsaleContract } from "../../utils/contracts";
+
 export default {
   name: "Invite",
 
@@ -166,7 +174,8 @@ export default {
         earn1: 0,
         earn2: 0
       },
-      earns: []
+      earns: [],
+      token: CrowdsaleContract.token
     };
   },
 

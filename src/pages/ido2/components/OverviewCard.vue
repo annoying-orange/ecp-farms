@@ -16,7 +16,7 @@
                   {{ $t("crowdsale.totalRaise") }}
                 </div>
                 <div class="number-lg amount">
-                  {{ value.total }} {{ value.tokenSymbol }}
+                  {{ value.total | number }} {{ value.tokenSymbol }}
                 </div>
               </q-item-section>
               <q-item-section side top>
@@ -46,7 +46,7 @@
             <div class="nk-wg7-foot">
               <span class="nk-wg7-note">
                 {{ $t("crowdsale.endTime") }}:
-                <span v-if="value.expires === 0">--</span>
+                <span v-if="value.status === '0'">--</span>
                 <span v-else>{{ value.expires | datetime }}</span>
               </span>
             </div>

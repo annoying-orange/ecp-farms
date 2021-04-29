@@ -33,7 +33,7 @@
           <q-item class="nk-wgw-balance">
             <q-item-section class="amount">{{ progress || 0 }}%</q-item-section>
             <q-item-section side class="amount">
-              {{ value.amount }} / {{ value.total }}
+              {{ value.amount | number }} / {{ value.total | number }}
             </q-item-section>
           </q-item>
         </div>

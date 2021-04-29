@@ -19,9 +19,7 @@
         </div>
         <div class="tranx-col">
           <div class="tranx-amount">
-            <div class="number">
-              {{ value.name }}
-            </div>
+            <div class="number">{{ value.name }} ({{ value.symbol }})</div>
           </div>
         </div>
       </div>

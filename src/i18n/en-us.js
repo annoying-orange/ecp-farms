@@ -102,11 +102,11 @@ export default {
         successfully: 'Successfully Sent Payment!',
         failed: 'Transaction Failed',
         insufficientBalance: 'Insufficient balance',
-        confirmMessage: "You are about to get <strong>${amount}</strong> ETS for <strong>${paymentAmount}</strong> USDT",
+        confirmMessage: "You are about to get <strong>${amount}</strong> CHX for <strong>${paymentAmount}</strong> USDT",
         exchangeRate: "Exchange rate",
-        successfullyMessage: "You’ve successfully bought <strong>${amount}</strong> ETS for <strong>${paymentAmount}</strong> USDT.",
-        minAllocationMessage: "The amount you want be less than <strong>${min}</strong> ETS.",
-        maxAllocationMessage: "You've bought <strong>${balance}</strong> ETS, the max allocation cannot be more than <strong>${max}</strong> ETS.`",
+        successfullyMessage: "You’ve successfully bought <strong>${amount}</strong> CHX for <strong>${paymentAmount}</strong> USDT.",
+        minAllocationMessage: "The amount you want be less than <strong>${min}</strong> CHX.",
+        maxAllocationMessage: "You've bought <strong>${balance}</strong> CHX, the max allocation cannot be more than <strong>${max}</strong> CHX.`",
         insufficientBalanceMessage: "You've <strong>${balance}</strong> USDT in wallet, but need payment <strong>${paymentAmount}</strong> USDT."
     },
     referUs: {
