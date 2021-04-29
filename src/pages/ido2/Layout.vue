@@ -8,7 +8,19 @@
       >
         <div class="nk-sidebar-element nk-sidebar-head">
           <div class="nk-sidebar-brand">
-            <h4>ChiaX</h4>
+            <a href="/#/" class="logo-link nk-sidebar-logo">
+              <img
+                class="logo-light logo-img"
+                src="/assets/logo.png"
+                alt="logo"
+              />
+              <img
+                class="logo-dark logo-img"
+                src="/assets/logo-dark.png"
+                alt="logo-dark"
+              />
+              <h5 class="brand-name">ChiaX</h5>
+            </a>
           </div>
           <div class="nk-menu-trigger mr-n2">
             <a
@@ -152,9 +164,19 @@
                   <em class="icon ni ni-menu"></em>
                 </a>
               </div>
-              <div class="nk-header-brand d-xl-none">
+              <div class="nk-header-brand d-xl-none q-ml-sm">
                 <a href="/#/" class="logo-link">
-                  <h5>ChiaX</h5>
+                  <img
+                    class="logo-light logo-img"
+                    src="/assets/logo.png"
+                    alt="logo"
+                  />
+                  <img
+                    class="logo-dark logo-img"
+                    src="/assets/logo-dark.png"
+                    alt="logo-dark"
+                  />
+                  <h4 class="brand-name">ChiaX</h4>
                 </a>
               </div>
               <div class="nk-header-news d-none d-xl-block">
@@ -309,3 +331,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.nk-header-brand {
+  flex-shrink: 0;
+  padding: 0 !important;
+}
+</style>

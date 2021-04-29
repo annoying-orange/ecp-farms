@@ -225,3 +225,13 @@ html {
 .walletconnect-qrcode__notification.notification__show {
   z-index: 999;
 }
+
+.brand-name {
+  display: inline-block;
+  padding-top: 5px;
+  margin: 0 4px;
+  font-size: 1.75rem;
+  line-height: inherit;
+  white-space: nowrap;
+  font-weight: bold;
+}

@@ -26,7 +26,7 @@
               >
                 <div class="coin-item coin-btc">
                   <div class="coin-icon">
-                    <em class="icon ni ni-sign-btc-alt"></em>
+                    <img class="icon" src="/assets/coins/chx.png" />
                   </div>
                   <div class="coin-info">
                     <span class="coin-name">
@@ -46,7 +46,7 @@
                     >
                       <div class="coin-item coin-btc">
                         <div class="coin-icon">
-                          <em class="icon ni ni-sign-btc-alt"></em>
+                          <img class="icon" src="/assets/coins/chx.png" />
                         </div>
                         <div class="coin-info">
                           <span class="coin-name">
