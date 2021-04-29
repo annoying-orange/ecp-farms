@@ -336,4 +336,9 @@ export default {
   flex-shrink: 0;
   padding: 0 !important;
 }
+
+.dark-mode .logo-light {
+  opacity: 1;
+  margin-top: -10px;
+}
 </style>
