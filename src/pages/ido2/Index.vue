@@ -175,14 +175,14 @@ export default {
       console.log({ info });
 
       return {
-        allocatedTime: parseInt(info[0]),
-        expires: parseInt(info[1]),
+        allocatedTime: 0, //parseInt(info[0]),
+        expires: 0, //parseInt(info[1]),
         rate: parseFloat(fromWei(info[2])),
         min: parseFloat(fromWei(info[3])),
         max: parseFloat(fromWei(info[4])),
         total: parseFloat(fromWei(info[5])),
         amount: parseFloat(fromWei(info[6])),
-        status: info[7]
+        status: "0" //info[7]
       };
     },
 
@@ -201,7 +201,7 @@ export default {
       const name = await contract.methods.name().call();
       const symbol = await contract.methods.symbol().call();
       const totalSupply = await contract.methods.totalSupply().call();
-      const holders = 2;
+      const holders = 1;
       const transfers = 0;
 
       return {

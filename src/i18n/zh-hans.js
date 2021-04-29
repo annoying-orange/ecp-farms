@@ -171,7 +171,7 @@ export default {
         howToConnect: '学习如何连接钱包'
     },
     status: {
-        inactive: "即将推出",
+        inactive: "即将开启",
         active: "认购中",
         pause: "已暂停",
         close: "已结束"

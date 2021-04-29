@@ -189,7 +189,7 @@ export default {
       rate: 0.3,
       paymentToken: PaymentToken,
       buy: CrowdsaleContract.token,
-      status: "1",
+      status: "0",
       allStatus
     };
   },
@@ -319,14 +319,14 @@ export default {
       console.log({ info });
 
       return {
-        allocatedTime: parseInt(info[0]),
-        expires: parseInt(info[1]),
+        allocatedTime: 0, //parseInt(info[0]),
+        expires: 0, //parseInt(info[1]),
         rate: parseFloat(fromWei(info[2])),
         min: parseFloat(fromWei(info[3])),
         max: parseFloat(fromWei(info[4])),
         total: parseFloat(fromWei(info[5])),
         amount: parseFloat(fromWei(info[6])),
-        status: info[7] // INACTIVE = 0, ACTIVE = 1, PAUSE = 2, CLOSE = 3
+        status: "0" //info[7] // INACTIVE = 0, ACTIVE = 1, PAUSE = 2, CLOSE = 3
       };
     },
 
