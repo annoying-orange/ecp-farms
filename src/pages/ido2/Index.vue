@@ -103,6 +103,7 @@ export default {
       pool: {
         startBlock: 0,
         endBlock: 0,
+        status: "0",
         allocatedTime: 0,
         minAllocation: 100,
         tokenSymbol: CrowdsaleContract.token.symbol,
@@ -138,6 +139,7 @@ export default {
         });
 
         this.pool = Object.assign(this.pool, {
+          status,
           allocatedTime,
           minAllocation: min
         });
@@ -167,11 +169,10 @@ export default {
 
   methods: {
     async info(contract) {
+      const fromWei = this.$web3.utils.fromWei;
       const info = await contract.methods.getInfo().call();
 
       console.log({ info });
-
-      const fromWei = this.$web3.utils.fromWei;
 
       return {
         allocatedTime: parseInt(info[0]),

@@ -48,21 +48,25 @@ export default {
     completed: function() {
       return this.end < new Date().getTime() / 1000;
     },
+
     day: function() {
       return Math.floor(this.timeRemaining / (3600 * 24))
         .toFixed(0)
         .padStart(1, "0");
     },
+
     hour: function() {
       return Math.floor((this.timeRemaining % (3600 * 24)) / 3600)
         .toFixed(0)
         .padStart(2, "0");
     },
+
     minute: function() {
       return Math.floor(((this.timeRemaining % (3600 * 24)) % 3600) / 60)
         .toFixed(0)
         .padStart(2, "0");
     },
+
     second: function() {
       return Math.floor(((this.timeRemaining % (3600 * 24)) % 3600) % 60)
         .toFixed(0)
@@ -74,6 +78,7 @@ export default {
     tick() {
       const { onComplete } = this;
       const countdownComplete = this.completed;
+
       this.timeRemaining = Math.round(this.end - new Date().getTime() / 1000);
 
       if (this.mounted) {

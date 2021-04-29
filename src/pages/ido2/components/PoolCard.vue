@@ -57,7 +57,7 @@
         </div>
         <div class="tranx-col">
           <div class="tranx-amount">
-            <div class="number" v-if="value.allocatedTime === 0">
+            <div class="number" v-if="value.status === '0'">
               {{ $t("pool.inactive") }}
             </div>
             <div class="number" v-else>

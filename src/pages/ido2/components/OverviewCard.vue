@@ -81,7 +81,16 @@ export default {
   },
 
   props: {
-    value: Object
+    value: {
+      expires: Number,
+      rate: Number,
+      total: Number,
+      amount: 0,
+      min: Number,
+      max: Number,
+      status: String,
+      tokenSymbol: String
+    }
   }
 };
 </script>
