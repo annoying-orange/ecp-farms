@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function (/* ctx */) {
+module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -70,6 +70,14 @@ module.exports = function (/* ctx */) {
           loader: 'eslint-loader'
         })
       },
+      
+      // Env
+      env: {
+        BACKEND: {
+          http: ctx.prod ? "https://api.chiax.io" : "http://localhost:9090",
+          ws: ctx.prod ? "wss://api.chiax.io" : "ws://localhost:9090",
+        }
+      }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer

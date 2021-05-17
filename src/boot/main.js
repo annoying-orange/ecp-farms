@@ -22,6 +22,8 @@ Vue.use(VueClipboard)
 const web3 = new Web3(Network.rpc)
 Vue.prototype.$web3 = web3
 
+const backend = process.env.BACKEND
+
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext({
     headers: { }
@@ -31,11 +33,11 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const httpLink = new HttpLink({
-  uri: 'https://api.chiax.io'
+  uri: backend.http
 })
 
 const wsLink = new WebSocketLink({
-  uri: 'wss://api.chiax.io',
+  uri: backend.ws,
   options: {
     reconnect: true
   }
